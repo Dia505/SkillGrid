@@ -11,7 +11,7 @@ class SplashScreen1View extends StatelessWidget {
         
         child: Container(
           width: double.infinity,
-          color: Color(0xFF322E86),
+          color: const Color(0xFF322E86),
 
           child: Padding(
             padding: const EdgeInsets.only(bottom: 55),
