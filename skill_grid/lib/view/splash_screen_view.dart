@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SplashScreen1View extends StatelessWidget {
-  const SplashScreen1View({super.key});
+class SplashScreenView extends StatelessWidget {
+  const SplashScreenView({super.key});
 
   @override
   Widget build(BuildContext context) {
