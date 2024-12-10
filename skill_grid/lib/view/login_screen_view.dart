@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
+import 'package:skill_grid/view/client_dashboard.dart';
 
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({super.key});
@@ -84,10 +86,24 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
                     const SizedBox(width: 50),
 
-                    Text('Forgot Password',
+                    Text('Forgot Password?',
                         style: GoogleFonts.inter(
                           color: const Color(0xFF322E86), fontSize: 14)),
                   ],
+                ),
+
+                const SizedBox(height: 50),
+
+                Padding(
+                  padding: EdgeInsets.only(left: 12.0),
+                  child: CommonButton(
+                    buttonText: "Log In", 
+                    buttonColor: Color(0xFF322E86), 
+                    buttonTextColor: Colors.white,
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ClientDashboard()));
+                    },
+                  ),
                 )
               ],
             ),

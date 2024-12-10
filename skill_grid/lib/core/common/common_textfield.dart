@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CommonTextfield extends StatefulWidget {
-  const CommonTextfield(
-      {super.key, required this.textFieldTitle, this.obscureText = false});
+  const CommonTextfield({
+    super.key, 
+    required this.textFieldTitle, 
+    this.obscureText = false
+  });
 
   final String textFieldTitle;
   final bool obscureText;

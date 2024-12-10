@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skill_grid/core/common/common_button.dart';
+import 'package:skill_grid/view/login_screen_view.dart';
 
 class OnboardScreenView extends StatelessWidget {
   const OnboardScreenView({super.key});
@@ -70,25 +72,13 @@ class OnboardScreenView extends StatelessWidget {
               ),
             ),
         
-            SizedBox(
-              width: 295,
-              height: 43,
-                        
-              child: ElevatedButton(
-                onPressed: (){}, 
-                        
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(9)
-                  )
-                ),
-                        
-                child: Text("Log In",
-                  style:GoogleFonts.caprasimo(
-                  color: const Color(0xFF322E86),
-                  fontSize: 18
-                )),
-              ),
+            CommonButton(
+              buttonText: "Log In", 
+              buttonColor: Color(0xFFE7E7FF), 
+              buttonTextColor: Color(0xFF322E86),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreenView()));
+              },
             ),
                         
             Container(
