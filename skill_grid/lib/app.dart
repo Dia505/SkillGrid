@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/view/login_screen_view.dart';
 import 'package:skill_grid/view/onboard_screen_view.dart';
+// import 'package:skill_grid/view/onboard_screen_view.dart';
 // import 'package:skill_grid/view/splash_screen_view.dart';
 // import 'package:skill_grid/view/onboard_screen_view.dart';
 

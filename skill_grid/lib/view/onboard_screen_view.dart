@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_button.dart';
+import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/view/login_screen_view.dart';
 
 class OnboardScreenView extends StatelessWidget {
@@ -18,31 +19,10 @@ class OnboardScreenView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
         
           children: [
-            Container(
-              width: 190,
-              padding: const EdgeInsets.only(top: 100),
-        
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              
-                children: [
-                  Image.asset(
-                    "assets/images/splash_screen_logo.png",
-                    width: 48,
-                    height: 50,),
-                      
-                  Text(
-                    "SkillGrid.", 
-                    style:GoogleFonts.caprasimo(
-                      color: const Color(0xFFE7E7FF),
-                      fontSize: 24
-                    ))
-                ],
-              ),
-            ),
+            CommonLogo(),
         
             Image.asset(
-              "assets/images/splash_screen2_img.png",
+              "assets/images/onboard_screen_img.png",
               width: 255,
               height: 266),
         
