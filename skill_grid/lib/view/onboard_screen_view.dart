@@ -19,7 +19,7 @@ class OnboardScreenView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
         
           children: [
-            CommonLogo(),
+            const CommonLogo(),
         
             Image.asset(
               "assets/images/onboard_screen_img.png",

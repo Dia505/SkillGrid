@@ -28,7 +28,7 @@ class CommonButton extends StatelessWidget {
           backgroundColor: buttonColor,
         ),
 
-        child: Text("Log In",
+        child: Text(buttonText,
           style: GoogleFonts.caprasimo(
             color: buttonTextColor, fontSize: 18)),
       ),

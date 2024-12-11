@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
-import 'package:skill_grid/view/client_dashboard.dart';
+import 'package:skill_grid/view/client/client_dashboard.dart';
 
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({super.key});
