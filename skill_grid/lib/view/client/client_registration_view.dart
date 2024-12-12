@@ -150,12 +150,21 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
 
                       Container(
                         padding: const EdgeInsets.only(right: 40),
-                        child: DropdownButtonFormField(
+                        child: DropdownButtonFormField <String> (
+                          value: city,
                           items: items,
+
                           onChanged: (value) {
                             setState(() {
                               city = value;
                             });
+                          },
+
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a city'; 
+                            }
+                            return null; 
                           },
                           
                           decoration: InputDecoration(
@@ -167,6 +176,15 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                                 borderRadius: BorderRadius.circular(11),
                                 borderSide: const BorderSide(
                                     color: Color(0xFF322E86), width: 2)),
+
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(11),
+                                borderSide:
+                                  const BorderSide(color: Colors.red, width: 1)),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(11),
+                                borderSide:
+                                  const BorderSide(color: Colors.red, width: 2))
                           ),
                         ),
                       ),
@@ -207,55 +225,76 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Checkbox(
-                            value: _isChecked,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _isChecked = value!;
-                              });
+                          FormField<bool>(
+                            initialValue: _isChecked,
+                            validator: (value) {
+                              if (value == null || !value) {
+                                return "Please accept the SkillGrid Terms of Service before continuing";
+                              }
+                              return null;
                             },
-                            side: const BorderSide(color: Color(0xFF625D5D)),
-                          ),
 
-                          SizedBox(
-                            width: 289,
-
-                            child: RichText(
-
-                              text: TextSpan(
-                                style: GoogleFonts.inter(
-                                  color: const Color(0xFF625D5D), 
-                                  fontSize: 14,
-                                ),
-                                children: const [
-                                  TextSpan(
-                                    text: 'Yes, I understand and agree to the ',
-                                  ),
-                                  TextSpan(
-                                    text: 'SkillGrid Terms of Service',
-                                    style: TextStyle(
-                                      color: Color(0xFF322E86),
-                                      decoration: TextDecoration
-                                          .underline, 
+                            builder: (FormFieldState<bool> state) {
+                              return Row(
+                                children: [
+                                  Checkbox(
+                                    value: state.value,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        _isChecked = value!;
+                                      });
+                                      state.didChange(value);
+                                    },
+                                    side: BorderSide(
+                                      color: state.hasError
+                                        ? Colors.red 
+                                        : const Color(0xFF625D5D),
                                     ),
                                   ),
-                                  TextSpan(
-                                    text: ', including the User Agreement and ',
-                                  ),
-                                  TextSpan(
-                                    text: 'Privacy Policy',
-                                    style: TextStyle(
-                                      color: Color(0xFF322E86), // Purple color
-                                      decoration: TextDecoration
-                                          .underline, // Underline decoration
+
+                                  SizedBox(
+                                    width: 289,
+
+                                    child: RichText(
+
+                                      text: TextSpan(
+                                        style: GoogleFonts.inter(
+                                          color: const Color(0xFF625D5D), 
+                                          fontSize: 14,
+                                        ),
+                                        children: const [
+                                          TextSpan(
+                                            text: 'Yes, I understand and agree to the ',
+                                          ),
+                                          TextSpan(
+                                            text: 'SkillGrid Terms of Service',
+                                            style: TextStyle(
+                                              color: Color(0xFF322E86),
+                                              decoration: TextDecoration
+                                                  .underline, 
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: ', including the User Agreement and ',
+                                          ),
+                                          TextSpan(
+                                            text: 'Privacy Policy',
+                                            style: TextStyle(
+                                              color: Color(0xFF322E86), // Purple color
+                                              decoration: TextDecoration
+                                                  .underline, // Underline decoration
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '.',
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  TextSpan(
-                                    text: '.',
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ]
+                              );
+                            },                            
                           ),
                         ],
                       ),
@@ -271,10 +310,9 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LoginScreenView()));
+                                context,
+                                MaterialPageRoute(builder: (context) => const LoginScreenView()),
+                              );
                             }
                           },
                         ),

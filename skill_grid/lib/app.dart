@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skill_grid/view/client/client_registration_view.dart';
 // import 'package:skill_grid/view/client/client_registration_view.dart';
 import 'package:skill_grid/view/join_client_freelancer_view.dart';
 // import 'package:skill_grid/view/login_screen_view.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: JoinClientFreelancerView(),
+      home: ClientRegistrationView(),
     );
   }
 }
