@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skill_grid/view/onboard_screen_view.dart';
 
-class SplashScreenView extends StatelessWidget {
+class SplashScreenView extends StatefulWidget {
   const SplashScreenView({super.key});
+
+  @override
+  State<SplashScreenView> createState() => _SplashScreenViewState();
+}
+
+class _SplashScreenViewState extends State<SplashScreenView> {
+  @override
+  void initState() {
+    super.initState();
+    // Navigate to the next page after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const OnboardScreenView()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

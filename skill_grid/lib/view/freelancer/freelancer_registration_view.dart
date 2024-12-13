@@ -175,54 +175,61 @@ class _FreelancerRegistrationViewState extends State<FreelancerRegistrationView>
       
                         const SizedBox(height: 7),
 
-                        Padding(
-                          padding: const EdgeInsets.only(right: 85.0),
+                        SizedBox(
+                          width: 325,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CommonDropdown(
-                                hintText: "Year",
-                                width: 90,
-                                items: yearList
-                                .map((year) => DropdownMenuItem<int>(
-                                      value: year,
-                                      child: Text(year.toString()),
-                                    ))
-                                .toList(),
-                          
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    year = value;
-                                  }
-                                },
+                              Flexible(
+                                child: CommonDropdown(
+                                  hintText: "Year",
+                                  width: 90,
+                                  items: yearList
+                                  .map((year) => DropdownMenuItem<int>(
+                                        value: year,
+                                        child: Text(year.toString()),
+                                      ))
+                                  .toList(),
+                                                          
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      year = value;
+                                    }
+                                  },
+                                ),
                               ),
                           
-                              CommonDropdown(
-                                hintText: "Month",
-                                width: 90,
-                                items: monthList, 
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    month = value;
-                                  }
-                                },
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: CommonDropdown(
+                                  hintText: "Month",
+                                  width: 90,
+                                  items: monthList, 
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      month = value;
+                                    }
+                                  },
+                                ),
                               ),
                           
-                              CommonDropdown(
-                                hintText: "Date",
-                                width: 90,
-                                items: dateList
-                                .map((date) => DropdownMenuItem<int>(
-                                      value: date,
-                                      child: Text(date.toString()),
-                                    ))
-                                .toList(),
-                              
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    date = value;
-                                  }
-                                },
+                              Flexible(
+                                child: CommonDropdown(
+                                  hintText: "Date",
+                                  width: 90,
+                                  items: dateList
+                                  .map((date) => DropdownMenuItem<int>(
+                                        value: date,
+                                        child: Text(date.toString()),
+                                      ))
+                                  .toList(),
+                                
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      date = value;
+                                    }
+                                  },
+                                ),
                               ),
                             ],
                           ),
