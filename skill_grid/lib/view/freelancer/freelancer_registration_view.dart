@@ -246,7 +246,7 @@ class _FreelancerRegistrationViewState extends State<FreelancerRegistrationView>
                             }
       
                             if (!RegExp(r'^(98|97|96)\d{8}$').hasMatch(value)) {
-                              return 'Enter a valid Nepal mobile number';
+                              return 'Enter a valid mobile number';
                             }
       
                             return null;
