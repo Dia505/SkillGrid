@@ -9,6 +9,7 @@ class CommonTextfield extends StatefulWidget {
     required this.controller,
     required this.validator,
     this.width,
+    this.hintText 
   });
 
   final String textFieldTitle;
@@ -16,6 +17,7 @@ class CommonTextfield extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final double? width;
+  final String? hintText;
 
   @override
   State<CommonTextfield> createState() => _CommonTextfieldState();
@@ -50,6 +52,8 @@ class _CommonTextfieldState extends State<CommonTextfield> {
                 validator: widget.validator,
 
                 decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 20),
 

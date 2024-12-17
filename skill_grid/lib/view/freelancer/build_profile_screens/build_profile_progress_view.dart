@@ -22,6 +22,12 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
   late AnimationController _progressController;
   late Animation<double> _progressAnimation;
 
+  // Use a list of form keys for each page
+  final List<GlobalKey<FormState>> _formKeys = List.generate(
+    4,
+    (index) => GlobalKey<FormState>(),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +48,14 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
   }
 
   void _nextStep() {
+    // Validate only the current step's form if it exists
+    if (_formKeys[_currentStep].currentState != null &&
+        !_formKeys[_currentStep].currentState!.validate()) {
+      print("Form on step $_currentStep is not valid");
+      return; // <-- Change 2: Prevent moving to the next step if the form is invalid
+    }
+
+    // If the form is valid, proceed to the next step
     if (_currentStep < _totalSteps - 1) {
       setState(() {
         _currentStep++;
@@ -55,7 +69,7 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
       // Animate the progress bar smoothly
       _progressController.animateTo(
         (_currentStep + 1) / _totalSteps,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
@@ -68,14 +82,14 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
       });
       _pageController.animateToPage(
         _currentStep,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
 
       // Animate the progress bar smoothly
        _progressController.animateTo(
         (_currentStep + 1) / _totalSteps,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
@@ -115,6 +129,7 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
           ),
           Expanded(
             child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
               onPageChanged: (int step) {
                 setState(() {
@@ -124,15 +139,15 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
                 // Animate the progress bar smoothly when the page changes
                 _progressController.animateTo(
                   (_currentStep + 1) / _totalSteps,
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 );
               },
-              children: const [
-                JobCategoryView(),
-                JobDetailsView(),
-                ServicesFormView(),
-                BioFormView()
+              children: [
+                const JobCategoryView(),
+                JobDetailsView(formKey: _formKeys[1]),
+                const ServicesFormView(),
+                const BioFormView()
               ],
             ),
           ),
@@ -158,9 +173,9 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
                   ),
                 ),
                 SizedBox(
-                  width: 130,
+                  width: _currentStep == _totalSteps - 1 ? 200 : 130,
                   child: CommonButton(
-                    buttonText: "Next",
+                    buttonText: _currentStep == _totalSteps - 1 ? "View My Profile" : "Next",
                     buttonColor: const Color(0xFF322E86),
                     buttonTextColor: const Color(0xFFE7E7FF),
                     onPressed: _nextStep,

@@ -67,7 +67,7 @@ class _FreelancerRegistrationViewState extends State<FreelancerRegistrationView>
   @override
   void initState() {
     super.initState();
-    // Initialize years in initState
+    // Initialize years and date in initState
     yearList = List.generate(endYear - startYear + 1, (index) => startYear + index);
     dateList = List.generate(31, (index) => index + 1);
   }
