@@ -38,7 +38,8 @@ class _JobDetailsViewState extends State<JobDetailsView> {
           Text("Describe your job",
           style: GoogleFonts.inter(
             color: const Color(0xFF322E86),
-            fontSize: 20
+            fontSize: 20,
+            fontWeight: FontWeight.w500
           ),),
     
           const SizedBox(height: 10,),

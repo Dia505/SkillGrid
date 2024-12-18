@@ -147,7 +147,7 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
                 const JobCategoryView(),
                 JobDetailsView(formKey: _formKeys[1]),
                 const ServicesFormView(),
-                const BioFormView()
+                BioFormView(formKey: _formKeys[3])
               ],
             ),
           ),
