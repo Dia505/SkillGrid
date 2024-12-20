@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/view/onboard_screen_view.dart';
 
 class SplashScreenView extends StatefulWidget {

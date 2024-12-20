@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
 
 class HomeScreenView extends StatefulWidget {
   const HomeScreenView({super.key});
@@ -123,7 +124,6 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
                   child: Row(
                     children: serviceCategory.asMap().entries.map((entry) {
-                      int index = entry.key; // Access index
                       var category = entry.value; // Access the map (category)
 
                       return Padding(
@@ -151,7 +151,40 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                   style: TextStyle(fontSize: 22, fontFamily: "Inter Light"),
                 ),
 
-                
+                const SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      HomeRecentlyViewedCard(
+                        portfolioImgPath: "assets/images/gettyimages-480952865-612x612.jpg",
+                        freelancerProfileImgPath: "assets/images/istockphoto-1395071229-612x612.jpg",
+                        freelancerName: "Krishna Basnet",
+                        profession: "Photographer/Videographer",
+                        rating: "⭐⭐⭐⭐",
+                        hourlyRate: "1500",
+                      ),
+
+                      HomeRecentlyViewedCard(
+                        portfolioImgPath: "assets/images/Screenshot 2024-12-01 003357.png",
+                        freelancerProfileImgPath: "assets/images/gettyimages-484274251-612x612.jpg",
+                        freelancerName: "Amaira Yadav",
+                        profession: "Photographer",
+                        rating: "⭐⭐⭐⭐⭐",
+                        hourlyRate: "5000",
+                      ),
+
+                      HomeRecentlyViewedCard(
+                        portfolioImgPath: "assets/images/food-photographer-ideas.jpg",
+                        freelancerProfileImgPath: "assets/images/headshot-portrait-indian-girl-posing-studio-headshot-portrait-smiling-millennial-indian-girl-orange-brown-studio-160962677.webp",
+                        freelancerName: "Rita Singh",
+                        profession: "Photographer",
+                        rating: "⭐⭐⭐⭐⭐",
+                        hourlyRate: "3000",
+                      ),
+                      
+                    ],
+                  ),
+                )
               ],
             ),
           )

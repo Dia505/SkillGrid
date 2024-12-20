@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/view/join_client_freelancer_view.dart';
