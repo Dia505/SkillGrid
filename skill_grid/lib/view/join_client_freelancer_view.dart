@@ -88,9 +88,9 @@ class _JoinClientFreelancerViewState extends State<JoinClientFreelancerView> {
           children: [
             const CommonLogo(),
 
-            Text("Join as a client or freelancer",
-                style: GoogleFonts.caprasimo(
-                    color: const Color(0xFFE7E7FF), fontSize: 20)),
+            const Text("Join as a client or freelancer",
+                style: TextStyle(
+                    color: Color(0xFFE7E7FF), fontSize: 20, fontFamily: "Caprasimo")),
 
             GestureDetector(
               onTap: _toggleClientSelection,
@@ -120,13 +120,13 @@ class _JoinClientFreelancerViewState extends State<JoinClientFreelancerView> {
                         height: 135,
                       ),
               
-                      SizedBox(
+                      const SizedBox(
                         width: 170,
                         child: Text("I’m a client, hiring for a project",
-                            style: GoogleFonts.inter(
+                            style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600)),
+                                fontFamily: "Inter SemiBold")),
                       ),
               
                       Padding(
@@ -175,13 +175,13 @@ class _JoinClientFreelancerViewState extends State<JoinClientFreelancerView> {
                         height: 125,
                       ),
               
-                      SizedBox(
+                      const SizedBox(
                         width: 151,
                         child: Text("I’m a freelancer, looking for work",
-                            style: GoogleFonts.inter(
+                            style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600)),
+                                fontFamily: "Inter SemiBold")),
                       ),
               
                       Padding(
@@ -241,11 +241,11 @@ class _JoinClientFreelancerViewState extends State<JoinClientFreelancerView> {
               padding: const EdgeInsets.only(bottom: 70, left: 85),
               child: Row(
                 children: [
-                  Text("Already have an account?",
-                      style: GoogleFonts.inter(
+                  const Text("Already have an account?",
+                      style: TextStyle(
                         color: const Color(0xFFE7E7FF),
                         fontSize: 14,
-                        fontWeight: FontWeight.w500
+                        fontFamily: "Inter Medium"
                       )),
                   const SizedBox(
                     width: 10,
@@ -257,10 +257,11 @@ class _JoinClientFreelancerViewState extends State<JoinClientFreelancerView> {
                           MaterialPageRoute(
                               builder: (context) => const LoginScreenView()));
                     },
-                    child: Text("Log in",
-                        style: GoogleFonts.caprasimo(
+                    child: const Text("Log in",
+                        style: TextStyle(
                           color: const Color(0xFFE7E7FF),
                           fontSize: 14,
+                          fontFamily: "Caprasimo"
                         )),
                   ),
                 ],

@@ -81,22 +81,23 @@ class _OnboardScreenViewState extends State<OnboardScreenView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "New to SkillGrid?",
-                    style: GoogleFonts.inter(
-                      color: const Color(0xFFE7E7FF),
-                      fontSize: 16,
+                    style: TextStyle(
+                      color:  Color(0xFFE7E7FF),
+                      fontSize: 16
                     ),
                   ),
                   InkWell(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => JoinClientFreelancerView()));
                     },
-                    child: Text(
+                    child: const Text(
                       "Sign up",
-                      style: GoogleFonts.caprasimo(
-                        color: const Color(0xFFE7E7FF),
+                      style: TextStyle(
+                        color: Color(0xFFE7E7FF),
                         fontSize: 16,
+                        fontFamily: "Caprasimo"
                       ),
                     ),
                   ),
@@ -124,9 +125,10 @@ class _OnboardScreenViewState extends State<OnboardScreenView> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             carouselData["title"]!,
-            style: GoogleFonts.caprasimo(
-              color: const Color(0xFFE7E7FF),
+            style: const TextStyle(
+              color: Color(0xFFE7E7FF),
               fontSize: 20,
+              fontFamily: "Caprasimo"
             ),
           ),
         ),
@@ -136,10 +138,10 @@ class _OnboardScreenViewState extends State<OnboardScreenView> {
           child: Text(
             carouselData["subtitle"]!,
             textAlign: TextAlign.center,
-            style: GoogleFonts.inter(
-              color: const Color(0xFFE7E7FF),
+            style: const TextStyle(
+              color: Color(0xFFE7E7FF),
               fontSize: 15,
-              fontWeight: FontWeight.w500,
+              fontFamily: "Inter Medium"
             ),
           ),
         ),
