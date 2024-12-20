@@ -166,7 +166,16 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       rating: "⭐⭐⭐⭐⭐",
                     ),
 
-                    const SizedBox(height: 20,),
+                    const SizedBox(height: 12),
+
+                    const Divider(
+                        color: Colors.grey, 
+                        thickness: 1, 
+                        indent: 0, // Space before the line (left)
+                        endIndent: 25, // Space after the line (right)
+                      ),
+
+                    const SizedBox(height: 15,),
 
                     const Text(
                       "Service Category",
