@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const ClientDashboard(),
+      home: const BuildProfileLottieView(),
       theme: getApplicationTheme(),
     );
   }

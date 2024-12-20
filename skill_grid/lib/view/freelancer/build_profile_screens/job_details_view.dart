@@ -35,18 +35,18 @@ class _JobDetailsViewState extends State<JobDetailsView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Describe your job",
-          style: GoogleFonts.inter(
-            color: const Color(0xFF322E86),
+          const Text("Describe your job",
+          style: TextStyle(
+            color: Color(0xFF322E86),
             fontSize: 20,
-            fontWeight: FontWeight.w500
+            fontFamily: "Inter Medium"
           ),),
     
           const SizedBox(height: 10,),
     
-          Text("Share the details of your work, skills, and what clients can expect.",
-          style: GoogleFonts.inter(
-            color: const Color(0xFF322E86),
+          const Text("Share the details of your work, skills, and what clients can expect.",
+          style: TextStyle(
+            color: Color(0xFF322E86),
             fontSize: 15
           ),),
     

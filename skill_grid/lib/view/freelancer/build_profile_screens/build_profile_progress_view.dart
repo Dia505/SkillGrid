@@ -105,9 +105,9 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Build Your Profile",
-            style: GoogleFonts.caprasimo(
-                color: const Color(0xFFE7E7FF), fontSize: 24)),
+        title: const Text("Build Your Profile",
+            style: TextStyle(
+                color: Color(0xFFE7E7FF), fontSize: 24, fontFamily: "Caprasimo")),
         elevation: 0,
         centerTitle: true,
         backgroundColor: const Color(0xFF322E86),
@@ -146,7 +146,7 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
               children: [
                 const JobCategoryView(),
                 JobDetailsView(formKey: _formKeys[1]),
-                const ServicesFormView(),
+                ServicesFormView(formKey: _formKeys[2]),
                 BioFormView(formKey: _formKeys[3])
               ],
             ),
@@ -176,8 +176,6 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
                   width: _currentStep == _totalSteps - 1 ? 200 : 130,
                   child: CommonButton(
                     buttonText: _currentStep == _totalSteps - 1 ? "View My Profile" : "Next",
-                    buttonColor: const Color(0xFF322E86),
-                    buttonTextColor: const Color(0xFFE7E7FF),
                     onPressed: _nextStep,
                   ),
                 ),
