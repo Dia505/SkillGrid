@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skill_grid/core/common/home_ongoing_collab_card.dart';
 import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
 
 class HomeScreenView extends StatefulWidget {
@@ -139,6 +140,35 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               
                   children: [
                     const Text(
+                      "Ongoing Collaborations",
+                      style: TextStyle(fontSize: 22, fontFamily: "Inter Light"),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    const HomeOngoingCollabCard(
+                      freelancerProfileImgPath: "assets/images/istockphoto-1354842602-612x612.jpg",
+                      freelancerName: "Anjali Karki",
+                      projectName: "Bank Management System",
+                      deadlineDuration: "5 days",
+                      completePercent: 65,
+                      rating: "⭐⭐⭐⭐⭐",
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    const HomeOngoingCollabCard(
+                      freelancerProfileImgPath: "assets/images/indian_girl_stock_img.jpg",
+                      freelancerName: "Rita Singh",
+                      projectName: "Bank advertisement videography",
+                      deadlineDuration: "2 hours",
+                      completePercent: 85,
+                      rating: "⭐⭐⭐⭐⭐",
+                    ),
+
+                    const SizedBox(height: 20,),
+
+                    const Text(
                       "Service Category",
                       style: TextStyle(fontSize: 22, fontFamily: "Inter Light"),
                     ),
@@ -205,7 +235,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               
                           HomeRecentlyViewedCard(
                             portfolioImgPath: "assets/images/food-photographer-ideas.jpg",
-                            freelancerProfileImgPath: "assets/images/headshot-portrait-indian-girl-posing-studio-headshot-portrait-smiling-millennial-indian-girl-orange-brown-studio-160962677.webp",
+                            freelancerProfileImgPath: "assets/images/indian_girl_stock_img.jpg",
                             freelancerName: "Rita Singh",
                             profession: "Photographer",
                             rating: "⭐⭐⭐⭐⭐",

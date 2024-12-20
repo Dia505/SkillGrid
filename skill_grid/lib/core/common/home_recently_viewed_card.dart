@@ -10,7 +10,7 @@ class HomeRecentlyViewedCard extends StatelessWidget {
   // final VoidCallback onPressed;
 
   const HomeRecentlyViewedCard({
-    Key? key,
+    super.key,
     required this.portfolioImgPath,
     required this.freelancerProfileImgPath,
     required this.freelancerName,
@@ -18,7 +18,7 @@ class HomeRecentlyViewedCard extends StatelessWidget {
     required this.rating,
     required this.hourlyRate,
     // required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,7 @@ class HomeRecentlyViewedCard extends StatelessWidget {
       width: 250,
       height: 200,
       child: Card(
+        elevation: 3,
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
 
