@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/view/freelancer/build_profile_screens/bio_form_view.dart';
 import 'package:skill_grid/view/freelancer/build_profile_screens/job_category_view.dart';
@@ -144,7 +143,7 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
                 );
               },
               children: [
-                const JobCategoryView(),
+                JobCategoryView(formKey: _formKeys[0]),
                 JobDetailsView(formKey: _formKeys[1]),
                 ServicesFormView(formKey: _formKeys[2]),
                 BioFormView(formKey: _formKeys[3])

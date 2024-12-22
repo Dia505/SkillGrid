@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const BuildProfileLottieView(),
+      home: const BuildProfileProgressView(),
       theme: getApplicationTheme(),
     );
   }

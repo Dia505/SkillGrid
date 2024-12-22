@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
 
 class BioFormView extends StatefulWidget {
