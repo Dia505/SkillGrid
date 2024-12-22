@@ -43,7 +43,7 @@ class _JobCategoryViewState extends State<JobCategoryView> {
             "Select your job category",
             style: TextStyle(
               color: Color(0xFF322E86),
-              fontSize: 24,
+              fontSize: 20,
               fontFamily: "Inter Medium",
             ),
           ),

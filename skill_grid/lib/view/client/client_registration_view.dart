@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
@@ -151,9 +150,9 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
       
                         Container(
                           padding: const EdgeInsets.only(left: 12),
-                          child: Text("City",
-                              style: GoogleFonts.inter(
-                                  color: const Color(0xFF322E86), fontSize: 15)),
+                          child: const Text("City",
+                              style: TextStyle(
+                                  color: Color(0xFF322E86), fontSize: 15)),
                         ),
       
                         const SizedBox(height: 7),
@@ -236,12 +235,12 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
       
                                       child: RichText(
       
-                                        text: TextSpan(
-                                          style: GoogleFonts.inter(
-                                            color: const Color(0xFF625D5D), 
+                                        text: const TextSpan(
+                                          style: TextStyle(
+                                            color: Color(0xFF625D5D), 
                                             fontSize: 14,
                                           ),
-                                          children: const [
+                                          children: [
                                             TextSpan(
                                               text: 'Yes, I understand and agree to the ',
                                             ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
 
@@ -84,10 +83,10 @@ class _JobDetailsViewState extends State<JobDetailsView> {
     
                 const SizedBox(height: 10,),
     
-                Padding(
+                const Padding(
                   padding: const EdgeInsets.only(left: 12, bottom: 8),
                   child: Text("Years of experience",
-                  style: GoogleFonts.inter(
+                  style: TextStyle(
                     color: const Color(0xFF322E86)
                   ),),
                 ),
