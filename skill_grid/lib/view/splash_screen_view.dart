@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/view/onboard_screen_view.dart';
 
 class SplashScreenView extends StatefulWidget {
@@ -43,11 +42,12 @@ class _SplashScreenViewState extends State<SplashScreenView> {
                   width: 151,
                   height: 154,),
                     
-                Text(
+                const Text(
                   "SkillGrid.", 
-                  style:GoogleFonts.caprasimo(
-                    color: const Color(0xFFE7E7FF),
-                    fontSize: 40
+                  style:TextStyle(
+                    color: Color(0xFFE7E7FF),
+                    fontSize: 40,
+                    fontFamily: "Caprasimo"
                   ))
               ],
             ),

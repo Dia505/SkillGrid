@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CommonLogo extends StatelessWidget {
   const CommonLogo({super.key});
@@ -17,9 +16,9 @@ class CommonLogo extends StatelessWidget {
             width: 48,
             height: 50,
           ),
-          Text("SkillGrid.",
-              style: GoogleFonts.caprasimo(
-                  color: const Color(0xFFE7E7FF), fontSize: 24))
+          const Text("SkillGrid.",
+              style: TextStyle(
+                  color: Color(0xFFE7E7FF), fontSize: 24, fontFamily: "Caprasimo"))
         ],
       ),
     );

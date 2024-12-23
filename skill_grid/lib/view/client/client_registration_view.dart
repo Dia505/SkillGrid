@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
@@ -88,15 +87,15 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
       
                       children: [
-                        Text("Sign Up",
-                            style: GoogleFonts.caprasimo(
-                                color: const Color(0xFF322E86), fontSize: 26)),
+                        const Text("Sign Up",
+                            style: TextStyle(
+                                color: Color(0xFF322E86), fontSize: 26, fontFamily: "Caprasimo")),
       
                         const SizedBox(height: 10,),
       
-                        Text("Connect with experts for your next project",
-                            style: GoogleFonts.inter(
-                                color: const Color(0xFF322E86), fontSize: 15)),
+                        const Text("Connect with experts for your next project",
+                            style: TextStyle(
+                                color: Color(0xFF322E86), fontSize: 16)),
       
                         const SizedBox(height: 15),
       
@@ -151,9 +150,9 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
       
                         Container(
                           padding: const EdgeInsets.only(left: 12),
-                          child: Text("City",
-                              style: GoogleFonts.inter(
-                                  color: const Color(0xFF322E86), fontSize: 15)),
+                          child: const Text("City",
+                              style: TextStyle(
+                                  color: Color(0xFF322E86), fontSize: 15)),
                         ),
       
                         const SizedBox(height: 7),
@@ -236,12 +235,12 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
       
                                       child: RichText(
       
-                                        text: TextSpan(
-                                          style: GoogleFonts.inter(
-                                            color: const Color(0xFF625D5D), 
+                                        text: const TextSpan(
+                                          style: TextStyle(
+                                            color: Color(0xFF625D5D), 
                                             fontSize: 14,
                                           ),
-                                          children: const [
+                                          children: [
                                             TextSpan(
                                               text: 'Yes, I understand and agree to the ',
                                             ),
@@ -284,8 +283,6 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                           padding: const EdgeInsets.only(left: 12.0),
                           child: CommonButton(
                             buttonText: "Create my account",
-                            buttonColor: const Color(0xFF322E86),
-                            buttonTextColor: Colors.white,
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 Navigator.push(
@@ -303,10 +300,10 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                             
                           
                             children: [
-                              Text("Already have an account?",
-                              style:GoogleFonts.inter(
-                                color: const Color(0xFF322E86),
-                                fontSize: 14,
+                              const Text("Already have an account?",
+                              style:TextStyle(
+                                color: Color(0xFF322E86),
+                                fontSize: 15,
                               )),
       
                               const SizedBox(width: 10,),
@@ -320,10 +317,11 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                                             const LoginScreenView()));
                                 },
       
-                                child: Text("Log in",
-                                style:GoogleFonts.caprasimo(
-                                  color: const Color(0xFF544FBD),
-                                  fontSize: 14,
+                                child: const Text("Log in",
+                                style:TextStyle(
+                                  color: Color(0xFF544FBD),
+                                  fontSize: 16,
+                                  fontFamily: "Caprasimo"
                                 )),
                               ),
                             ],

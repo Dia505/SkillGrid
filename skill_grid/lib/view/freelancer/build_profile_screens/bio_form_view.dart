@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
 
 class BioFormView extends StatefulWidget {
@@ -23,18 +22,18 @@ class _BioFormViewState extends State<BioFormView> {
       padding: const EdgeInsets.all(40),
       child: Column(
         children: [
-          Text("Great! Now write a bio about yourself ",
-          style: GoogleFonts.inter(
-            color: const Color(0xFF322E86),
+          const Text("Great! Now write a bio about yourself ",
+          style: TextStyle(
+            color: Color(0xFF322E86),
             fontSize: 20,
-            fontWeight: FontWeight.w500
+            fontFamily: "Inter Medium"
           ),),
     
           const SizedBox(height: 10,),
     
-          Text("Help potential clients get to know you at a glance. Share your expertise, experience, and what sets you apart.",
-          style: GoogleFonts.inter(
-            color: const Color(0xFF322E86),
+          const Text("Help potential clients get to know you at a glance. Share your expertise, experience, and what sets you apart.",
+          style: TextStyle(
+            color: Color(0xFF322E86),
             fontSize: 15
           ),),
 

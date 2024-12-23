@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CommonButton extends StatelessWidget {
   const CommonButton({
     super.key,
     required this.buttonText,
-    required this.buttonColor, 
-    required this.buttonTextColor,
+    this.buttonColor, 
+    this.buttonTextColor,
     required this.onPressed
   });
 
@@ -23,14 +22,11 @@ class CommonButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
           backgroundColor: buttonColor,
         ),
 
         child: Text(buttonText,
-          style: GoogleFonts.caprasimo(
-            color: buttonTextColor, fontSize: 18)),
+          style: TextStyle(color: buttonTextColor)),
       ),
     );
   }

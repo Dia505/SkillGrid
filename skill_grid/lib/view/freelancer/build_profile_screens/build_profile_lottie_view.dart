@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:skill_grid/view/freelancer/build_profile_screens/build_profile_progress_view.dart';
 
-class BuildProfileLottieView extends StatelessWidget {
+class BuildProfileLottieView extends StatefulWidget {
   const BuildProfileLottieView({super.key});
+
+  @override
+  State<BuildProfileLottieView> createState() => _BuildProfileLottieViewState();
+}
+
+class _BuildProfileLottieViewState extends State<BuildProfileLottieView> {
+  @override
+  void initState() {
+    super.initState();
+    // Navigate to the next page after 2 seconds
+    Future.delayed(const Duration(seconds: 8), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const BuildProfileProgressView()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,21 +31,22 @@ class BuildProfileLottieView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Step Into The Spotlight",
-            style: GoogleFonts.caprasimo(
+            const Text("Step Into The Spotlight",
+            style: TextStyle(
               fontSize: 24,
-              color: const Color(0xFF322E86)
+              color: Color(0xFF322E86),
+              fontFamily: "Caprasimo"
             )),
 
             const SizedBox(height: 15),
 
-            SizedBox(
+            const SizedBox(
               width: 300,
               child: Text("Let’s set up your freelance profile and connect you with clients who need your skills",
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 fontSize: 15,
-                color: const Color(0xFF322E86)
+                color: Color(0xFF322E86) 
               )),
             ),
 

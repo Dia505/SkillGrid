@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CommonTextfield extends StatefulWidget {
   const CommonTextfield({
@@ -36,8 +35,8 @@ class _CommonTextfieldState extends State<CommonTextfield> {
           Container(
             padding: const EdgeInsets.only(left: 12),
             child: Text(widget.textFieldTitle,
-                style: GoogleFonts.inter(
-                    color: const Color(0xFF322E86), fontSize: 15)),
+                style: const TextStyle(
+                    color: Color(0xFF322E86), fontSize: 16)),
           ),
       
           const SizedBox(height: 7),
@@ -53,27 +52,7 @@ class _CommonTextfieldState extends State<CommonTextfield> {
 
                 decoration: InputDecoration(
                   hintText: widget.hintText,
-                  hintStyle: GoogleFonts.inter(color: Colors.grey, fontSize: 13),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20),
-
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(11),
-                      borderSide:
-                          const BorderSide(color: Color(0xFF322E86), width: 1)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(11),
-                      borderSide:
-                          const BorderSide(color: Color(0xFF322E86), width: 2)),
-
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
-                      borderSide:
-                        const BorderSide(color: Colors.red, width: 1)),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
-                      borderSide:
-                        const BorderSide(color: Colors.red, width: 2))
+                  
                 ),
             ))
         ],
