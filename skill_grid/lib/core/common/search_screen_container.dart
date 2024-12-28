@@ -9,6 +9,7 @@ class SearchScreenContainer extends StatefulWidget {
   final String address;
   final int hourlyRate;
   final List<String> searchScreenImages;
+  final List<String> skills;
 
   const SearchScreenContainer(
       {super.key,
@@ -17,7 +18,8 @@ class SearchScreenContainer extends StatefulWidget {
       required this.profession,
       required this.address,
       required this.hourlyRate,
-      required this.searchScreenImages});
+      required this.searchScreenImages,
+      required this.skills});
 
   @override
   _SearchScreenContainerState createState() => _SearchScreenContainerState();
@@ -29,7 +31,7 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 365,
+      height: 420,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
       child: Column(
@@ -86,6 +88,10 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
             },
           ),
           buildIndicator(),
+          const SizedBox(
+            height: 10,
+          ),
+          buildSkillsSection(widget.skills),
         ],
       ),
     );
@@ -93,12 +99,16 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
 
   Widget buildSearchImage(String carouselData, int index) {
     return Container(
+      width: 266,
+      height: 130,
       margin: const EdgeInsets.symmetric(horizontal: 12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
-        child:
-            Image.asset(carouselData, // Dynamically get image from carouselData
-                fit: BoxFit.cover),
+        child: Image.asset(
+          carouselData, // Dynamically get image from carouselData
+          fit: BoxFit.cover,
+          alignment: Alignment.topCenter,
+        ),
       ),
     );
   }
@@ -110,8 +120,59 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
         effect: const JumpingDotEffect(
           dotHeight: 8,
           dotWidth: 8,
-          activeDotColor: Color(0xFF544FBD),
+          activeDotColor: Color(0xFF8984F2),
           dotColor: Colors.grey,
         ),
       );
+
+  Widget buildSkillsSection(List<String> skills) {
+    const int maxSkillsToShow = 4; // Show up to 6 skills before showing "+X"
+
+    // If there are more than maxSkillsToShow skills, show the rest as "+X"
+    List<String> displayedSkills = skills.length > maxSkillsToShow
+        ? skills.sublist(0, maxSkillsToShow)
+        : skills;
+
+    int remainingSkillsCount = skills.length - displayedSkills.length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8.0, //horizontal spacing between each item
+          runSpacing: 5.0, //vertical spacing between each row
+          children: [
+            for (var skill in displayedSkills)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFCCCAFF),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Text(
+                  skill,
+                  style:
+                      const TextStyle(color: Color(0xFF625D5D), fontSize: 12),
+                ),
+              ),
+            if (remainingSkillsCount > 0)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFCCCAFF),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Text(
+                  "+$remainingSkillsCount",
+                  style:
+                      const TextStyle(color: Color(0xFF625D5D), fontSize: 12),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
 }
