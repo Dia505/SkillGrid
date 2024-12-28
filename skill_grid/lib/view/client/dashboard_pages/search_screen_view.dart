@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skill_grid/core/common/search_screen_container.dart';
 
 class SearchScreenView extends StatefulWidget {
   const SearchScreenView({super.key});
@@ -13,11 +14,11 @@ class _SearchScreenViewState extends State<SearchScreenView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 14),
-        child: Column(
-          children: [
-            Row(
+          child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20, left: 14),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,9 +65,21 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                   ),
                 ),
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+          const SearchScreenContainer(
+            freelancerProfileImgPath: "assets/images/istockphoto-1395071229-612x612.jpg", 
+            freelancerName: "Krishna Basnet", 
+            profession: "Photographer & Videographer", 
+            address: "Kalimati, Kathmandu", 
+            hourlyRate: 1500,
+            searchScreenImages: [
+              "assets/images/gettyimages-480952865-612x612.jpg",
+              "assets/images/panel-discussion-event-stockcake.jpg",
+              "assets/images/istockphoto-1137781483-612x612.jpg"
+            ],
+          )
+        ],
       )),
     );
   }
