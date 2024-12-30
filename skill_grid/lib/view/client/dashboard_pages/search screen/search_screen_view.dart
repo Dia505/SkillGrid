@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/search_screen_container.dart';
+import 'package:skill_grid/view/client/dashboard_pages/search%20screen/search_filter_view.dart';
 
 class SearchScreenView extends StatefulWidget {
   const SearchScreenView({super.key});
@@ -48,7 +49,19 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled:
+                            true, // Makes the sheet scrollable if content is long
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(16)),
+                        ),
+                        builder: (context) => SearchFilterView(),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(
                           side: BorderSide(
