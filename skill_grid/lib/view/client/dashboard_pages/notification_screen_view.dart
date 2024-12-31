@@ -37,20 +37,22 @@ class _NotificationScreenViewState extends State<NotificationScreenView> {
             ),
             NotificationCard(
               notificationDate: "1 Dec, 2024",
-              freelancerFirstName: "Anjali",
+              notificationTitle: "Anjali has accepted your offer!",
               freelancerProfileImgPath:
                   "assets/images/istockphoto-1354842602-612x612.jpg",
-              projectDate: "5 December, 2024",
+              notificationMessage:
+                  "Your project is set to start on 5 December, 2024. The pricing will be tracked from that date onward. Please review the details in the Contract section.",
             ),
             SizedBox(
               height: 5,
             ),
             NotificationCard(
               notificationDate: "27 Nov, 2024",
-              freelancerFirstName: "Rita",
+              notificationTitle: "Rita has accepted your offer!",
               freelancerProfileImgPath:
                   "assets/images/indian_girl_stock_img.jpg",
-              projectDate: "12 December, 2024",
+              notificationMessage:
+                  "Your project is set to start on 12 December, 2024. The pricing will be tracked from that date onward. Please review the details in the Contract section.",
             ),
           ],
         ),
