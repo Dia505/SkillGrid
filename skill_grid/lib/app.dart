@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/app_theme/app_theme.dart';
+import 'package:skill_grid/view/client/client_dashboard.dart';
 import 'package:skill_grid/view/freelancer/freelancer_dashboard.dart';
 // import 'package:skill_grid/view/client/client_registration_view.dart';
 // import 'package:skill_grid/view/join_client_freelancer_view.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const FreelancerDashboard(),
+      home: const ClientDashboard(),
       theme: getApplicationTheme(),
     );
   }

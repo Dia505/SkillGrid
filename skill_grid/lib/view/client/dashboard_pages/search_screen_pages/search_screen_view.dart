@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/search_screen_container.dart';
-import 'package:skill_grid/view/client/dashboard_pages/search%20screen/search_filter_view.dart';
+import 'package:skill_grid/view/client/dashboard_pages/search_screen_pages/freelancer_profile_view.dart';
+import 'package:skill_grid/view/client/dashboard_pages/search_screen_pages/search_filter_view.dart';
 
 class SearchScreenView extends StatefulWidget {
   const SearchScreenView({super.key});
@@ -59,7 +60,7 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(16)),
                         ),
-                        builder: (context) => SearchFilterView(),
+                        builder: (context) => const SearchFilterView(),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -81,26 +82,36 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                 ],
               ),
             ),
-            const SearchScreenContainer(
-              freelancerProfileImgPath:
-                  "assets/images/istockphoto-1395071229-612x612.jpg",
-              freelancerName: "Krishna Basnet",
-              profession: "Photographer & Videographer",
-              address: "Kalimati, Kathmandu",
-              hourlyRate: 1500,
-              searchScreenImages: [
-                "assets/images/gettyimages-480952865-612x612.jpg",
-                "assets/images/panel-discussion-event-stockcake.jpg",
-                "assets/images/istockphoto-1137781483-612x612.jpg"
-              ],
-              skills: [
-                "Event Photography",
-                "Commercial Photography",
-                "Videography",
-                "Adobe photoshop",
-                "Davinci resolve",
-                "Professional photoshoots"
-              ],
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FreelancerProfileView(),
+                  ),
+                );
+              },
+              child: const SearchScreenContainer(
+                freelancerProfileImgPath:
+                    "assets/images/istockphoto-1395071229-612x612.jpg",
+                freelancerName: "Krishna Basnet",
+                profession: "Photographer & Videographer",
+                address: "Kalimati, Kathmandu",
+                hourlyRate: 1500,
+                searchScreenImages: [
+                  "assets/images/gettyimages-480952865-612x612.jpg",
+                  "assets/images/panel-discussion-event-stockcake.jpg",
+                  "assets/images/istockphoto-1137781483-612x612.jpg"
+                ],
+                skills: [
+                  "Event Photography",
+                  "Commercial Photography",
+                  "Videography",
+                  "Adobe photoshop",
+                  "Davinci resolve",
+                  "Professional photoshoots"
+                ],
+              ),
             ),
             const Divider(
               color: Colors.grey,
