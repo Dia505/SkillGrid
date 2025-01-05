@@ -4,7 +4,7 @@ import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
-import 'package:skill_grid/view/login_screen_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
 
 class FreelancerRegistrationView extends StatefulWidget {
   const FreelancerRegistrationView({super.key});

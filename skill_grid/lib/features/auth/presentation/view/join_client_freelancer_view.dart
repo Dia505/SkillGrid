@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
-import 'package:skill_grid/view/client/client_registration_view.dart';
-import 'package:skill_grid/view/freelancer/freelancer_registration_view.dart';
-import 'package:skill_grid/view/login_screen_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/client_registration_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/freelancer_registration_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
 
 class JoinClientFreelancerView extends StatefulWidget {
   const JoinClientFreelancerView({super.key});

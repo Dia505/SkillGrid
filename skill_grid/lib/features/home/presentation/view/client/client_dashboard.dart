@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:skill_grid/view/freelancer/dashboard_pages/calendar_screen_view.dart';
-import 'package:skill_grid/view/freelancer/dashboard_pages/contract_screen_view.dart';
-import 'package:skill_grid/view/freelancer/dashboard_pages/home_screen_view.dart';
-import 'package:skill_grid/view/freelancer/dashboard_pages/notification_screen_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/calendar_screen_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/notification_screen_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
 
-class FreelancerDashboard extends StatefulWidget {
-  const FreelancerDashboard({super.key});
+class ClientDashboard extends StatefulWidget {
+  const ClientDashboard({super.key});
 
   @override
-  State<FreelancerDashboard> createState() => _FreelancerDashboardState();
+  State<ClientDashboard> createState() => _ClientDashboardState();
 }
 
-class _FreelancerDashboardState extends State<FreelancerDashboard> {
+class _ClientDashboardState extends State<ClientDashboard> {
   int _selectedIndex = 0;
 
   List<Widget> lstBottomNavScreen = [
     const HomeScreenView(),
-    const ContractScreenView(),
+    const SearchScreenView(),
     const CalendarScreenView(),
     const NotificationScreenView(),
   ];
@@ -36,7 +36,7 @@ class _FreelancerDashboardState extends State<FreelancerDashboard> {
                 BottomNavigationBarItem(
                     icon: Icon(Icons.dashboard_rounded), label: "Dashboard"),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.description_outlined), label: "Contract"),
+                    icon: Icon(Icons.search_rounded), label: "Search"),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.calendar_month_rounded),
                     label: "Calendar"),

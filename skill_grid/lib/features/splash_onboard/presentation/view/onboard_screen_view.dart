@@ -2,8 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
-import 'package:skill_grid/view/join_client_freelancer_view.dart';
-import 'package:skill_grid/view/login_screen_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/join_client_freelancer_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardScreenView extends StatefulWidget {
