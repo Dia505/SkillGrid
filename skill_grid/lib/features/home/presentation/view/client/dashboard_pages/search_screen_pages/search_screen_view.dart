@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/search_screen_container.dart';
-import 'package:skill_grid/view/client/dashboard_pages/search_screen_pages/freelancer_profile_view.dart';
-import 'package:skill_grid/view/client/dashboard_pages/search_screen_pages/search_filter_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/freelancer_profile_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_filter_view.dart';
 
 class SearchScreenView extends StatefulWidget {
   const SearchScreenView({super.key});

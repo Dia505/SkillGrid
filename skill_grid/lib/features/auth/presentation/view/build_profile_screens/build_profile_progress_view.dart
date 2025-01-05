@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/common_button.dart';
-import 'package:skill_grid/view/freelancer/build_profile_screens/bio_form_view.dart';
-import 'package:skill_grid/view/freelancer/build_profile_screens/job_category_view.dart';
-import 'package:skill_grid/view/freelancer/build_profile_screens/job_details_view.dart';
-import 'package:skill_grid/view/freelancer/build_profile_screens/services_form_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/build_profile_screens/bio_form_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/build_profile_screens/job_category_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/build_profile_screens/job_details_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/build_profile_screens/services_form_view.dart';
 
 class BuildProfileProgressView extends StatefulWidget {
   const BuildProfileProgressView({super.key});

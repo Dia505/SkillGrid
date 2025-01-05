@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:skill_grid/view/freelancer/build_profile_screens/build_profile_progress_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/build_profile_screens/build_profile_progress_view.dart';
 
 class BuildProfileLottieView extends StatefulWidget {
   const BuildProfileLottieView({super.key});

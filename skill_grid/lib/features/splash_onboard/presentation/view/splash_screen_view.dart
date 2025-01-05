@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skill_grid/view/onboard_screen_view.dart';
+import 'package:skill_grid/features/splash_onboard/presentation/view/onboard_screen_view.dart';
 
 class SplashScreenView extends StatefulWidget {
   const SplashScreenView({super.key});
