@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skill_grid/view/client/dashboard_pages/calendar_screen_view.dart';
 import 'package:skill_grid/view/client/dashboard_pages/home_screen_view.dart';
 import 'package:skill_grid/view/client/dashboard_pages/notification_screen_view.dart';
-import 'package:skill_grid/view/client/dashboard_pages/search screen/search_screen_view.dart';
+import 'package:skill_grid/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
 
 class ClientDashboard extends StatefulWidget {
   const ClientDashboard({super.key});
