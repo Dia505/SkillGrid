@@ -10,7 +10,7 @@ class HomeScreenView extends StatefulWidget {
 }
 
 class _HomeScreenViewState extends State<HomeScreenView> {
-  final _searchController = new TextEditingController();
+  final _searchController = TextEditingController();
 
   final List<Map<String, dynamic>> serviceCategory = [
     {'icon': Icons.computer, 'label': 'Technology'},
