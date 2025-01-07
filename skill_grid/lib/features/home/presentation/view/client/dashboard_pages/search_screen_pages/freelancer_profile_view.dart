@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/common_button.dart';
+import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -322,6 +323,69 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                 thickness: 1,
                 indent: 20,
                 endIndent: 20,
+              ),
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Reviews",
+                      style: TextStyle(fontFamily: "Inter Bold", fontSize: 24),
+                    ),
+                    SizedBox(height: 10),
+                    FreelancerProfileReviewContainer(
+                      projectTitle: "Figma designs for our management system",
+                      rating: "⭐⭐⭐⭐ 4.0",
+                      reviewDate: "20 Jan, 2022",
+                      review: "“It was great to work with Anjali!”",
+                    ),
+                    SizedBox(height: 5),
+                    Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    SizedBox(height: 5),
+                    FreelancerProfileReviewContainer(
+                      projectTitle:
+                          "Create web mockups for Somerset Interior Studio",
+                      rating: "⭐⭐⭐⭐⭐ 5.0",
+                      reviewDate: "26 May, 2022",
+                      review:
+                          "“Anjali does amazing work! Delivered a great product”",
+                    ),
+                    SizedBox(height: 5),
+                    Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    SizedBox(height: 5),
+                    FreelancerProfileReviewContainer(
+                      projectTitle: "Meal Rush” mobile app design",
+                      rating: "⭐⭐⭐⭐ 4.0",
+                      reviewDate: "5 Mar, 2023",
+                    ),
+                    SizedBox(height: 5),
+                    Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    SizedBox(height: 5),
+                    FreelancerProfileReviewContainer(
+                      projectTitle: "Poster for “Study in Europe” seminar",
+                      rating: "⭐⭐⭐⭐ 4.0",
+                      reviewDate: "6 June, 2023",
+                      review: "“It was great to work with Anjali!”",
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
