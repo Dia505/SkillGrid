@@ -43,18 +43,83 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
     },
   ];
 
-  final PageController _pageController = PageController();
+  final PageController _servicePageController = PageController();
   int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(() {
+    _servicePageController.addListener(() {
       setState(() {
-        _currentPage = _pageController.page!.toInt();
+        _currentPage = _servicePageController.page!.toInt();
       });
     });
   }
+
+  final PageController _reviewPageController = PageController();
+
+  final List<Map<String, String?>> reviews = [
+    {
+      "projectTitle": "Figma designs for our management system",
+      "rating": "⭐⭐⭐⭐ 4.0",
+      "reviewDate": "20 Jan, 2022",
+      "review": "“It was great to work with Anjali!”"
+    },
+    {
+      "projectTitle": "Create web mockups for Somerset Interior Studio",
+      "rating": "⭐⭐⭐⭐⭐ 5.0",
+      "reviewDate": "26 May, 2022",
+      "review": "“Anjali does amazing work! Delivered a great product”"
+    },
+    {
+      "projectTitle": "Meal Rush” mobile app design",
+      "rating": "⭐⭐⭐⭐ 4.0",
+      "reviewDate": "5 Mar, 2023",
+      "review": null
+    },
+    {
+      "projectTitle": "Poster for “Study in Europe” seminar",
+      "rating": "⭐⭐⭐⭐ 4.0",
+      "reviewDate": "6 June, 2023",
+      "review": "“It was great to work with Anjali!”"
+    },
+    {
+      "projectTitle": "Logo Design for TechFest 2023",
+      "rating": "⭐⭐⭐⭐⭐ 5.0",
+      "reviewDate": "15 July, 2023",
+      "review": "“Fantastic work and great communication!”"
+    },
+    {
+      "projectTitle": "UI redesign for “QuickMed” app",
+      "rating": "⭐⭐⭐⭐ 4.0",
+      "reviewDate": "10 Sep, 2023",
+      "review": "“Anjali was professional and delivered on time.”"
+    },
+    {
+      "projectTitle": "Brand Identity for CoffeeHouse Co.",
+      "rating": "⭐⭐⭐⭐⭐ 5.0",
+      "reviewDate": "1 Oct, 2023",
+      "review": "“Very creative and easy to work with.”"
+    },
+    {
+      "projectTitle": "Social Media Campaign Designs",
+      "rating": "⭐⭐⭐⭐ 4.0",
+      "reviewDate": "20 Dec, 2023",
+      "review": "“Great designs and quick turnaround.”"
+    },
+    {
+      "projectTitle": "E-commerce App Wireframes",
+      "rating": "⭐⭐⭐⭐ 4.0",
+      "reviewDate": "1 Jan, 2024",
+      "review": null
+    },
+    {
+      "projectTitle": "Packaging Design for EcoFriendly",
+      "rating": "⭐⭐⭐⭐⭐ 5.0",
+      "reviewDate": "10 Jan, 2024",
+      "review": "“Exceeded our expectations!”"
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -288,7 +353,7 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                     SizedBox(
                       height: 290,
                       child: PageView.builder(
-                        controller: _pageController,
+                        controller: _servicePageController,
                         itemCount: serviceCategory.length,
                         itemBuilder: (context, index) {
                           final service = serviceCategory[index];
@@ -303,7 +368,7 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                     const SizedBox(height: 10),
                     Center(
                       child: SmoothPageIndicator(
-                        controller: _pageController,
+                        controller: _servicePageController,
                         count: serviceCategory.length,
                         effect: const WormEffect(
                           activeDotColor: Color(0xFF544FBD),
@@ -325,67 +390,79 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                 endIndent: 20,
               ),
 
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Reviews",
                       style: TextStyle(fontFamily: "Inter Bold", fontSize: 24),
                     ),
-                    SizedBox(height: 10),
-                    FreelancerProfileReviewContainer(
-                      projectTitle: "Figma designs for our management system",
-                      rating: "⭐⭐⭐⭐ 4.0",
-                      reviewDate: "20 Jan, 2022",
-                      review: "“It was great to work with Anjali!”",
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 472, // Height for 4 reviews and spacing
+                      child: PageView.builder(
+                        controller: _reviewPageController,
+                        itemCount: (reviews.length / 4).ceil(),
+                        itemBuilder: (context, pageIndex) {
+                          final startIndex = pageIndex * 4;
+                          final endIndex = startIndex + 4;
+                          final currentPageReviews = reviews.sublist(
+                              startIndex,
+                              endIndex > reviews.length
+                                  ? reviews.length
+                                  : endIndex);
+
+                          return Column(
+                            children: currentPageReviews.map((review) {
+                              return Column(
+                                children: [
+                                  FreelancerProfileReviewContainer(
+                                    projectTitle: review['projectTitle'] ?? '',
+                                    rating: review['rating'] ?? '',
+                                    reviewDate: review['reviewDate'] ?? '',
+                                    review: review['review'],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  const Divider(
+                                    color: Colors.grey,
+                                    thickness: 1,
+                                    indent: 0,
+                                    endIndent: 0,
+                                  ),
+                                  const SizedBox(height: 5),
+                                ],
+                              );
+                            }).toList(),
+                          );
+                        },
+                      ),
                     ),
-                    SizedBox(height: 5),
-                    Divider(
-                      color: Colors.grey,
-                      thickness: 1,
-                      indent: 0,
-                      endIndent: 0,
-                    ),
-                    SizedBox(height: 5),
-                    FreelancerProfileReviewContainer(
-                      projectTitle:
-                          "Create web mockups for Somerset Interior Studio",
-                      rating: "⭐⭐⭐⭐⭐ 5.0",
-                      reviewDate: "26 May, 2022",
-                      review:
-                          "“Anjali does amazing work! Delivered a great product”",
-                    ),
-                    SizedBox(height: 5),
-                    Divider(
-                      color: Colors.grey,
-                      thickness: 1,
-                      indent: 0,
-                      endIndent: 0,
-                    ),
-                    SizedBox(height: 5),
-                    FreelancerProfileReviewContainer(
-                      projectTitle: "Meal Rush” mobile app design",
-                      rating: "⭐⭐⭐⭐ 4.0",
-                      reviewDate: "5 Mar, 2023",
-                    ),
-                    SizedBox(height: 5),
-                    Divider(
-                      color: Colors.grey,
-                      thickness: 1,
-                      indent: 0,
-                      endIndent: 0,
-                    ),
-                    SizedBox(height: 5),
-                    FreelancerProfileReviewContainer(
-                      projectTitle: "Poster for “Study in Europe” seminar",
-                      rating: "⭐⭐⭐⭐ 4.0",
-                      reviewDate: "6 June, 2023",
-                      review: "“It was great to work with Anjali!”",
-                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: SmoothPageIndicator(
+                        controller: _reviewPageController,
+                        count: (reviews.length / 4).ceil(),
+                        effect: const WormEffect(
+                          activeDotColor: Color(0xFF544FBD),
+                          dotColor: Color(0xFF707070),
+                          dotHeight: 8,
+                          dotWidth: 8,
+                          spacing: 8,
+                        ),
+                      ),
+                    )
                   ],
                 ),
+              ),
+              const SizedBox(height: 10),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+                indent: 20,
+                endIndent: 20,
               ),
             ],
           ),
