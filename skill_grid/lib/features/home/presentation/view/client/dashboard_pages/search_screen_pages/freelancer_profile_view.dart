@@ -121,6 +121,19 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
     }
   ];
 
+  final List<String> skills = [
+    "Wireframing",
+    "Web Design",
+    "Mobile UI Design",
+    "User Interface Design",
+    "Figma",
+    "App Design",
+    "User Experience Design",
+    "Graphic Design",
+    "Poster Design",
+    "Logo Design"
+  ];
+
   @override
   Widget build(BuildContext context) {
     String fullText =
@@ -464,6 +477,48 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                 indent: 20,
                 endIndent: 20,
               ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Skills",
+                        style:
+                            TextStyle(fontFamily: "Inter Bold", fontSize: 24)),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: 333,
+                      height: 150,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Wrap(
+                            spacing: 8.0,
+                            runSpacing: 5.0,
+                            children: [
+                              for (var skill in skills)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFCCCAFF),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Text(
+                                    skill,
+                                    style: const TextStyle(
+                                        color: Color(0xFF625D5D), fontSize: 12),
+                                  ),
+                                ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         ),
