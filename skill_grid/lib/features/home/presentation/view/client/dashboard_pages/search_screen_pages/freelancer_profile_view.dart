@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/freelancer_profile_education_container.dart';
+import 'package:skill_grid/core/common/freelancer_profile_employment_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -547,6 +548,49 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                       institutionName: "St. Xavier's College",
                       startDate: "April 2015",
                       endDate: "March 2017",
+                    )
+                  ],
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+                indent: 20,
+                endIndent: 20,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Employment",
+                        style:
+                            TextStyle(fontFamily: "Inter Bold", fontSize: 24)),
+                    SizedBox(height: 10),
+                    FreelancerProfileEmploymentContainer(
+                      jobTitle: "UI/UX Designer",
+                      companyName: "InnoSphere Technologies",
+                      startDate: "July 2024",
+                      endDate: "Present",
+                      description:
+                          "Crafted intuitive and visually appealing user interfaces for web and mobile applications. Conducted user research, wireframing, and prototyping to enhance user experiences.",
+                    ),
+                    SizedBox(height: 10),
+                    FreelancerProfileEmploymentContainer(
+                      jobTitle: "UI/UX Designer",
+                      companyName: "TechHive",
+                      startDate: "March 2022",
+                      endDate: "January 2024",
+                      description: "Worked on web and mobile apps (figma)",
+                    ),
+                    SizedBox(height: 10),
+                    FreelancerProfileEmploymentContainer(
+                      jobTitle: "UI/UX intern",
+                      companyName: "NextGen IT",
+                      startDate: "December 2020",
+                      endDate: "July 2021",
+                      description:
+                          "Assisted in designing user-friendly interfaces for web and mobile platforms. Supported user research, wireframing, and prototyping tasks to improve usability.",
                     )
                   ],
                 ),
