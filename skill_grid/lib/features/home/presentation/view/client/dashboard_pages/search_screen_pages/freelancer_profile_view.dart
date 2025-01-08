@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/common_button.dart';
+import 'package:skill_grid/core/common/freelancer_profile_education_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -518,7 +519,38 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                     )
                   ],
                 ),
-              )
+              ),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+                indent: 20,
+                endIndent: 20,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Education",
+                        style:
+                            TextStyle(fontFamily: "Inter Bold", fontSize: 24)),
+                    SizedBox(height: 10),
+                    FreelancerProfileEducationContainer(
+                      degreeTitle: "Bachelors in Computing",
+                      institutionName: "Islington College",
+                      startDate: "May 2017",
+                      endDate: "June 2020",
+                    ),
+                    SizedBox(height: 10),
+                    FreelancerProfileEducationContainer(
+                      degreeTitle: "A levels",
+                      institutionName: "St. Xavier's College",
+                      startDate: "April 2015",
+                      endDate: "March 2017",
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
