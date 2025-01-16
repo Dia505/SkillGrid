@@ -23,7 +23,7 @@ class ClientLocalRepository implements IClientRepository {
   Future<Either<Failure, void>> deleteClient(String clientId) async {
     try {
       await _clientLocalDataSource.deleteClient(clientId);
-      return Right(null);
+      return const Right(null);
     }
     catch (e) {
       return Left(LocalDatabaseFailure(message: "Error deleting client: $e"));
@@ -31,7 +31,7 @@ class ClientLocalRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, ClientEntity?>> getClientById(String clientId) async {
+  Future<Either<Failure, ClientEntity>> getClientById(String clientId) async {
     try {
       final clientEntity = await _clientLocalDataSource.getClientById(clientId);
       return Right(clientEntity);
