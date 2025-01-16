@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:skill_grid/core/common/common_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
 import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 
 class ClientRegistrationView extends StatefulWidget {
   const ClientRegistrationView({super.key});
@@ -43,10 +44,8 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-      
         body: Stack(
           alignment: Alignment.bottomCenter,
-      
           children: [
             Positioned(
               top: 0,
@@ -58,21 +57,16 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                   child: const Align(
                       alignment: Alignment.topCenter, child: CommonLogo())),
             ),
-      
             Form(
               key: _formKey,
-      
               child: Positioned(
                 top: 200,
                 bottom: 0,
                 left: 0,
                 right: 0,
-                
                 child: SingleChildScrollView(
-      
                   child: Container(
                     padding: const EdgeInsets.only(left: 45, top: 40),
-      
                     decoration: const BoxDecoration(
                       color: Color(0xFFE7E7FF),
                       borderRadius: BorderRadius.only(
@@ -81,27 +75,24 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                           bottomLeft: Radius.zero,
                           bottomRight: Radius.zero),
                     ),
-      
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-      
                       children: [
                         const Text("Sign Up",
                             style: TextStyle(
-                                color: Color(0xFF322E86), fontSize: 26, fontFamily: "Caprasimo")),
-      
-                        const SizedBox(height: 10,),
-      
+                                color: Color(0xFF322E86),
+                                fontSize: 26,
+                                fontFamily: "Caprasimo")),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         const Text("Connect with experts for your next project",
                             style: TextStyle(
                                 color: Color(0xFF322E86), fontSize: 16)),
-      
                         const SizedBox(height: 15),
-      
                         Row(
                           children: [
-      
                             CommonTextfield(
                               textFieldTitle: "First name",
                               controller: _fnameController,
@@ -110,11 +101,10 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                                 if (value == null || value.isEmpty) {
                                   return '*required';
                                 }
-      
+
                                 return null;
                               },
                             ),
-      
                             CommonTextfield(
                               textFieldTitle: "Last name",
                               controller: _lnameController,
@@ -123,13 +113,12 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                                 if (value == null || value.isEmpty) {
                                   return '*required';
                                 }
-      
+
                                 return null;
                               },
                             ),
                           ],
                         ),
-      
                         CommonTextfield(
                           textFieldTitle: "Mobile number",
                           controller: _mobNumberController,
@@ -137,38 +126,32 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                             if (value == null || value.isEmpty) {
                               return '*required';
                             }
-      
+
                             if (!RegExp(r'^(98|97|96)\d{8}$').hasMatch(value)) {
                               return 'Enter a valid Nepal mobile number';
                             }
-      
+
                             return null;
                           },
                         ),
-      
                         const SizedBox(height: 10),
-      
                         Container(
                           padding: const EdgeInsets.only(left: 12),
                           child: const Text("City",
                               style: TextStyle(
                                   color: Color(0xFF322E86), fontSize: 15)),
                         ),
-      
                         const SizedBox(height: 7),
-      
                         CommonDropdown(
                           width: 325,
-                          items: cityList, 
+                          items: cityList,
                           onChanged: (value) {
                             if (value != null) {
                               city = value;
                             }
                           },
                         ),
-      
                         const SizedBox(height: 10),
-      
                         CommonTextfield(
                           textFieldTitle: "Email address",
                           controller: _emailController,
@@ -176,15 +159,15 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                             if (value == null || value.isEmpty) {
                               return '*required';
                             }
-      
-                            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+
+                            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                .hasMatch(value)) {
                               return 'Enter a valid email';
                             }
-      
+
                             return null;
                           },
                         ),
-      
                         CommonTextfield(
                           textFieldTitle: "Password",
                           obscureText: true,
@@ -193,13 +176,13 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                             if (value == null || value.isEmpty) {
                               return '*required';
                             }
-      
+
                             return null;
                           },
                         ),
-      
-                        const SizedBox(height: 10,),
-      
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -211,118 +194,121 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                                 }
                                 return null;
                               },
-      
                               builder: (FormFieldState<bool> state) {
-                                return Row(
-                                  children: [
-                                    Checkbox(
-                                      value: state.value,
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          _isChecked = value!;
-                                        });
-                                        state.didChange(value);
-                                      },
-                                      side: BorderSide(
-                                        color: state.hasError
-                                          ? Colors.red 
+                                return Row(children: [
+                                  Checkbox(
+                                    value: state.value,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        _isChecked = value!;
+                                      });
+                                      state.didChange(value);
+                                    },
+                                    side: BorderSide(
+                                      color: state.hasError
+                                          ? Colors.red
                                           : const Color(0xFF625D5D),
-                                      ),
                                     ),
-      
-                                    SizedBox(
-                                      width: 289,
-      
-                                      child: RichText(
-      
-                                        text: const TextSpan(
-                                          style: TextStyle(
-                                            color: Color(0xFF625D5D), 
-                                            fontSize: 14,
-                                          ),
-                                          children: [
-                                            TextSpan(
-                                              text: 'Yes, I understand and agree to the ',
-                                            ),
-                                            TextSpan(
-                                              text: 'SkillGrid Terms of Service',
-                                              style: TextStyle(
-                                                color: Color(0xFF322E86),
-                                                decoration: TextDecoration
-                                                    .underline, 
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: ', including the User Agreement and ',
-                                            ),
-                                            TextSpan(
-                                              text: 'Privacy Policy',
-                                              style: TextStyle(
-                                                color: Color(0xFF322E86), // Purple color
-                                                decoration: TextDecoration
-                                                    .underline, // Underline decoration
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: '.',
-                                            ),
-                                          ],
+                                  ),
+                                  SizedBox(
+                                    width: 289,
+                                    child: RichText(
+                                      text: const TextSpan(
+                                        style: TextStyle(
+                                          color: Color(0xFF625D5D),
+                                          fontSize: 14,
                                         ),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                'Yes, I understand and agree to the ',
+                                          ),
+                                          TextSpan(
+                                            text: 'SkillGrid Terms of Service',
+                                            style: TextStyle(
+                                              color: Color(0xFF322E86),
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                ', including the User Agreement and ',
+                                          ),
+                                          TextSpan(
+                                            text: 'Privacy Policy',
+                                            style: TextStyle(
+                                              color: Color(
+                                                  0xFF322E86), // Purple color
+                                              decoration: TextDecoration
+                                                  .underline, // Underline decoration
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '.',
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ]
-                                );
-                              },                            
+                                  ),
+                                ]);
+                              },
                             ),
                           ],
                         ),
-      
                         const SizedBox(height: 50),
-      
                         Padding(
                           padding: const EdgeInsets.only(left: 12.0),
-                          child: CommonButton(
-                            buttonText: "Create my account",
+                          child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const LoginScreenView()),
-                                );
+                                context.read<ClientBloc>().add(RegisterClient(
+                                    context: context,
+                                    firstName: _fnameController.text.trim(),
+                                    lastName: _lnameController.text.trim(),
+                                    mobileNo: _mobNumberController.text.trim(),
+                                    city: city!,
+                                    email: _emailController.text.trim(),
+                                    password: _passwordController.text.trim()));
                               }
                             },
+                            child: BlocBuilder<ClientBloc, ClientState>(
+                                builder: (context, state) {
+                              if (state.isLoading) {
+                                return const CircularProgressIndicator(
+                                  color: Color(0XFF322E86),
+                                );
+                              }
+                              return const Text("Create my account");
+                            }),
                           ),
                         ),
-      
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 70, left: 40, top: 20),
+                          padding: const EdgeInsets.only(
+                              bottom: 70, left: 40, top: 20),
                           child: Row(
-                            
-                          
                             children: [
                               const Text("Already have an account?",
-                              style:TextStyle(
-                                color: Color(0xFF322E86),
-                                fontSize: 15,
-                              )),
-      
-                              const SizedBox(width: 10,),
-                          
+                                  style: TextStyle(
+                                    color: Color(0xFF322E86),
+                                    fontSize: 15,
+                                  )),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               InkWell(
                                 onTap: () {
                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginScreenView()));
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginScreenView()));
                                 },
-      
                                 child: const Text("Log in",
-                                style:TextStyle(
-                                  color: Color(0xFF544FBD),
-                                  fontSize: 16,
-                                  fontFamily: "Caprasimo"
-                                )),
+                                    style: TextStyle(
+                                        color: Color(0xFF544FBD),
+                                        fontSize: 16,
+                                        fontFamily: "Caprasimo")),
                               ),
                             ],
                           ),
