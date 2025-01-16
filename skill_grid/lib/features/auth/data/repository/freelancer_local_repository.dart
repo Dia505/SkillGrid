@@ -5,12 +5,14 @@ import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/repository/freelancer_repository.dart';
 
 class FreelancerLocalRepository implements IFreelancerRepository {
-  FreelancerLocalDataSource _freelancerLocalDataSource;
-  FreelancerLocalRepository({required FreelancerLocalDataSource freelancerLocalDataSource}) 
-    :_freelancerLocalDataSource = freelancerLocalDataSource;
+  final FreelancerLocalDataSource _freelancerLocalDataSource;
+  FreelancerLocalRepository(
+      {required FreelancerLocalDataSource freelancerLocalDataSource})
+      : _freelancerLocalDataSource = freelancerLocalDataSource;
 
   @override
-  Future<Either<Failure, void>> registerFreelancer(FreelancerEntity freelancerEntity) {
+  Future<Either<Failure, void>> registerFreelancer(
+      FreelancerEntity freelancerEntity) {
     try {
       _freelancerLocalDataSource.registerFreelancer(freelancerEntity);
       return Future.value(const Right(null));
@@ -24,31 +26,33 @@ class FreelancerLocalRepository implements IFreelancerRepository {
     try {
       await _freelancerLocalDataSource.deleteFreelancer(freelancerId);
       return const Right(null);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(LocalDatabaseFailure(message: "Error deleting client: $e"));
     }
   }
 
   @override
-  Future<Either<Failure, FreelancerEntity>> getFreelancerById(String freelancerId) async {
+  Future<Either<Failure, FreelancerEntity>> getFreelancerById(
+      String freelancerId) async {
     try {
-      final freelancerEntity = await _freelancerLocalDataSource.getFreelancerById(freelancerId);
+      final freelancerEntity =
+          await _freelancerLocalDataSource.getFreelancerById(freelancerId);
       return Right(freelancerEntity);
-    }
-    catch (e) {
-      return Left(LocalDatabaseFailure(message: "Error getting client information: $e"));
+    } catch (e) {
+      return Left(LocalDatabaseFailure(
+          message: "Error getting client information: $e"));
     }
   }
 
   @override
   Future<Either<Failure, List<FreelancerEntity>>> getAllFreelancer() async {
     try {
-      final freelancerList = await _freelancerLocalDataSource.getAllFreelancers();
+      final freelancerList =
+          await _freelancerLocalDataSource.getAllFreelancers();
       return Right(freelancerList);
-    }
-    catch (e) {
-      return Left(LocalDatabaseFailure(message: "Error getting all freelancers: $e"));
+    } catch (e) {
+      return Left(
+          LocalDatabaseFailure(message: "Error getting all freelancers: $e"));
     }
   }
 }

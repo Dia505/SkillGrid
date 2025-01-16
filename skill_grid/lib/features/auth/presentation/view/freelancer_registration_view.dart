@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
 import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 
 class FreelancerRegistrationView extends StatefulWidget {
   const FreelancerRegistrationView({super.key});
@@ -68,15 +69,18 @@ class _FreelancerRegistrationViewState
     });
 
     if (_formKey.currentState!.validate() && selectedDate != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginScreenView()
-        ),
-      );
+      context.read<FreelancerBloc>().add(RegisterFreelancer(
+          context: context,
+          firstName: _fnameController.text.trim(),
+          lastName: _lnameController.text.trim(),
+          dateOfBirth: selectedDate!,
+          mobileNo: _mobNumberController.text.trim(),
+          address: _addressController.text.trim(),
+          city: city!,
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim()));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +124,9 @@ class _FreelancerRegistrationViewState
                       children: [
                         const Text("Sign Up",
                             style: TextStyle(
-                                color: Color(0xFF322E86), fontSize: 26, fontFamily: "Caprasimo")),
+                                color: Color(0xFF322E86),
+                                fontSize: 26,
+                                fontFamily: "Caprasimo")),
                         const SizedBox(
                           height: 10,
                         ),
@@ -161,12 +167,9 @@ class _FreelancerRegistrationViewState
                           padding: const EdgeInsets.only(left: 12),
                           child: const Text("Date of birth",
                               style: TextStyle(
-                                  color: Color(0xFF322E86),
-                                  fontSize: 15)),
+                                  color: Color(0xFF322E86), fontSize: 15)),
                         ),
-
                         const SizedBox(height: 7),
-
                         ElevatedButton(
                           onPressed: _showDatePicker,
                           style: ElevatedButton.styleFrom(
@@ -175,26 +178,28 @@ class _FreelancerRegistrationViewState
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15),
                                   side: const BorderSide(
-                                    color: Color(0xFF322E86)
-                                  ))),
+                                      color: Color(0xFF322E86)))),
                           child: Text(
                             selectedDate != null
                                 ? DateFormat('yyyy-MM-dd').format(selectedDate!)
                                 : "Choose date",
                             style: const TextStyle(
-                                color: Color(0xFF322E86), fontSize: 17, fontFamily: "Inter SemiBold"),
+                                color: Color(0xFF322E86),
+                                fontSize: 17,
+                                fontFamily: "Inter SemiBold"),
                           ),
                         ),
-
-                        if(dateError != null) 
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10, left: 20),
-                                child: Text(dateError!,
-                                style: const TextStyle(color: Color.fromARGB(255, 185, 37, 27), fontSize: 13),),
-                              ),
-
+                        if (dateError != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, left: 20),
+                            child: Text(
+                              dateError!,
+                              style: const TextStyle(
+                                  color: Color.fromARGB(255, 185, 37, 27),
+                                  fontSize: 13),
+                            ),
+                          ),
                         const SizedBox(height: 10),
-
                         CommonTextfield(
                           textFieldTitle: "Mobile number",
                           controller: _mobNumberController,
@@ -354,10 +359,15 @@ class _FreelancerRegistrationViewState
                         const SizedBox(height: 50),
                         Padding(
                           padding: const EdgeInsets.only(left: 12.0),
-                          child: CommonButton(
-                            buttonText: "Create my account",
-                            onPressed: _validateForm
-                          ),
+                          child: BlocBuilder<FreelancerBloc, FreelancerState>(
+                              builder: (context, state) {
+                            if (state.isLoading) {
+                              return const CircularProgressIndicator(
+                                color: Color(0XFF322E86),
+                              );
+                            }
+                            return const Text("Create my account");
+                          }),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -382,10 +392,9 @@ class _FreelancerRegistrationViewState
                                 },
                                 child: const Text("Log in",
                                     style: TextStyle(
-                                      color: Color(0xFF544FBD),
-                                      fontSize: 14,
-                                      fontFamily: "Caprasimo"
-                                    )),
+                                        color: Color(0xFF544FBD),
+                                        fontSize: 14,
+                                        fontFamily: "Caprasimo")),
                               ),
                             ],
                           ),
