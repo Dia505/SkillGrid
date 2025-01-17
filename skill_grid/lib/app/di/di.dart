@@ -17,6 +17,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
@@ -30,6 +31,7 @@ Future<void> initDependencies() async {
   await _initJoinAsClientFreelancerDependencies();
   await _initSplashScreenDependencies();
   await _initOnboardScreenDependencies();
+  await _initFreelancerDashboardDependencies();
 }
 
 _initHiveService() {
@@ -113,7 +115,8 @@ _initLoginDependencies() async {
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       clientLoginUseCase: getIt<ClientLoginUseCase>(), 
-      freelancerLoginUseCase: getIt<FreelancerLoginUseCase>()
+      freelancerLoginUseCase: getIt<FreelancerLoginUseCase>(),
+      freelancerDashboardCubit: getIt<FreelancerDashboardCubit>()
     )
   );
 }
@@ -145,5 +148,12 @@ _initOnboardScreenDependencies() async {
       clientBloc: getIt<ClientBloc>(),
       freelancerBloc: getIt<FreelancerBloc>()
     )
+  );
+}
+
+//Freelancer dashboard dependencies
+_initFreelancerDashboardDependencies() async {
+  getIt.registerFactory<FreelancerDashboardCubit>(
+    () => FreelancerDashboardCubit()
   );
 }

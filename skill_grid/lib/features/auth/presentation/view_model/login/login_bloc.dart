@@ -10,6 +10,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view/freelancer/freelancer_dashboard.dart';
+import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -17,12 +18,15 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final ClientLoginUseCase _clientLoginUseCase;
   final FreelancerLoginUseCase _freelancerLoginUseCase;
+  final FreelancerDashboardCubit _freelancerDashboardCubit;
 
   LoginBloc({
     required ClientLoginUseCase clientLoginUseCase,
     required FreelancerLoginUseCase freelancerLoginUseCase,
+    required FreelancerDashboardCubit freelancerDashboardCubit
   })  : _clientLoginUseCase = clientLoginUseCase,
         _freelancerLoginUseCase = freelancerLoginUseCase,
+        _freelancerDashboardCubit = freelancerDashboardCubit,
         super(LoginState.initial()) {
     // Navigate to client/freelancer selection screen
     on<NavigateJoinAsClientFreelancerEvent>((event, emit) {
@@ -52,7 +56,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Navigator.pushReplacement(
         event.context,
         MaterialPageRoute(
-          builder: (context) => event.destination,
+          builder: (context) => BlocProvider.value(
+            value: _freelancerDashboardCubit,
+            child: event.destination,
+          ),
         ),
       );
     });
