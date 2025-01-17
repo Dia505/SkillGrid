@@ -8,6 +8,8 @@ import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dar
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
+import 'package:skill_grid/features/splash_onboard/presentation/view/splash_screen_view.dart';
+import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,8 +20,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: getApplicationTheme(),
       home: BlocProvider.value(
-        value: getIt<ClientBloc>(),
-        child: const ClientRegistrationView(),
+        value: getIt<SplashScreenCubit>(),
+        child: const SplashScreenView(),
       ),
     );
   }

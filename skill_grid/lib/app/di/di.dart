@@ -17,6 +17,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
+import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -26,6 +27,7 @@ Future<void> initDependencies() async {
   await _initFreelancerRegistrationDependencies();
   await _initLoginDependencies();
   await _initJoinAsClientFreelancerDependencies();
+  await _initSplashScreenDependencies();
 }
 
 _initHiveService() {
@@ -122,5 +124,11 @@ _initJoinAsClientFreelancerDependencies() async {
       freelancerBloc: getIt<FreelancerBloc>(), 
       loginBloc: getIt<LoginBloc>()
     )
+  );
+}
+
+_initSplashScreenDependencies() async {
+  getIt.registerFactory<SplashScreenCubit>(
+    () => SplashScreenCubit(getIt<LoginBloc>())
   );
 }
