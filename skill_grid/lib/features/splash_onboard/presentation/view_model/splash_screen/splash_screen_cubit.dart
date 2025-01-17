@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
-import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:skill_grid/features/splash_onboard/presentation/view/onboard_screen_view.dart';
+import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
 
 class SplashScreenCubit extends Cubit<void> {
-  final LoginBloc _loginBloc;
+  final OnboardScreenCubit _onboardScreenCubit;
 
-  SplashScreenCubit(this._loginBloc) : super(null);
+  SplashScreenCubit(this._onboardScreenCubit) : super(null);
 
   Future<void> init(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2), () async {
@@ -15,8 +15,8 @@ class SplashScreenCubit extends Cubit<void> {
           context,
           MaterialPageRoute(
             builder: (context) => BlocProvider.value(
-              value: _loginBloc,
-              child: const LoginScreenView(),
+              value: _onboardScreenCubit,
+              child: const OnboardScreenView(),
             ),
           ),
         );
