@@ -141,7 +141,9 @@ _initOnboardScreenDependencies() async {
   getIt.registerFactory<OnboardScreenCubit>(
     () => OnboardScreenCubit(
       loginBloc: getIt<LoginBloc>(),
-      asClientFreelancerCubit: getIt<JoinAsClientFreelancerCubit>()
+      asClientFreelancerCubit: getIt<JoinAsClientFreelancerCubit>(),
+      clientBloc: getIt<ClientBloc>(),
+      freelancerBloc: getIt<FreelancerBloc>()
     )
   );
 }

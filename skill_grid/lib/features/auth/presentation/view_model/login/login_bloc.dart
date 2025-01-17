@@ -5,8 +5,9 @@ import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/freelancer_login_usec_case.dart';
-import 'package:skill_grid/features/auth/presentation/view/join_client_freelancer_view.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_freelancer/join_as_client_freelancer_cubit.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view/freelancer/freelancer_dashboard.dart';
 
@@ -27,13 +28,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // Navigate to client/freelancer selection screen
     on<NavigateJoinAsClientFreelancerEvent>((event, emit) {
       final joinAsClientFreelancerCubit = getIt<JoinAsClientFreelancerCubit>();
+      final clientBloc = getIt<ClientBloc>();
+      final freelancerBloc = getIt<FreelancerBloc>();
+      final loginBloc = getIt<LoginBloc>();
 
       Navigator.pushReplacement(
         event.context,
         MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
-            value: joinAsClientFreelancerCubit,
-            child: const JoinClientFreelancerView(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: joinAsClientFreelancerCubit),
+              BlocProvider.value(value: clientBloc),
+              BlocProvider.value(value: freelancerBloc),
+              BlocProvider.value(value: loginBloc),
+            ],
+            child: event.destination,
           ),
         ),
       );
@@ -61,9 +70,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       result.fold(
         (failure) {
           emit(state.copyWith(isLoading: false, isSuccess: false));
+          String errorMessage = failure.message ?? "Invalid Credentials";
           showSnackBar(
             context: event.context,
-            message: "Invalid Credentials",
+            message: errorMessage,
             color: Colors.red,
           );
         },
