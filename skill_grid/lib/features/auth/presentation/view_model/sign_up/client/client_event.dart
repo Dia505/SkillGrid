@@ -27,3 +27,13 @@ class RegisterClient extends ClientEvent {
     required this.password,
   });
 }
+
+class NavigateToLoginScreen extends ClientEvent {
+  final BuildContext context;
+  final Widget destination; 
+
+  const NavigateToLoginScreen({
+    required this.context,
+    required this.destination,
+  });
+}

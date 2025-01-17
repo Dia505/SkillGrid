@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/freelancer_login_usec_case.dart';
@@ -13,25 +14,25 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final JoinAsClientFreelancerCubit _joinAsClientFreelancerCubit;
   final ClientLoginUseCase _clientLoginUseCase;
   final FreelancerLoginUseCase _freelancerLoginUseCase;
 
   LoginBloc({
-    required JoinAsClientFreelancerCubit joinAsClientFreelancerCubit,
     required ClientLoginUseCase clientLoginUseCase,
     required FreelancerLoginUseCase freelancerLoginUseCase,
-  })  : _joinAsClientFreelancerCubit = joinAsClientFreelancerCubit,
-        _clientLoginUseCase = clientLoginUseCase,
+  })  : _clientLoginUseCase = clientLoginUseCase,
         _freelancerLoginUseCase = freelancerLoginUseCase,
         super(LoginState.initial()) {
+          
     // Navigate to client/freelancer selection screen
     on<NavigateJoinAsClientFreelancerEvent>((event, emit) {
-      Navigator.push(
+      final joinAsClientFreelancerCubit = getIt<JoinAsClientFreelancerCubit>();
+
+      Navigator.pushReplacement(
         event.context,
         MaterialPageRoute(
           builder: (context) => BlocProvider.value(
-            value: _joinAsClientFreelancerCubit,
+            value: joinAsClientFreelancerCubit,
             child: const JoinClientFreelancerView(),
           ),
         ),
@@ -50,12 +51,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
-      
+
       final result = (state.role == 'client')
-      ? await _clientLoginUseCase(
-          ClientLoginParams(email: event.email, password: event.password))
-      : await _freelancerLoginUseCase(
-          FreelancerLoginParams(email: event.email, password: event.password));
+          ? await _clientLoginUseCase(
+              ClientLoginParams(email: event.email, password: event.password))
+          : await _freelancerLoginUseCase(FreelancerLoginParams(
+              email: event.email, password: event.password));
 
       result.fold(
         (failure) {
@@ -69,13 +70,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         (token) {
           emit(state.copyWith(isLoading: false, isSuccess: true));
 
-          final destination = state.role == 'client'
-              ? const ClientDashboard()
-              : const FreelancerDashboard();
-
+          // Add NavigateHomeScreenEvent here to navigate to the appropriate dashboard
           add(NavigateHomeScreenEvent(
             context: event.context,
-            destination: destination,
+            destination: state.role == 'client'
+                ? const ClientDashboard()
+                : const FreelancerDashboard(),
           ));
         },
       );

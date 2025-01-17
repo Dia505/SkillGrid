@@ -4,28 +4,35 @@ import 'package:skill_grid/features/auth/data/data_source/local_data_source/clie
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/freelancer_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/repository/client_local_repository.dart';
 import 'package:skill_grid/features/auth/data/repository/freelancer_local_repository.dart';
+import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/delete_client_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/register_client_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/delete_freelancer_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/freelancer_login_usec_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_all_freelancer_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/register_freelancer_use_case.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_freelancer/join_as_client_freelancer_cubit.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 
 final getIt = GetIt.instance;
 
-Future<void> intiDependencies() async {
+Future<void> initDependencies() async {
   await _initHiveService();
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
+  await _initLoginDependencies();
+  await _initJoinAsClientFreelancerDependencies();
 }
 
 _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
 
+//Client dependencies
 _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<ClientLocalDataSource>(
     () => ClientLocalDataSource(hiveService: getIt())
@@ -48,10 +55,14 @@ _initClientRegistrationDependencies() async {
   );
 
   getIt.registerFactory<ClientBloc>(() => 
-    ClientBloc(registerClientUseCase: getIt<RegisterClientUseCase>())
+    ClientBloc(
+      registerClientUseCase: getIt<RegisterClientUseCase>(),
+      loginBloc: getIt<LoginBloc>()
+    )
   );
 }
 
+//Freelancer dependencies
 _initFreelancerRegistrationDependencies() async {
   getIt.registerLazySingleton<FreelancerLocalDataSource>(
     () => FreelancerLocalDataSource(hiveService: getIt())
@@ -78,6 +89,38 @@ _initFreelancerRegistrationDependencies() async {
   );
 
   getIt.registerFactory<FreelancerBloc>(() => 
-    FreelancerBloc(registerFreelancerUseCase: getIt<RegisterFreelancerUseCase>())
+    FreelancerBloc(
+      registerFreelancerUseCase: getIt<RegisterFreelancerUseCase>(),
+      loginBloc: getIt<LoginBloc>()
+    )
+  );
+}
+
+//Login dependencies
+_initLoginDependencies() async {
+  getIt.registerLazySingleton<ClientLoginUseCase>(
+    () => ClientLoginUseCase(getIt<ClientLocalRepository>())
+  );
+
+  getIt.registerLazySingleton<FreelancerLoginUseCase>(
+    () => FreelancerLoginUseCase(getIt<FreelancerLocalRepository>())
+  );
+
+  getIt.registerFactory<LoginBloc>(
+    () => LoginBloc(
+      clientLoginUseCase: getIt<ClientLoginUseCase>(), 
+      freelancerLoginUseCase: getIt<FreelancerLoginUseCase>()
+    )
+  );
+}
+
+//Join as client/freelancer dependencies
+_initJoinAsClientFreelancerDependencies() async {
+  getIt.registerFactory<JoinAsClientFreelancerCubit>(
+    () => JoinAsClientFreelancerCubit(
+      clientBloc: getIt<ClientBloc>(), 
+      freelancerBloc: getIt<FreelancerBloc>(), 
+      loginBloc: getIt<LoginBloc>()
+    )
   );
 }
