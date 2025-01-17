@@ -31,6 +31,14 @@ class HiveService {
     return box.get(clientId); 
   }
 
+  Future<ClientHiveModel?> loginClient(String email, String password) async {
+    var box = await Hive.openBox<ClientHiveModel>(HiveTableConstant.clientBox);
+    var client = box.values.firstWhere((element) =>
+      element.email == email && element.password == password);
+    box.close();
+    return client;
+  }
+
    //Freelancer Queries
   Future<void> registerFreelancer(FreelancerHiveModel freelancer) async {
     var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
@@ -50,6 +58,14 @@ class HiveService {
   Future<List<FreelancerHiveModel>> getAllFreelancers() async {
     var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
     return box.values.toList();
+  }
+
+  Future<FreelancerHiveModel?> loginFreelancer(String email, String password) async {
+    var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
+    var freelancer = box.values.firstWhere((element) =>
+      element.email == email && element.password == password);
+    box.close();
+    return freelancer;
   }
 
   Future<void> clearAll() async {

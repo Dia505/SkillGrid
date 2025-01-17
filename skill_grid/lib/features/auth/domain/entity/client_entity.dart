@@ -9,6 +9,7 @@ class ClientEntity extends Equatable {
   final String email;
   final String password;
   final String? profilePicture;
+  final String role;
 
   const ClientEntity({
     this.clientId,
@@ -19,10 +20,11 @@ class ClientEntity extends Equatable {
     required this.email,
     required this.password,
     this.profilePicture,
+    this.role = "client"
   });
 
   @override
   List<Object?> get props =>
-      [clientId, firstName, lastName, mobileNo, city, email, password, profilePicture];
+      [clientId, firstName, lastName, mobileNo, city, email, password, profilePicture, role];
 }
 

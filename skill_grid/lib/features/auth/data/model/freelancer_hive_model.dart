@@ -30,6 +30,8 @@ class FreelancerHiveModel extends Equatable {
   final String profilePicture;
   @HiveField(10)
   final String? backgroundPicture;
+  @HiveField(11)
+  final String role;
 
   FreelancerHiveModel(
       {String? freelancerId,
@@ -42,7 +44,8 @@ class FreelancerHiveModel extends Equatable {
       required this.email,
       required this.password,
       String? profilePicture,
-      String? backgroundPicture})
+      String? backgroundPicture,
+      this.role = "freelancer"})
       : freelancerId = freelancerId ?? const Uuid().v4(),
         profilePicture =
             profilePicture ?? "assets/images/default_profile_img.png",
@@ -60,7 +63,8 @@ class FreelancerHiveModel extends Equatable {
         email = "",
         password = "",
         profilePicture = "assets/images/default_profile_img.png",
-        backgroundPicture = "assets/images/default_bg_img.jpg";
+        backgroundPicture = "assets/images/default_bg_img.jpg",
+        role = "freelancer";
 
     factory FreelancerHiveModel.fromEntity(FreelancerEntity entity) {
       return FreelancerHiveModel(
@@ -74,7 +78,8 @@ class FreelancerHiveModel extends Equatable {
         email: entity.email, 
         password: entity.password,
         profilePicture: entity.profilePicture,
-        backgroundPicture: entity.backgroundPicture
+        backgroundPicture: entity.backgroundPicture,
+        role: entity.role
       );
     }
 
@@ -90,7 +95,8 @@ class FreelancerHiveModel extends Equatable {
         email: email, 
         password: password,
         profilePicture: profilePicture,
-        backgroundPicture: backgroundPicture
+        backgroundPicture: backgroundPicture,
+        role: role
       );
     }
 
@@ -106,6 +112,7 @@ class FreelancerHiveModel extends Equatable {
         email,
         password,
         profilePicture,
-        backgroundPicture
+        backgroundPicture,
+        role
       ];
 }

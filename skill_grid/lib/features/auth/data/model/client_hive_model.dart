@@ -24,6 +24,8 @@ class ClientHiveModel extends Equatable {
   final String password;
   @HiveField(7)
   final String profilePicture;
+  @HiveField(8)
+  final String role;
 
   ClientHiveModel(
       {String? clientId,
@@ -33,7 +35,8 @@ class ClientHiveModel extends Equatable {
       required this.city,
       required this.email,
       required this.password,
-      String? profilePicture})
+      String? profilePicture,
+      this.role = "client"})
       : clientId = clientId ?? const Uuid().v4(),
         profilePicture =
             profilePicture ?? "assets/images/default_profile_img.png";
@@ -46,7 +49,8 @@ class ClientHiveModel extends Equatable {
         city = "",
         email = "",
         password = "",
-        profilePicture = "assets/images/default_profile_img.png";
+        profilePicture = "assets/images/default_profile_img.png",
+        role = "client";
 
   factory ClientHiveModel.fromEntity(ClientEntity entity) {
     return ClientHiveModel(
@@ -57,7 +61,8 @@ class ClientHiveModel extends Equatable {
         city: entity.city,
         email: entity.email,
         password: entity.password,
-        profilePicture: entity.profilePicture);
+        profilePicture: entity.profilePicture,
+        role: entity.role);
   }
 
   ClientEntity toEntity() {
@@ -69,7 +74,8 @@ class ClientHiveModel extends Equatable {
         city: city,
         email: email,
         password: password,
-        profilePicture: profilePicture);
+        profilePicture: profilePicture,
+        role: role);
   }
 
   @override
@@ -81,6 +87,7 @@ class ClientHiveModel extends Equatable {
         city,
         email,
         password,
-        profilePicture
+        profilePicture,
+        role
       ];
 }
