@@ -257,8 +257,10 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                           ],
                         ),
                         const SizedBox(height: 50),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
+                        Container(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          width: 295,
+                          height: 43,
                           child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
@@ -285,29 +287,29 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              bottom: 70, left: 40, top: 20),
+                              bottom: 70, left: 20, top: 20),
                           child: Row(
                             children: [
                               const Text("Already have an account?",
                                   style: TextStyle(
                                     color: Color(0xFF322E86),
-                                    fontSize: 15,
+                                    fontSize: 18,
                                   )),
                               const SizedBox(
                                 width: 10,
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
+                                  context.read<ClientBloc>().add(
+                                      NavigateToLoginScreen(
+                                          context: context,
+                                          destination:
                                               const LoginScreenView()));
                                 },
                                 child: const Text("Log in",
                                     style: TextStyle(
                                         color: Color(0xFF544FBD),
-                                        fontSize: 16,
+                                        fontSize: 18,
                                         fontFamily: "Caprasimo")),
                               ),
                             ],

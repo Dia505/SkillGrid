@@ -31,3 +31,13 @@ class RegisterFreelancer extends FreelancerEvent {
     required this.password,
   });
 }
+
+class NavigateToLoginScreen extends FreelancerEvent {
+  final BuildContext context;
+  final Widget destination; 
+
+  const NavigateToLoginScreen({
+    required this.context,
+    required this.destination,
+  });
+}

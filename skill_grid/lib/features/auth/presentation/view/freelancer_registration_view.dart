@@ -357,43 +357,64 @@ class _FreelancerRegistrationViewState
                           ],
                         ),
                         const SizedBox(height: 50),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: BlocBuilder<FreelancerBloc, FreelancerState>(
-                              builder: (context, state) {
-                            if (state.isLoading) {
-                              return const CircularProgressIndicator(
-                                color: Color(0XFF322E86),
-                              );
-                            }
-                            return const Text("Create my account");
-                          }),
+                        Container(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          width: 295,
+                          height: 43,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<FreelancerBloc>().add(
+                                    RegisterFreelancer(
+                                        context: context,
+                                        firstName: _fnameController.text.trim(),
+                                        lastName: _lnameController.text.trim(),
+                                        dateOfBirth: selectedDate!,
+                                        mobileNo:
+                                            _mobNumberController.text.trim(),
+                                        address: _addressController.text.trim(),
+                                        city: city!,
+                                        email: _emailController.text.trim(),
+                                        password:
+                                            _passwordController.text.trim()));
+                              }
+                            },
+                            child: BlocBuilder<FreelancerBloc, FreelancerState>(
+                                builder: (context, state) {
+                              if (state.isLoading) {
+                                return const CircularProgressIndicator(
+                                  color: Color(0XFF322E86),
+                                );
+                              }
+                              return const Text("Create my account");
+                            }),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              bottom: 70, left: 40, top: 20),
+                              bottom: 70, left: 25, top: 20),
                           child: Row(
                             children: [
                               const Text("Already have an account?",
                                   style: TextStyle(
                                     color: Color(0xFF322E86),
-                                    fontSize: 14,
+                                    fontSize: 17,
                                   )),
                               const SizedBox(
                                 width: 10,
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
+                                  context.read<FreelancerBloc>().add(
+                                      NavigateToLoginScreen(
+                                          context: context,
+                                          destination:
                                               const LoginScreenView()));
                                 },
                                 child: const Text("Log in",
                                     style: TextStyle(
                                         color: Color(0xFF544FBD),
-                                        fontSize: 14,
+                                        fontSize: 18,
                                         fontFamily: "Caprasimo")),
                               ),
                             ],
