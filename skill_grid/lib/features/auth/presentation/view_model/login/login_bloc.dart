@@ -24,7 +24,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   })  : _clientLoginUseCase = clientLoginUseCase,
         _freelancerLoginUseCase = freelancerLoginUseCase,
         super(LoginState.initial()) {
-          
     // Navigate to client/freelancer selection screen
     on<NavigateJoinAsClientFreelancerEvent>((event, emit) {
       final joinAsClientFreelancerCubit = getIt<JoinAsClientFreelancerCubit>();
@@ -61,16 +60,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
-      final result = (state.role == 'client')
-          ? await _clientLoginUseCase(
-              ClientLoginParams(email: event.email, password: event.password))
-          : await _freelancerLoginUseCase(FreelancerLoginParams(
-              email: event.email, password: event.password));
+      // if (state.role == null || state.role!.isEmpty) {
+      //   print("Role is not assigned!");
+      //   showSnackBar(
+      //     context: event.context,
+      //     message: "Role is not assigned. Please select a role.",
+      //     color: Colors.red,
+      //   );
+      //   emit(state.copyWith(isLoading: false, isSuccess: false));
+      //   return; // Exit early if role is not assigned
+      // }
+
+      // final result = (state.role == 'client')
+      //     ? await _clientLoginUseCase(
+      //         ClientLoginParams(email: event.email, password: event.password))
+      //     : await _freelancerLoginUseCase(FreelancerLoginParams(
+      //         email: event.email, password: event.password));
+
+      final result = await _freelancerLoginUseCase(
+        FreelancerLoginParams(email: event.email, password: event.password));
 
       result.fold(
         (failure) {
           emit(state.copyWith(isLoading: false, isSuccess: false));
           String errorMessage = failure.message ?? "Invalid Credentials";
+          print("Login error: $errorMessage");
           showSnackBar(
             context: event.context,
             message: errorMessage,
@@ -80,12 +94,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         (token) {
           emit(state.copyWith(isLoading: false, isSuccess: true));
 
-          // Add NavigateHomeScreenEvent here to navigate to the appropriate dashboard
           add(NavigateHomeScreenEvent(
             context: event.context,
-            destination: state.role == 'client'
-                ? const ClientDashboard()
-                : const FreelancerDashboard(),
+            destination: const FreelancerDashboard(),
           ));
         },
       );

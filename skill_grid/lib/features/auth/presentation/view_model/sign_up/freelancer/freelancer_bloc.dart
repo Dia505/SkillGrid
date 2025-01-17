@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
+import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/register_freelancer_use_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 
