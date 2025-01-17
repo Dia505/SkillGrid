@@ -21,9 +21,9 @@ class FreelancerLoginParams extends Equatable {
   List<Object?> get props => [email, password];
 }
 
-class FreelancerLoginUsecCase implements UsecaseWithParams<String, FreelancerLoginParams> {
+class FreelancerLoginUseCase implements UsecaseWithParams<String, FreelancerLoginParams> {
   final IFreelancerRepository freelancerRepository;
-  FreelancerLoginUsecCase(this.freelancerRepository);
+  FreelancerLoginUseCase(this.freelancerRepository);
 
   @override
   Future<Either<Failure, String>> call(FreelancerLoginParams params) {
