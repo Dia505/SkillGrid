@@ -287,13 +287,13 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              bottom: 70, left: 20, top: 20),
+                              bottom: 70, left: 35, top: 20),
                           child: Row(
                             children: [
                               const Text("Already have an account?",
                                   style: TextStyle(
                                     color: Color(0xFF322E86),
-                                    fontSize: 18,
+                                    fontSize: 16,
                                   )),
                               const SizedBox(
                                 width: 10,
@@ -309,7 +309,7 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                                 child: const Text("Log in",
                                     style: TextStyle(
                                         color: Color(0xFF544FBD),
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontFamily: "Caprasimo")),
                               ),
                             ],
