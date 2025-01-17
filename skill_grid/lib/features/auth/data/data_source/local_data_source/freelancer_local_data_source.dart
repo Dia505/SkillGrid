@@ -49,4 +49,14 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<String> loginFreelancer(String email, String password) async {
+    try {
+      await _hiveService.loginFreelancer(email, password);
+      return Future.value("Success");
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
 }

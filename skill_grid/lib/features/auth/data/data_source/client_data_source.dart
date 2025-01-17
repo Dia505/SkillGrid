@@ -4,4 +4,5 @@ abstract interface class IClientDataSource {
   Future<void> registerClient(ClientEntity clientEntity);
   Future<void> deleteClient(String clientId);
   Future<ClientEntity> getClientById(String clientId);
+  Future<String> loginClient(String email, String password);
 }

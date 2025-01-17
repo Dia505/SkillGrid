@@ -6,4 +6,5 @@ abstract interface class IClientRepository {
   Future<Either<Failure, void>> registerClient(ClientEntity clientEntity);
   Future<Either<Failure, void>> deleteClient(String clientId);
   Future<Either<Failure, ClientEntity>> getClientById(String clientId);
+  Future<Either<Failure, String>> loginClient(String email, String password);
 }

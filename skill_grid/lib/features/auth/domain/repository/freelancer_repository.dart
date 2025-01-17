@@ -7,4 +7,5 @@ abstract interface class IFreelancerRepository {
   Future<Either<Failure, void>> deleteFreelancer(String freelancerId);
   Future<Either<Failure, FreelancerEntity>> getFreelancerById(String freelancerId);
   Future<Either<Failure, List<FreelancerEntity>>> getAllFreelancer();
+  Future<Either<Failure, String>> loginFreelancer(String email, String password);
 }
