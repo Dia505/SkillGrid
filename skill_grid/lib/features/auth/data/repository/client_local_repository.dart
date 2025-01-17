@@ -40,4 +40,14 @@ class ClientLocalRepository implements IClientRepository {
       return Left(LocalDatabaseFailure(message: "Error getting client information: $e"));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> loginClient(String email, String password) async {
+    try {
+      final token = await _clientLocalDataSource.loginClient(email, password);
+      return Right(token);
+    } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
 }

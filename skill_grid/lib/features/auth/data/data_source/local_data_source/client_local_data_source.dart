@@ -36,4 +36,14 @@ class ClientLocalDataSource implements IClientDataSource {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<String> loginClient(String email, String password) async {
+    try {
+      await _hiveService.loginClient(email, password);
+      return Future.value("Success");
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
 }

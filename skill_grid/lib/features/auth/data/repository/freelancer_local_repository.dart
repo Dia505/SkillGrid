@@ -55,4 +55,14 @@ class FreelancerLocalRepository implements IFreelancerRepository {
           LocalDatabaseFailure(message: "Error getting all freelancers: $e"));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> loginFreelancer(String email, String password) async {
+    try {
+      final token = await _freelancerLocalDataSource.loginFreelancer(email, password);
+      return Right(token);
+    } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
 }
