@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:skill_grid/features/splash_onboard/presentation/view/onboard_screen_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
 class SplashScreenView extends StatefulWidget {
   const SplashScreenView({super.key});
@@ -12,13 +13,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   @override
   void initState() {
     super.initState();
-    // Navigate to the next page after 2 seconds
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const OnboardScreenView()),
-      );
-    });
+    context.read<SplashScreenCubit>().init(context);
   }
 
   @override
