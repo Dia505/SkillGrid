@@ -12,6 +12,7 @@ class FreelancerEntity extends Equatable {
   final String password;
   final String? profilePicture;
   final String? backgroundPicture;
+  final String role;
 
   const FreelancerEntity(
       {this.freelancerId,
@@ -24,7 +25,8 @@ class FreelancerEntity extends Equatable {
       required this.email,
       required this.password,
       this.profilePicture,
-      this.backgroundPicture});
+      this.backgroundPicture,
+      this.role = "freelancer"});
 
   @override
   List<Object?> get props => [
@@ -38,6 +40,7 @@ class FreelancerEntity extends Equatable {
         email,
         password,
         profilePicture,
-        backgroundPicture
+        backgroundPicture,
+        role
       ];
 }

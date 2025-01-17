@@ -28,13 +28,14 @@ class FreelancerHiveModelAdapter extends TypeAdapter<FreelancerHiveModel> {
       password: fields[8] as String,
       profilePicture: fields[9] as String?,
       backgroundPicture: fields[10] as String?,
+      role: fields[11] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, FreelancerHiveModel obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.freelancerId)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class FreelancerHiveModelAdapter extends TypeAdapter<FreelancerHiveModel> {
       ..writeByte(9)
       ..write(obj.profilePicture)
       ..writeByte(10)
-      ..write(obj.backgroundPicture);
+      ..write(obj.backgroundPicture)
+      ..writeByte(11)
+      ..write(obj.role);
   }
 
   @override
