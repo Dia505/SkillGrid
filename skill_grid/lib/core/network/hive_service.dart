@@ -15,7 +15,7 @@ class HiveService {
     Hive.registerAdapter(FreelancerHiveModelAdapter());
   }
 
-  //Client Queries
+  //-------------------------Client Queries--------------------------------------
   Future<void> registerClient(ClientHiveModel client) async {
     var box = await Hive.openBox<ClientHiveModel>(HiveTableConstant.clientBox);
     await box.put(client.clientId, client);
@@ -28,44 +28,52 @@ class HiveService {
 
   Future<ClientHiveModel?> getClientById(String clientId) async {
     var box = await Hive.openBox<ClientHiveModel>(HiveTableConstant.clientBox);
-    return box.get(clientId); 
+    return box.get(clientId);
   }
 
-  Future<ClientHiveModel?> loginClient(String email, String password) async {
-    var box = await Hive.openBox<ClientHiveModel>(HiveTableConstant.clientBox);
-    var client = box.values.firstWhere((element) =>
-      element.email == email && element.password == password);
-    box.close();
-    return client;
+  Future<ClientHiveModel?> loginClient(
+      String email, String password) async {
+        var box = await Hive.openBox<ClientHiveModel>(
+            HiveTableConstant.clientBox);
+        var client = box.values.firstWhere(
+            (element) => element.email == email && element.password == password);
+        box.close();
+        return client;
   }
 
-   //Freelancer Queries
+  //--------------------Freelancer Queries------------------------------
   Future<void> registerFreelancer(FreelancerHiveModel freelancer) async {
-    var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
+    var box = await Hive.openBox<FreelancerHiveModel>(
+        HiveTableConstant.freelancerBox);
     await box.put(freelancer.freelancerId, freelancer);
   }
 
   Future<void> deleteFreelancer(String freelancerId) async {
-    var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
+    var box = await Hive.openBox<FreelancerHiveModel>(
+        HiveTableConstant.freelancerBox);
     await box.delete(freelancerId);
   }
 
   Future<FreelancerHiveModel?> getFreelancerById(String freelancerId) async {
-    var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
-    return box.get(freelancerId); 
+    var box = await Hive.openBox<FreelancerHiveModel>(
+        HiveTableConstant.freelancerBox);
+    return box.get(freelancerId);
   }
 
   Future<List<FreelancerHiveModel>> getAllFreelancers() async {
-    var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
+    var box = await Hive.openBox<FreelancerHiveModel>(
+        HiveTableConstant.freelancerBox);
     return box.values.toList();
   }
 
-  Future<FreelancerHiveModel?> loginFreelancer(String email, String password) async {
-    var box = await Hive.openBox<FreelancerHiveModel>(HiveTableConstant.freelancerBox);
-    var freelancer = box.values.firstWhere((element) =>
-      element.email == email && element.password == password);
-    box.close();
-    return freelancer;
+  Future<FreelancerHiveModel?> loginFreelancer(
+      String email, String password) async {
+        var box = await Hive.openBox<FreelancerHiveModel>(
+            HiveTableConstant.freelancerBox);
+        var freelancer = box.values.firstWhere(
+            (element) => element.email == email && element.password == password);
+        box.close();
+        return freelancer;
   }
 
   Future<void> clearAll() async {
