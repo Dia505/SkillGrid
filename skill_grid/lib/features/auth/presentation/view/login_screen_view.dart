@@ -154,11 +154,12 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                             ),
                             InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const JoinClientFreelancerView()));
+                                context.read<LoginBloc>().add(
+                                      NavigateJoinAsClientFreelancerEvent(
+                                        context: context, 
+                                        destination: const JoinClientFreelancerView()
+                                      )
+                                    );
                               },
                               child: const Text("Sign Up",
                                   style: TextStyle(

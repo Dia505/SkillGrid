@@ -24,8 +24,7 @@ class ClientLocalRepository implements IClientRepository {
     try {
       await _clientLocalDataSource.deleteClient(clientId);
       return const Right(null);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(LocalDatabaseFailure(message: "Error deleting client: $e"));
     }
   }
@@ -35,9 +34,9 @@ class ClientLocalRepository implements IClientRepository {
     try {
       final clientEntity = await _clientLocalDataSource.getClientById(clientId);
       return Right(clientEntity);
-    }
-    catch (e) {
-      return Left(LocalDatabaseFailure(message: "Error getting client information: $e"));
+    } catch (e) {
+      return Left(LocalDatabaseFailure(
+          message: "Error getting client information: $e"));
     }
   }
 
