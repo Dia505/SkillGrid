@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
+import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/freelancer_login_usec_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_freelancer/join_as_client_freelancer_cubit.dart';
@@ -61,17 +62,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<NavigateHomeScreenEvent>((event, emit) {
       Widget destinationWidget;
 
-      if (state.role == 'client') {
-        print("User role: ${state.role}");
+      if (event.role == 'client') {
+        print("Navigating to client dashboard");
         destinationWidget = BlocProvider<ClientDashboardCubit>.value(
           value: _clientDashboardCubit,
-          child: event.destination,
+          child: const ClientDashboard(),
         );
       } else {
-        print("User role: ${state.role}");
+        print("Navigating to freelancer dashboard");
         destinationWidget = BlocProvider<FreelancerDashboardCubit>.value(
           value: _freelancerDashboardCubit,
-          child: event.destination,
+          child: const FreelancerDashboard(),
         );
       }
 
@@ -86,44 +87,54 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
-      final result = (state.role == 'client')
-          ? await _clientLoginUseCase(
-              ClientLoginParams(email: event.email, password: event.password))
-          : await _freelancerLoginUseCase(FreelancerLoginParams(
-              email: event.email, password: event.password));
+      // ✅ Try client login first
+      final clientResult = await _clientLoginUseCase(
+        ClientLoginParams(email: event.email, password: event.password),
+      );
 
-      result.fold(
-        (failure) {
-          emit(state.copyWith(isLoading: false, isSuccess: false));
-          String message = failure.message;
+      if (clientResult.isRight()) {
+        final user = clientResult.getOrElse(() => throw Exception("Unexpected null user"));
+        print("Login success. User role: client");
 
-          print("User role: ${state.role}");
-          print('Login failed with message: $message');
+        emit(state.copyWith(isLoading: false, isSuccess: true, role: 'client'));
 
-          showSnackBar(
-            context: event.context,
-            message: message,
-            color: Colors.red,
-          );
-        },
-        (user) {
-          String role = user is ClientEntity ? 'client' : 'freelancer';
+        add(NavigateHomeScreenEvent(
+          context: event.context,
+          destination: const ClientDashboard(),
+          role: 'client',
+        ));
+        return;
+      }
 
-          print("User role 2: $role");
-          
-          // 🔹 Update state first
-          emit(state.copyWith(isLoading: false, isSuccess: true, role: role));
+      // ✅ If client login fails, try freelancer login
+      final freelancerResult = await _freelancerLoginUseCase(
+        FreelancerLoginParams(email: event.email, password: event.password),
+      );
 
-          // 🔹 Then navigate
-          add(NavigateHomeScreenEvent(
-            context: event.context,
-            destination: user is ClientEntity
-                ? const ClientDashboard()
-                : const FreelancerDashboard(),
-          ));
-        },
+      if (freelancerResult.isRight()) {
+        final user = freelancerResult.getOrElse(() => throw Exception("Unexpected null user"));
+        print("Login success. User role: freelancer");
+
+        emit(state.copyWith(isLoading: false, isSuccess: true, role: 'freelancer'));
+
+        add(NavigateHomeScreenEvent(
+          // ignore: use_build_context_synchronously
+          context: event.context,
+          destination: const FreelancerDashboard(),
+          role: 'freelancer',
+        ));
+        return;
+      }
+
+      // 🔹 If both fail, show an error message
+      print("Login failed for both client and freelancer.");
+      emit(state.copyWith(isLoading: false, isSuccess: false));
+
+      showSnackBar(
+        context: event.context,
+        message: "Invalid credentials. Please check your email and password.",
+        color: Colors.red,
       );
     });
   }
 }
-

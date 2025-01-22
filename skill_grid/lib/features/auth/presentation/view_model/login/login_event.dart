@@ -10,7 +10,7 @@ sealed class LoginEvent extends Equatable {
 
 class NavigateJoinAsClientFreelancerEvent extends LoginEvent {
   final BuildContext context;
-  final Widget destination; 
+  final Widget destination;
 
   const NavigateJoinAsClientFreelancerEvent({
     required this.context,
@@ -21,10 +21,12 @@ class NavigateJoinAsClientFreelancerEvent extends LoginEvent {
 class NavigateHomeScreenEvent extends LoginEvent {
   final BuildContext context;
   final Widget destination;
+  final String role;
 
   const NavigateHomeScreenEvent({
     required this.context,
     required this.destination,
+    required this.role,
   });
 }
 
@@ -39,4 +41,3 @@ class LoginUserEvent extends LoginEvent {
     required this.password,
   });
 }
-
