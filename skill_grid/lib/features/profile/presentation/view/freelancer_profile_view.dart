@@ -4,6 +4,7 @@ import 'package:skill_grid/core/common/freelancer_profile_education_container.da
 import 'package:skill_grid/core/common/freelancer_profile_employment_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
+import 'package:skill_grid/features/appointment/presentation/view/send_offer_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FreelancerProfileView extends StatefulWidget {
@@ -248,7 +249,14 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                   CommonButton(
                       buttonText: "Book an Appointment",
                       buttonColor: const Color(0xFF7975D8),
-                      onPressed: () {}),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SendOfferView(),
+                          ),
+                        );
+                      }),
                 ],
               ),
               const SizedBox(

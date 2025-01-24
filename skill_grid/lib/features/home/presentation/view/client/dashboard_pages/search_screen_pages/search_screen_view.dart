@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/core/common/search_screen_container.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/freelancer_profile_view.dart';
+import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_filter_view.dart';
 
 class SearchScreenView extends StatefulWidget {
@@ -116,8 +116,8 @@ class _SearchScreenViewState extends State<SearchScreenView> {
             const Divider(
               color: Colors.grey,
               thickness: 1,
-              indent: 20, // Space before the line (left)
-              endIndent: 20, // Space after the line (right)
+              indent: 20, 
+              endIndent: 20, 
             ),
             const SearchScreenContainer(
               freelancerProfileImgPath:
@@ -142,8 +142,8 @@ class _SearchScreenViewState extends State<SearchScreenView> {
             const Divider(
               color: Colors.grey,
               thickness: 1,
-              indent: 20, // Space before the line (left)
-              endIndent: 20, // Space after the line (right)
+              indent: 20, 
+              endIndent: 20, 
             ),
             const SearchScreenContainer(
               freelancerProfileImgPath:
