@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/freelancer_local_data_source.dart';
-import 'package:skill_grid/features/auth/data/repository/client_local_repository.dart';
-import 'package:skill_grid/features/auth/data/repository/freelancer_local_repository.dart';
+import 'package:skill_grid/features/auth/data/data_source/remote_data_source/client_remote_data_source.dart';
+import 'package:skill_grid/features/auth/data/repository/client_repository/client_local_repository.dart';
+import 'package:skill_grid/features/auth/data/repository/client_repository/client_remote_repository.dart';
+import 'package:skill_grid/features/auth/data/repository/freelancer_repository/freelancer_local_repository.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/delete_client_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
@@ -26,6 +30,8 @@ final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
   await _initHiveService();
+  await _initApiService();
+
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
   await _initLoginDependencies();
@@ -40,18 +46,28 @@ _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
 
+_initApiService() {
+  getIt.registerLazySingleton<Dio>(() => ApiService(Dio()).dio);
+}
+
 //Client dependencies
 _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<ClientLocalDataSource>(
     () => ClientLocalDataSource(hiveService: getIt())
   );
+  getIt.registerLazySingleton<ClientRemoteDataSource>(
+    () => ClientRemoteDataSource(dio: getIt<Dio>())
+  );
 
   getIt.registerLazySingleton<ClientLocalRepository>(() => 
     ClientLocalRepository(clientLocalDataSource: getIt<ClientLocalDataSource>())
   );
+  getIt.registerLazySingleton<ClientRemoteRepository>(() =>
+    ClientRemoteRepository(clientRemoteDataSource: getIt<ClientRemoteDataSource>())
+  );
 
   getIt.registerLazySingleton<RegisterClientUseCase>(
-    () => RegisterClientUseCase(clientRepository: getIt<ClientLocalRepository>())
+    () => RegisterClientUseCase(clientRepository: getIt<ClientRemoteRepository>())
   );
 
   getIt.registerLazySingleton<DeleteClientUseCase>(

@@ -1,6 +1,6 @@
 import 'package:skill_grid/core/network/hive_service.dart';
 import 'package:skill_grid/features/auth/data/data_source/freelancer_data_source.dart';
-import 'package:skill_grid/features/auth/data/model/freelancer_hive_model.dart';
+import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 
 class FreelancerLocalDataSource implements IFreelancerDataSource {

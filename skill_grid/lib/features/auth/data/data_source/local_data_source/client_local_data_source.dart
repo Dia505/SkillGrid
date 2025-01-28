@@ -1,6 +1,6 @@
 import 'package:skill_grid/core/network/hive_service.dart';
 import 'package:skill_grid/features/auth/data/data_source/client_data_source.dart';
-import 'package:skill_grid/features/auth/data/model/client_hive_model.dart';
+import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 
 class ClientLocalDataSource implements IClientDataSource {
