@@ -26,16 +26,22 @@ class FreelancerHiveModelAdapter extends TypeAdapter<FreelancerHiveModel> {
       city: fields[6] as String,
       email: fields[7] as String,
       password: fields[8] as String,
-      profilePicture: fields[9] as String?,
-      backgroundPicture: fields[10] as String?,
-      role: fields[11] as String,
+      jobCategory: fields[9] as String?,
+      profession: fields[10] as String?,
+      skills: fields[11] as String?,
+      yearsOfExperience: fields[12] as int?,
+      bio: fields[13] as String?,
+      available: fields[14] as bool?,
+      profilePicture: fields[15] as String?,
+      backgroundPicture: fields[16] as String?,
+      role: fields[17] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, FreelancerHiveModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.freelancerId)
       ..writeByte(1)
@@ -55,10 +61,22 @@ class FreelancerHiveModelAdapter extends TypeAdapter<FreelancerHiveModel> {
       ..writeByte(8)
       ..write(obj.password)
       ..writeByte(9)
-      ..write(obj.profilePicture)
+      ..write(obj.jobCategory)
       ..writeByte(10)
-      ..write(obj.backgroundPicture)
+      ..write(obj.profession)
       ..writeByte(11)
+      ..write(obj.skills)
+      ..writeByte(12)
+      ..write(obj.yearsOfExperience)
+      ..writeByte(13)
+      ..write(obj.bio)
+      ..writeByte(14)
+      ..write(obj.available)
+      ..writeByte(15)
+      ..write(obj.profilePicture)
+      ..writeByte(16)
+      ..write(obj.backgroundPicture)
+      ..writeByte(17)
       ..write(obj.role);
   }
 

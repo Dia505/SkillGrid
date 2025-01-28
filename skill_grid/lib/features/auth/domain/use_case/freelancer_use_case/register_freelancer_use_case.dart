@@ -39,23 +39,25 @@ class CreateFreelancerParams extends Equatable {
       ];
 }
 
-class RegisterFreelancerUseCase implements UsecaseWithParams<void, CreateFreelancerParams> {
+class RegisterFreelancerUseCase implements UsecaseWithParams<String, CreateFreelancerParams> {
   final IFreelancerRepository freelancerRepository;
+
   RegisterFreelancerUseCase({required this.freelancerRepository});
 
   @override
-  Future<Either<Failure, void>> call(CreateFreelancerParams params) async {
+  Future<Either<Failure, String>> call(CreateFreelancerParams params) async {
     return await freelancerRepository.registerFreelancer(
       FreelancerEntity(
-        firstName: params.firstName, 
-        lastName: params.lastName, 
+        firstName: params.firstName,
+        lastName: params.lastName,
         dateOfBirth: params.dateOfBirth,
-        mobileNo: params.mobileNo, 
+        mobileNo: params.mobileNo,
         address: params.address,
-        city: params.city, 
-        email: params.email, 
-        password: params.password
-      )
+        city: params.city,
+        email: params.email,
+        password: params.password,
+      ),
     );
   }
 }
+

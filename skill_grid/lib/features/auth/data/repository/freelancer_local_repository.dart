@@ -11,11 +11,12 @@ class FreelancerLocalRepository implements IFreelancerRepository {
       : _freelancerLocalDataSource = freelancerLocalDataSource;
 
   @override
-  Future<Either<Failure, void>> registerFreelancer(
-      FreelancerEntity freelancerEntity) {
+  Future<Either<Failure, String>> registerFreelancer(
+      FreelancerEntity freelancerEntity) async {
     try {
-      _freelancerLocalDataSource.registerFreelancer(freelancerEntity);
-      return Future.value(const Right(null));
+      final freelancerId =
+          await _freelancerLocalDataSource.registerFreelancer(freelancerEntity);
+      return Right(freelancerId);
     } catch (e) {
       return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
     }
@@ -57,10 +58,23 @@ class FreelancerLocalRepository implements IFreelancerRepository {
   }
 
   @override
-  Future<Either<Failure, String>> loginFreelancer(String email, String password) async {
+  Future<Either<Failure, String>> loginFreelancer(
+      String email, String password) async {
     try {
-      final token = await _freelancerLocalDataSource.loginFreelancer(email, password);
+      final token =
+          await _freelancerLocalDataSource.loginFreelancer(email, password);
       return Right(token);
+    } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateFreelancer(
+      FreelancerEntity freelancerEntity) async {
+    try {
+      await _freelancerLocalDataSource.updateFreelancer(freelancerEntity);
+      return const Right(null); 
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }

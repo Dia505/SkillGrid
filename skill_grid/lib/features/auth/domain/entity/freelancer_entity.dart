@@ -10,6 +10,12 @@ class FreelancerEntity extends Equatable {
   final String city;
   final String email;
   final String password;
+  final String? jobCategory;
+  final String? profession;
+  final String? skills;
+  final int? yearsOfExperience;
+  final String? bio;
+  final bool? available;
   final String? profilePicture;
   final String? backgroundPicture;
   final String role;
@@ -24,6 +30,12 @@ class FreelancerEntity extends Equatable {
       required this.city,
       required this.email,
       required this.password,
+      this.jobCategory,
+      this.profession,
+      this.skills,
+      this.yearsOfExperience,
+      this.bio,
+      this.available = true,
       this.profilePicture,
       this.backgroundPicture,
       this.role = "freelancer"});
@@ -39,6 +51,12 @@ class FreelancerEntity extends Equatable {
         city,
         email,
         password,
+        jobCategory,
+        profession,
+        skills,
+        yearsOfExperience,
+        bio,
+        available,
         profilePicture,
         backgroundPicture,
         role

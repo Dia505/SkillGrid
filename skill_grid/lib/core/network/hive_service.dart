@@ -31,21 +31,20 @@ class HiveService {
     return box.get(clientId);
   }
 
-  Future<ClientHiveModel?> loginClient(
-      String email, String password) async {
-        var box = await Hive.openBox<ClientHiveModel>(
-            HiveTableConstant.clientBox);
-        var client = box.values.firstWhere(
-            (element) => element.email == email && element.password == password);
-        box.close();
-        return client;
+  Future<ClientHiveModel?> loginClient(String email, String password) async {
+    var box = await Hive.openBox<ClientHiveModel>(HiveTableConstant.clientBox);
+    var client = box.values.firstWhere(
+        (element) => element.email == email && element.password == password);
+    box.close();
+    return client;
   }
 
   //--------------------Freelancer Queries------------------------------
-  Future<void> registerFreelancer(FreelancerHiveModel freelancer) async {
+  Future<String> registerFreelancer(FreelancerHiveModel freelancer) async {
     var box = await Hive.openBox<FreelancerHiveModel>(
         HiveTableConstant.freelancerBox);
     await box.put(freelancer.freelancerId, freelancer);
+    return freelancer.freelancerId;
   }
 
   Future<void> deleteFreelancer(String freelancerId) async {
@@ -68,12 +67,51 @@ class HiveService {
 
   Future<FreelancerHiveModel?> loginFreelancer(
       String email, String password) async {
-        var box = await Hive.openBox<FreelancerHiveModel>(
-            HiveTableConstant.freelancerBox);
-        var freelancer = box.values.firstWhere(
-            (element) => element.email == email && element.password == password);
-        box.close();
-        return freelancer;
+    var box = await Hive.openBox<FreelancerHiveModel>(
+        HiveTableConstant.freelancerBox);
+    var freelancer = box.values.firstWhere(
+        (element) => element.email == email && element.password == password);
+    box.close();
+    return freelancer;
+  }
+
+  Future<void> updateFreelancer(FreelancerHiveModel freelancer) async {
+    var box = await Hive.openBox<FreelancerHiveModel>(
+        HiveTableConstant.freelancerBox);
+
+    if (box.containsKey(freelancer.freelancerId)) {
+      final existingFreelancer = box.get(freelancer.freelancerId);
+
+      if (existingFreelancer != null) {
+        // Create an updated freelancer with only the fields that are being changed
+        final updatedFreelancer = existingFreelancer.copyWith(
+          firstName: freelancer.firstName,
+          lastName: freelancer.lastName,
+          dateOfBirth: freelancer.dateOfBirth,
+          mobileNo: freelancer.mobileNo,
+          address: freelancer.address,
+          city: freelancer.city,
+          email: freelancer.email,
+          password: freelancer.password,
+          jobCategory: freelancer.jobCategory,
+          profession: freelancer.profession,
+          skills: freelancer.skills,
+          yearsOfExperience: freelancer.yearsOfExperience,
+          bio: freelancer.bio,
+          available: freelancer.available,
+          profilePicture: freelancer.profilePicture,
+          backgroundPicture: freelancer.backgroundPicture,
+        );
+
+        await box.put(freelancer.freelancerId, updatedFreelancer);
+      } else {
+        throw Exception(
+            "Freelancer with ID ${freelancer.freelancerId} does not exist.");
+      }
+    } else {
+      throw Exception(
+          "Freelancer with ID ${freelancer.freelancerId} does not exist.");
+    }
   }
 
   Future<void> clearAll() async {

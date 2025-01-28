@@ -9,11 +9,12 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
       : _hiveService = hiveService;
 
   @override
-  Future<void> registerFreelancer(FreelancerEntity freelancerEntity) async {
+  Future<String> registerFreelancer(FreelancerEntity freelancerEntity) async {
     try {
       final freelancerHiveModel =
           FreelancerHiveModel.fromEntity(freelancerEntity);
       await _hiveService.registerFreelancer(freelancerHiveModel);
+      return freelancerHiveModel.freelancerId;
     } catch (e) {
       throw Exception(e);
     }
@@ -57,6 +58,18 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
       return Future.value("Success");
     } catch (e) {
       return Future.error(e);
+    }
+  }
+
+  @override
+  Future<void> updateFreelancer(FreelancerEntity freelancerEntity) async {
+    try {
+      final freelancerHiveModel =
+          FreelancerHiveModel.fromEntity(freelancerEntity);
+      await _hiveService.updateFreelancer(freelancerHiveModel);
+    }
+    catch (e) {
+      throw Exception("Error updating freelancer: $e");
     }
   }
 }
