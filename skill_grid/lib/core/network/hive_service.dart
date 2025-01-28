@@ -1,8 +1,8 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:skill_grid/app/constants/hive_table_constant.dart';
-import 'package:skill_grid/features/auth/data/model/client_hive_model.dart';
-import 'package:skill_grid/features/auth/data/model/freelancer_hive_model.dart';
+import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
+import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
 
 class HiveService {
   static Future<void> init() async {
