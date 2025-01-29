@@ -34,8 +34,17 @@ class ClientRemoteRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, String>> loginClient(String email, String password) {
-    // TODO: implement loginClient
-    throw UnimplementedError();
+  Future<Either<Failure, String>> loginClient(String email, String password) async {
+    try {
+      final token = await _clientRemoteDataSource.loginClient(email, password);
+      return Right(token);
+    }
+    catch (e) {
+      return Left(
+        ApiFailure(
+          message: e.toString(),
+        ),
+      );
+    }
   }
 }

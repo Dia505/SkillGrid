@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:skill_grid/app/constants/api_endpoints.dart';
 import 'package:skill_grid/features/auth/data/data_source/freelancer_data_source.dart';
+import 'package:skill_grid/features/auth/data/dto/login_dto.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 
 class FreelancerRemoteDataSource implements IFreelancerDataSource {
@@ -61,9 +62,28 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
   }
 
   @override
-  Future<String> loginFreelancer(String email, String password) {
-    // TODO: implement loginFreelancer
-    throw UnimplementedError();
+  Future<String> loginFreelancer(String email, String password) async {
+    try {
+      Response response = await _dio.post(
+        ApiEndpoints.login,
+        data: {
+          "email": email,
+          "password": password
+        }
+      );
+      if(response.statusCode == 200) {
+        LoginDto loginDto = LoginDto.fromJson(response.data);
+        return loginDto.token;
+      }
+      else {
+        throw Exception("Login failed: ${response.statusMessage}");
+      }
+    }
+    on DioException catch (e) {
+      throw Exception("Dio Error: ${e.message}");
+    } catch (e) {
+      throw Exception("An error occurred: ${e.toString()}");
+    }
   }
 
   @override
