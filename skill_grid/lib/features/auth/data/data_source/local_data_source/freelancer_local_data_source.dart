@@ -9,12 +9,11 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
       : _hiveService = hiveService;
 
   @override
-  Future<String> registerFreelancer(FreelancerEntity freelancerEntity) async {
+  Future<void> registerFreelancer(FreelancerEntity freelancerEntity) async {
     try {
       final freelancerHiveModel =
           FreelancerHiveModel.fromEntity(freelancerEntity);
       await _hiveService.registerFreelancer(freelancerHiveModel);
-      return freelancerHiveModel.freelancerId;
     } catch (e) {
       throw Exception(e);
     }

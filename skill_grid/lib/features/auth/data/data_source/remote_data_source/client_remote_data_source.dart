@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:skill_grid/app/constants/api_endpoints.dart';
 import 'package:skill_grid/features/auth/data/data_source/client_data_source.dart';
+import 'package:skill_grid/features/auth/data/dto/login_dto.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 
 class ClientRemoteDataSource implements IClientDataSource {
@@ -45,10 +46,27 @@ class ClientRemoteDataSource implements IClientDataSource {
   }
 
   @override
-  Future<String> loginClient(String email, String password) {
-    // TODO: implement loginClient
-    throw UnimplementedError();
+  Future<String> loginClient(String email, String password) async {
+    try {
+      Response response = await _dio.post(
+        ApiEndpoints.login,
+        data: {
+          "email": email,
+          "password": password
+        }
+      );
+      if(response.statusCode == 200) {
+        LoginDto loginDto = LoginDto.fromJson(response.data);
+        return loginDto.token;
+      }
+      else {
+        throw Exception("Login failed: ${response.statusMessage}");
+      }
+    }
+    on DioException catch (e) {
+      throw Exception("Dio Error: ${e.message}");
+    } catch (e) {
+      throw Exception("An error occurred: ${e.toString()}");
+    }
   }
-
-  
 }
