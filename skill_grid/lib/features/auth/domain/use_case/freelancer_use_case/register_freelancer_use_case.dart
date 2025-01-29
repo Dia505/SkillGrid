@@ -14,6 +14,14 @@ class CreateFreelancerParams extends Equatable {
   final String city;
   final String email;
   final String password;
+  final String? jobCategory;
+  final String? profession;
+  final String? skills;
+  final int? yearsOfExperience;
+  final String? bio;
+  final bool? available;
+  final String? profilePicture;
+  final String? backgroundPicture;
 
   const CreateFreelancerParams({
     required this.firstName,
@@ -24,6 +32,14 @@ class CreateFreelancerParams extends Equatable {
     required this.city,
     required this.email,
     required this.password,
+    this.jobCategory,
+    this.profession,
+    this.skills,
+    this.yearsOfExperience,
+    this.bio,
+    this.available,
+    this.profilePicture,
+    this.backgroundPicture
   });
 
   @override
@@ -35,17 +51,25 @@ class CreateFreelancerParams extends Equatable {
         address,
         city,
         email,
-        password
+        password,
+        jobCategory,
+        profession,
+        skills,
+        yearsOfExperience,
+        bio,
+        available,
+        profilePicture,
+        backgroundPicture,
       ];
 }
 
-class RegisterFreelancerUseCase implements UsecaseWithParams<String, CreateFreelancerParams> {
+class RegisterFreelancerUseCase implements UsecaseWithParams<void, CreateFreelancerParams> {
   final IFreelancerRepository freelancerRepository;
 
   RegisterFreelancerUseCase({required this.freelancerRepository});
 
   @override
-  Future<Either<Failure, String>> call(CreateFreelancerParams params) async {
+  Future<Either<Failure, void>> call(CreateFreelancerParams params) async {
     return await freelancerRepository.registerFreelancer(
       FreelancerEntity(
         firstName: params.firstName,
@@ -56,6 +80,14 @@ class RegisterFreelancerUseCase implements UsecaseWithParams<String, CreateFreel
         city: params.city,
         email: params.email,
         password: params.password,
+        jobCategory: params.jobCategory,
+        profession: params.profession,
+        skills: params.skills,
+        yearsOfExperience: params.yearsOfExperience,
+        bio: params.bio,
+        available: params.available,
+        profilePicture: params.profilePicture,
+        backgroundPicture: params.backgroundPicture
       ),
     );
   }

@@ -11,12 +11,11 @@ class FreelancerLocalRepository implements IFreelancerRepository {
       : _freelancerLocalDataSource = freelancerLocalDataSource;
 
   @override
-  Future<Either<Failure, String>> registerFreelancer(
+  Future<Either<Failure, void>> registerFreelancer(
       FreelancerEntity freelancerEntity) async {
     try {
-      final freelancerId =
-          await _freelancerLocalDataSource.registerFreelancer(freelancerEntity);
-      return Right(freelancerId);
+      await _freelancerLocalDataSource.registerFreelancer(freelancerEntity);
+      return Future.value(const Right(null));
     } catch (e) {
       return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
     }
