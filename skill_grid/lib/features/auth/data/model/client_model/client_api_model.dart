@@ -21,7 +21,7 @@ class ClientApiModel extends Equatable {
   final String? profilePicture;
   final String role;
 
-  ClientApiModel(
+  const ClientApiModel(
       {this.clientId,
       required this.firstName,
       required this.lastName,
@@ -35,9 +35,7 @@ class ClientApiModel extends Equatable {
             profilePicture ?? "assets/images/default_profile_img.png";
 
   factory ClientApiModel.fromJson(Map<String, dynamic> json) {
-    return _$ClientApiModelFromJson(json).copyWith(
-      profilePicture: json['profile_picture'] ?? "assets/images/default_profile_img.png",
-    );
+    return _$ClientApiModelFromJson(json);
   }
 
   Map<String, dynamic> toJson() => _$ClientApiModelToJson(this);
@@ -64,30 +62,6 @@ class ClientApiModel extends Equatable {
         password: password,
         profilePicture: profilePicture,
         role: role);
-  }
-
-  ClientApiModel copyWith({
-    String? clientId,
-    String? firstName,
-    String? lastName,
-    String? mobileNo,
-    String? city,
-    String? email,
-    String? password,
-    String? profilePicture,
-    String? role,
-  }) {
-    return ClientApiModel(
-      clientId: clientId ?? this.clientId,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      mobileNo: mobileNo ?? this.mobileNo,
-      city: city ?? this.city,
-      email: email ?? this.email,
-      password: password ?? this.password,
-      profilePicture: profilePicture ?? this.profilePicture,
-      role: role ?? this.role,
-    );
   }
 
   @override
