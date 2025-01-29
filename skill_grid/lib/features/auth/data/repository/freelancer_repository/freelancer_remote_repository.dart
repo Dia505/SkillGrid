@@ -40,9 +40,18 @@ class FreelancerRemoteRepository implements IFreelancerRepository {
   }
 
   @override
-  Future<Either<Failure, String>> loginFreelancer(String email, String password) {
-    // TODO: implement loginFreelancer
-    throw UnimplementedError();
+  Future<Either<Failure, String>> loginFreelancer(String email, String password) async {
+    try {
+      final token = await _freelancerRemoteDataSource.loginFreelancer(email, password);
+      return Right(token);
+    }
+    catch (e) {
+      return Left(
+        ApiFailure(
+          message: e.toString(),
+        ),
+      );
+    }
   }
 
   @override

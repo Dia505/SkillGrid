@@ -131,11 +131,11 @@ _initFreelancerRegistrationDependencies() async {
 //Login dependencies
 _initLoginDependencies() async {
   getIt.registerLazySingleton<ClientLoginUseCase>(
-    () => ClientLoginUseCase(getIt<ClientLocalRepository>())
+    () => ClientLoginUseCase(getIt<ClientRemoteRepository>())
   );
 
   getIt.registerLazySingleton<FreelancerLoginUseCase>(
-    () => FreelancerLoginUseCase(getIt<FreelancerLocalRepository>())
+    () => FreelancerLoginUseCase(getIt<FreelancerRemoteRepository>())
   );
 
   getIt.registerFactory<LoginBloc>(
