@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 
 class DashboardSidebar extends StatelessWidget {
   const DashboardSidebar({super.key});
@@ -9,9 +11,9 @@ class DashboardSidebar extends StatelessWidget {
       width: 317,
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 70),
-      child: const Column(
+      child: Column(
         children: [
-          Row(
+          const Row(
             children: [
               CircleAvatar(
                 radius: 30,
@@ -36,7 +38,7 @@ class DashboardSidebar extends StatelessWidget {
               )
             ],
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Divider(
               color: Colors.grey,
@@ -48,17 +50,58 @@ class DashboardSidebar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              GestureDetector(
+                onTap: () {
+                  context
+                      .read<ClientSidebarBloc>()
+                      .add(NavigateToClientProfile(context: context));
+                },
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.person_outline_sharp,
+                      size: 28,
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Profile",
+                      style:
+                          TextStyle(fontSize: 18, fontFamily: "Inter SemiBold"),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 24,
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: Divider(
+              color: Colors.grey,
+              thickness: 1,
+              indent: 0,
+              endIndent: 0,
+            ),
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Row(
                 children: [
                   Icon(
-                    Icons.person_outline_sharp,
+                    Icons.description_outlined,
                     size: 28,
                   ),
                   SizedBox(
                     width: 15,
                   ),
                   Text(
-                    "Profile",
+                    "Contracts",
                     style:
                         TextStyle(fontSize: 18, fontFamily: "Inter SemiBold"),
                   ),
@@ -70,8 +113,8 @@ class DashboardSidebar extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(),
-          Padding(
+          const Spacer(),
+          const Padding(
             padding: EdgeInsets.only(left: 80.0),
             child: Row(
               children: [

@@ -10,7 +10,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view/freelancer/freelancer_dashboard.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/client_dashboard_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 
 part 'login_event.dart';
