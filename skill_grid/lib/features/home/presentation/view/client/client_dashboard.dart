@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/client_dashboard_cubit.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/client_dashboard_state.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_state.dart';
 
 class ClientDashboard extends StatelessWidget {
   const ClientDashboard({super.key});

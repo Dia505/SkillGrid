@@ -14,7 +14,6 @@ class OnboardScreenCubit extends Cubit<void> {
   final ClientBloc _clientBloc;
   final FreelancerBloc _freelancerBloc;
 
-
   OnboardScreenCubit({
     required LoginBloc loginBloc,
     required JoinAsClientFreelancerCubit asClientFreelancerCubit,
