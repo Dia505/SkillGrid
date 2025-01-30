@@ -27,7 +27,7 @@ class FreelancerApiModel extends Equatable {
   @JsonKey(name: "years_of_experience")
   final int? yearsOfExperience;
   final String? bio;
-  final bool? available;
+  final bool available;
   @JsonKey(name: "profile_picture")
   final String? profilePicture;
   @JsonKey(name: "background_picture")

@@ -37,7 +37,7 @@ class FreelancerHiveModel extends Equatable {
   @HiveField(13)
   final String? bio;
   @HiveField(14)
-  final bool? available;
+  final bool available;
   @HiveField(15)
   final String profilePicture;
   @HiveField(16)

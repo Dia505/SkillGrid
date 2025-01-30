@@ -78,7 +78,8 @@ class _FreelancerRegistrationViewState
           address: _addressController.text.trim(),
           city: city!,
           email: _emailController.text.trim(),
-          password: _passwordController.text.trim()));
+          password: _passwordController.text.trim(),
+          available: true));
     }
   }
 
@@ -376,7 +377,8 @@ class _FreelancerRegistrationViewState
                                         city: city!,
                                         email: _emailController.text.trim(),
                                         password:
-                                            _passwordController.text.trim()));
+                                            _passwordController.text.trim(),
+                                        available: true));
                               }
                             },
                             child: BlocBuilder<FreelancerBloc, FreelancerState>(
