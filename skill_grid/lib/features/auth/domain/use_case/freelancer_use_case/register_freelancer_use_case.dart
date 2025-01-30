@@ -19,7 +19,7 @@ class CreateFreelancerParams extends Equatable {
   final String? skills;
   final int? yearsOfExperience;
   final String? bio;
-  final bool? available;
+  final bool available;
   final String? profilePicture;
   final String? backgroundPicture;
 
@@ -37,7 +37,7 @@ class CreateFreelancerParams extends Equatable {
     this.skills,
     this.yearsOfExperience,
     this.bio,
-    this.available,
+    required this.available,
     this.profilePicture,
     this.backgroundPicture
   });

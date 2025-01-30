@@ -15,7 +15,7 @@ class FreelancerEntity extends Equatable {
   final String? skills;
   final int? yearsOfExperience;
   final String? bio;
-  final bool? available;
+  final bool available;
   final String? profilePicture;
   final String? backgroundPicture;
   final String role;

@@ -32,7 +32,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _clientDashboardCubit = clientDashboardCubit,
         _freelancerDashboardCubit = freelancerDashboardCubit,
         super(LoginState.initial()) {
-    
     // 🔹 Navigate to client/freelancer selection screen
     on<NavigateJoinAsClientFreelancerEvent>((event, emit) {
       final joinAsClientFreelancerCubit = getIt<JoinAsClientFreelancerCubit>();
@@ -83,15 +82,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     // 🔹 Handle Login Logic
     on<LoginUserEvent>((event, emit) async {
-      emit(state.copyWith(isLoading: true));
+      emit(state.copyWith(isLoading: true, isSuccess: false));
 
       // ✅ Try client login first
       final clientResult = await _clientLoginUseCase(
         ClientLoginParams(email: event.email, password: event.password),
       );
+      print("Client Login Result: $clientResult");
 
       if (clientResult.isRight()) {
-        final user = clientResult.getOrElse(() => throw Exception("Unexpected null user"));
+        final user = clientResult
+            .getOrElse(() => throw Exception("Unexpected null user"));
         print("Login success. User role: client");
 
         emit(state.copyWith(isLoading: false, isSuccess: true, role: 'client'));
@@ -108,12 +109,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final freelancerResult = await _freelancerLoginUseCase(
         FreelancerLoginParams(email: event.email, password: event.password),
       );
+      print("Freelancer Login Result: $freelancerResult");
 
       if (freelancerResult.isRight()) {
         final user = freelancerResult.getOrElse(() => throw Exception("Unexpected null user"));
         print("Login success. User role: freelancer");
 
-        emit(state.copyWith(isLoading: false, isSuccess: true, role: 'freelancer'));
+        emit(state.copyWith(
+            isLoading: false, isSuccess: true, role: 'freelancer'));
 
         add(NavigateHomeScreenEvent(
           // ignore: use_build_context_synchronously

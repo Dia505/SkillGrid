@@ -18,6 +18,7 @@ class RegisterFreelancer extends FreelancerEvent {
   final String city;
   final String email;
   final String password;
+  final bool available;
 
   const RegisterFreelancer({
     required this.context,
@@ -29,6 +30,7 @@ class RegisterFreelancer extends FreelancerEvent {
     required this.city,
     required this.email,
     required this.password,
+    required this.available
   });
 }
 

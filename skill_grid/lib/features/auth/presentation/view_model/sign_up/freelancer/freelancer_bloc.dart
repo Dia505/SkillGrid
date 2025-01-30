@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
-import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/register_freelancer_use_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 
@@ -38,14 +37,16 @@ class FreelancerBloc extends Bloc<FreelancerEvent, FreelancerState> {
   ) async {
     emit(state.copyWith(isLoading: true));
     final result = await _registerFreelancerUseCase.call(CreateFreelancerParams(
-        firstName: event.firstName,
-        lastName: event.lastName,
-        dateOfBirth: event.dateOfBirth,
-        mobileNo: event.mobileNo,
-        address: event.address,
-        city: event.city,
-        email: event.email,
-        password: event.password));
+      firstName: event.firstName, 
+      lastName: event.lastName, 
+      dateOfBirth: event.dateOfBirth, 
+      mobileNo: event.mobileNo, 
+      address: event.address, 
+      city: event.city, 
+      email: event.email, 
+      password: event.password, 
+      available: event.available
+    ));
 
     result.fold((l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
         (r) {
