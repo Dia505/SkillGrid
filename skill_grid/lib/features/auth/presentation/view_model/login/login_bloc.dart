@@ -80,11 +80,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     });
 
-    // 🔹 Handle Login Logic
+    //Login User Event
     on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true, isSuccess: false));
 
-      // ✅ Try client login first
+      //First try client login
       final clientResult = await _clientLoginUseCase(
         ClientLoginParams(email: event.email, password: event.password),
       );
@@ -105,7 +105,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         return;
       }
 
-      // ✅ If client login fails, try freelancer login
+      //If client login fails, try freelancer login
       final freelancerResult = await _freelancerLoginUseCase(
         FreelancerLoginParams(email: event.email, password: event.password),
       );

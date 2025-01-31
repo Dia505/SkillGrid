@@ -55,139 +55,112 @@ _initApiService() {
 //Client dependencies
 _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<ClientLocalDataSource>(
-    () => ClientLocalDataSource(hiveService: getIt())
-  );
+      () => ClientLocalDataSource(hiveService: getIt()));
   getIt.registerLazySingleton<ClientRemoteDataSource>(
-    () => ClientRemoteDataSource(dio: getIt<Dio>())
-  );
+      () => ClientRemoteDataSource(dio: getIt<Dio>()));
 
-  getIt.registerLazySingleton<ClientLocalRepository>(() => 
-    ClientLocalRepository(clientLocalDataSource: getIt<ClientLocalDataSource>())
-  );
+  getIt.registerLazySingleton<ClientLocalRepository>(() =>
+      ClientLocalRepository(
+          clientLocalDataSource: getIt<ClientLocalDataSource>()));
   getIt.registerLazySingleton<ClientRemoteRepository>(() =>
-    ClientRemoteRepository(clientRemoteDataSource: getIt<ClientRemoteDataSource>())
-  );
+      ClientRemoteRepository(
+          clientRemoteDataSource: getIt<ClientRemoteDataSource>()));
 
-  getIt.registerLazySingleton<RegisterClientUseCase>(
-    () => RegisterClientUseCase(clientRepository: getIt<ClientRemoteRepository>())
-  );
+  getIt.registerLazySingleton<RegisterClientUseCase>(() =>
+      RegisterClientUseCase(clientRepository: getIt<ClientRemoteRepository>()));
 
-  getIt.registerLazySingleton<DeleteClientUseCase>(
-    () => DeleteClientUseCase(clientRepository: getIt<ClientLocalRepository>())
-  );
+  getIt.registerLazySingleton<DeleteClientUseCase>(() =>
+      DeleteClientUseCase(clientRepository: getIt<ClientLocalRepository>()));
 
-  getIt.registerLazySingleton<GetClientByIdUseCase>(
-    () => GetClientByIdUseCase(clientRepository: getIt<ClientLocalRepository>())
-  );
+  getIt.registerLazySingleton<GetClientByIdUseCase>(() =>
+      GetClientByIdUseCase(clientRepository: getIt<ClientLocalRepository>()));
 
-  getIt.registerFactory<ClientBloc>(() => 
-    ClientBloc(
+  getIt.registerFactory<ClientBloc>(() => ClientBloc(
       registerClientUseCase: getIt<RegisterClientUseCase>(),
-      loginBloc: getIt<LoginBloc>()
-    )
-  );
+      loginBloc: getIt<LoginBloc>()));
 }
 
 //Freelancer dependencies
 _initFreelancerRegistrationDependencies() async {
   getIt.registerLazySingleton<FreelancerLocalDataSource>(
-    () => FreelancerLocalDataSource(hiveService: getIt())
-  );
+      () => FreelancerLocalDataSource(hiveService: getIt()));
   getIt.registerLazySingleton<FreelancerRemoteDataSource>(
-    () => FreelancerRemoteDataSource(dio: getIt<Dio>())
-  );
+      () => FreelancerRemoteDataSource(dio: getIt<Dio>()));
 
-  getIt.registerLazySingleton<FreelancerLocalRepository>(() => 
-    FreelancerLocalRepository(freelancerLocalDataSource: getIt<FreelancerLocalDataSource>())
-  );
-  getIt.registerLazySingleton<FreelancerRemoteRepository>(() => 
-    FreelancerRemoteRepository(freelancerRemoteDataSource: getIt<FreelancerRemoteDataSource>())
-  );
+  getIt.registerLazySingleton<FreelancerLocalRepository>(() =>
+      FreelancerLocalRepository(
+          freelancerLocalDataSource: getIt<FreelancerLocalDataSource>()));
+  getIt.registerLazySingleton<FreelancerRemoteRepository>(() =>
+      FreelancerRemoteRepository(
+          freelancerRemoteDataSource: getIt<FreelancerRemoteDataSource>()));
 
-  getIt.registerLazySingleton<RegisterFreelancerUseCase>(
-    () => RegisterFreelancerUseCase(freelancerRepository: getIt<FreelancerRemoteRepository>())
-  );
+  getIt.registerLazySingleton<RegisterFreelancerUseCase>(() =>
+      RegisterFreelancerUseCase(
+          freelancerRepository: getIt<FreelancerRemoteRepository>()));
 
-  getIt.registerLazySingleton<DeleteFreelancerUseCase>(
-    () => DeleteFreelancerUseCase(freelancerRepository: getIt<FreelancerLocalRepository>())
-  );
+  getIt.registerLazySingleton<DeleteFreelancerUseCase>(() =>
+      DeleteFreelancerUseCase(
+          freelancerRepository: getIt<FreelancerLocalRepository>()));
 
-  getIt.registerLazySingleton<GetFreelancerByIdUseCase>(
-    () => GetFreelancerByIdUseCase(freelancerRepository: getIt<FreelancerLocalRepository>())
-  );
+  getIt.registerLazySingleton<GetFreelancerByIdUseCase>(() =>
+      GetFreelancerByIdUseCase(
+          freelancerRepository: getIt<FreelancerLocalRepository>()));
 
-  getIt.registerLazySingleton<GetAllFreelancerUseCase>(
-    () => GetAllFreelancerUseCase(freelancerRepository: getIt<FreelancerLocalRepository>())
-  );
+  getIt.registerLazySingleton<GetAllFreelancerUseCase>(() =>
+      GetAllFreelancerUseCase(
+          freelancerRepository: getIt<FreelancerLocalRepository>()));
 
-  getIt.registerFactory<FreelancerBloc>(() => 
-    FreelancerBloc(
+  getIt.registerFactory<FreelancerBloc>(() => FreelancerBloc(
       registerFreelancerUseCase: getIt<RegisterFreelancerUseCase>(),
-      loginBloc: getIt<LoginBloc>()
-    )
-  );
+      loginBloc: getIt<LoginBloc>()));
 }
 
 //Login dependencies
 _initLoginDependencies() async {
   getIt.registerLazySingleton<ClientLoginUseCase>(
-    () => ClientLoginUseCase(getIt<ClientLocalRepository>())
-  );
+      () => ClientLoginUseCase(getIt<ClientRemoteRepository>()));
 
   getIt.registerLazySingleton<FreelancerLoginUseCase>(
-    () => FreelancerLoginUseCase(getIt<FreelancerLocalRepository>())
-  );
+      () => FreelancerLoginUseCase(getIt<FreelancerRemoteRepository>()));
 
-  getIt.registerFactory<LoginBloc>(
-    () => LoginBloc(
-      clientLoginUseCase: getIt<ClientLoginUseCase>(), 
+  getIt.registerFactory<LoginBloc>(() => LoginBloc(
+      clientLoginUseCase: getIt<ClientLoginUseCase>(),
       freelancerLoginUseCase: getIt<FreelancerLoginUseCase>(),
       clientDashboardCubit: getIt<ClientDashboardCubit>(),
-      freelancerDashboardCubit: getIt<FreelancerDashboardCubit>()
-    )
-  );
+      freelancerDashboardCubit: getIt<FreelancerDashboardCubit>()));
 }
 
 //Join as client/freelancer dependencies
 _initJoinAsClientFreelancerDependencies() async {
-  getIt.registerFactory<JoinAsClientFreelancerCubit>(
-    () => JoinAsClientFreelancerCubit(
-      clientBloc: getIt<ClientBloc>(), 
-      freelancerBloc: getIt<FreelancerBloc>(), 
-      loginBloc: getIt<LoginBloc>()
-    )
-  );
+  getIt.registerFactory<JoinAsClientFreelancerCubit>(() =>
+      JoinAsClientFreelancerCubit(
+          clientBloc: getIt<ClientBloc>(),
+          freelancerBloc: getIt<FreelancerBloc>(),
+          loginBloc: getIt<LoginBloc>()));
 }
 
 //Splash screen dependencies
 _initSplashScreenDependencies() async {
   getIt.registerFactory<SplashScreenCubit>(
-    () => SplashScreenCubit(getIt<OnboardScreenCubit>())
-  );
+      () => SplashScreenCubit(getIt<OnboardScreenCubit>()));
 }
 
 //Onboard screen dependencies
 _initOnboardScreenDependencies() async {
-  getIt.registerFactory<OnboardScreenCubit>(
-    () => OnboardScreenCubit(
+  getIt.registerFactory<OnboardScreenCubit>(() => OnboardScreenCubit(
       loginBloc: getIt<LoginBloc>(),
       asClientFreelancerCubit: getIt<JoinAsClientFreelancerCubit>(),
       clientBloc: getIt<ClientBloc>(),
-      freelancerBloc: getIt<FreelancerBloc>()
-    )
-  );
+      freelancerBloc: getIt<FreelancerBloc>()));
 }
 
 //Client dashboard dependencies
 _initClientDashboardDependencies() async {
-  getIt.registerFactory<ClientDashboardCubit>(
-    () => ClientDashboardCubit()
-  );
+  getIt.registerFactory<ClientDashboardCubit>(() => ClientDashboardCubit());
 }
 
 //Freelancer dashboard dependencies
 _initFreelancerDashboardDependencies() async {
   getIt.registerFactory<FreelancerDashboardCubit>(
-    () => FreelancerDashboardCubit()
-  );
+      () => FreelancerDashboardCubit());
 }
