@@ -6,7 +6,7 @@ class CommonTextfield extends StatefulWidget {
       required this.textFieldTitle,
       this.obscureText = false,
       required this.controller,
-      required this.validator,
+      this.validator,
       this.width,
       this.hintText});
 
