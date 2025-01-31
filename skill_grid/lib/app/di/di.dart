@@ -29,6 +29,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelan
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
@@ -49,6 +50,7 @@ Future<void> initDependencies() async {
   await _initClientDashboardDependencies();
   await _initFreelancerDashboardDependencies();
   await _initClientHomeScreenDependencies();
+  await _initClientProfileDependencies();
 }
 
 _initHiveService() {
@@ -187,6 +189,12 @@ _initFreelancerDashboardDependencies() async {
 //Client home screen dependencies
 _initClientHomeScreenDependencies() async {
   getIt.registerFactory<ClientHomeCubit>(() => ClientHomeCubit(
+      getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
+      tokenHelper: getIt<TokenHelper>()));
+}
+
+_initClientProfileDependencies() async {
+  getIt.registerFactory<ClientProfileCubit>(() => ClientProfileCubit(
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
       tokenHelper: getIt<TokenHelper>()));
 }

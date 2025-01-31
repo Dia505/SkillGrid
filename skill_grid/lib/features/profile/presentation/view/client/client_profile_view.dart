@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_edit_view.dart';
 
-class ClientProfileView extends StatelessWidget {
+class ClientProfileView extends StatefulWidget {
   const ClientProfileView({super.key});
+
+  @override
+  State<ClientProfileView> createState() => _ClientProfileViewState();
+}
+
+class _ClientProfileViewState extends State<ClientProfileView> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context.read<ClientProfileCubit>().loadClient();
+  // }
 
   @override
   Widget build(BuildContext context) {

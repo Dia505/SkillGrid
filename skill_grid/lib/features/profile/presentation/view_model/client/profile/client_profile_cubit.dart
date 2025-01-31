@@ -6,26 +6,26 @@ import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 
-part 'client_home_state.dart';
+part 'client_profile_state.dart';
 
-class ClientHomeCubit extends Cubit<ClientHomeState> {
+class ClientProfileCubit extends Cubit<ClientProfileState> {
   final GetClientByIdUseCase _getClientByIdUseCase;
   final TokenHelper _tokenHelper;
 
-  ClientHomeCubit(
+  ClientProfileCubit(
       {required GetClientByIdUseCase getClientByIdUseCase,
       required TokenHelper tokenHelper})
       : _getClientByIdUseCase = getClientByIdUseCase,
         _tokenHelper = tokenHelper,
-        super(ClientHomeInitial());
+        super(ClientProfileInitial());
 
   Future<void> loadClient() async {
-    emit(ClientHomeLoading());
+    emit(ClientProfileLoading());
 
     try {
       final userId = await _tokenHelper.getUserIdFromToken();
       if (userId == null) {
-        emit(const ClientHomeError("Client id not found"));
+        emit(const ClientProfileError("Client id not found"));
         return;
       }
 
@@ -34,16 +34,16 @@ class ClientHomeCubit extends Cubit<ClientHomeState> {
 
       result.fold(
         (failure) {
-          emit(ClientHomeError(failure.message));
+          emit(ClientProfileError(failure.message));
           print("Error in cubit: ${failure.message}");
         },
         (clientEntity) {
-          emit(ClientHomeLoaded(clientEntity));
+          emit(ClientProfileLoaded(clientEntity));
           print("Client loaded: ${clientEntity.toString()}");
         },
       );
     } catch (e) {
-      emit(ClientHomeError("Error occurred: $e"));
+      emit(ClientProfileError("Error occurred: $e"));
       print("Exception occurred: $e");
     }
   }
