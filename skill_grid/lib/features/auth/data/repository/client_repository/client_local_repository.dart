@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
@@ -48,5 +50,11 @@ class ClientLocalRepository implements IClientRepository {
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadProfilePicture(File file) {
+    // TODO: implement uploadProfilePicture
+    throw UnimplementedError();
   }
 }
