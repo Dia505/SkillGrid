@@ -11,6 +11,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelan
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view/freelancer/freelancer_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 
 part 'login_event.dart';
@@ -97,6 +98,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         emit(state.copyWith(isLoading: false, isSuccess: true, role: 'client'));
 
+        final clientHomeCubit = getIt<ClientHomeCubit>();
+        clientHomeCubit.loadClient();
+
         add(NavigateHomeScreenEvent(
           context: event.context,
           destination: const ClientDashboard(),
@@ -112,7 +116,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       print("Freelancer Login Result: $freelancerResult");
 
       if (freelancerResult.isRight()) {
-        final user = freelancerResult.getOrElse(() => throw Exception("Unexpected null user"));
+        final user = freelancerResult
+            .getOrElse(() => throw Exception("Unexpected null user"));
         print("Login success. User role: freelancer");
 
         emit(state.copyWith(

@@ -69,6 +69,12 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+    context.read<ClientHomeCubit>().loadClient();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<ClientSidebarBloc, ClientSidebarState>(
       listener: (context, state) {
@@ -130,18 +136,25 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                         .read<ClientSidebarBloc>()
                                         .add(ToggleSidebar());
                                   },
-                                  child: BlocBuilder<ClientHomeCubit, ClientHomeState>(
+                                  child: BlocBuilder<ClientHomeCubit,
+                                      ClientHomeState>(
                                     builder: (context, state) {
                                       if (state is ClientHomeLoaded) {
                                         final client = state.clientEntity;
+                                        String imageUrl =
+                                            client.profilePicture ?? '';
                                         return CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: client.profilePicture != null
-                                            ? NetworkImage(client.profilePicture!)
-                                            : AssetImage("assets/images/default_profile_img.png")
-                                        );
-                                      }
-                                      else {
+                                            radius: 30,
+                                            backgroundImage: client
+                                                        .profilePicture !=
+                                                    null
+                                                ? NetworkImage(
+                                                    imageUrl.replaceFirst(
+                                                        'localhost',
+                                                        '10.0.2.2'))
+                                                : const AssetImage(
+                                                    "assets/images/default_profile_img.png"));
+                                      } else {
                                         return const CircleAvatar(
                                           radius: 30,
                                           backgroundImage: AssetImage(

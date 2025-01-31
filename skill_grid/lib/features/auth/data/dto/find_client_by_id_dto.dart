@@ -4,14 +4,19 @@ part 'find_client_by_id_dto.g.dart';
 @JsonSerializable()
 
 class FindClientByIdDto {
+  @JsonKey(name: "_id")
   final String clientId;
+  @JsonKey(name: "first_name")
   final String firstName;
+  @JsonKey(name: "last_name")
   final String lastName;
+  @JsonKey(name: "mobile_no")
   final String mobileNo;
   final String email;
   final String password; 
   final String city;
-  final String profilePicture;
+  @JsonKey(name: "profile_picture")
+  final String? profilePicture;
   final String role;
 
   FindClientByIdDto({
@@ -22,7 +27,7 @@ class FindClientByIdDto {
     required this.email,
     required this.password,
     required this.city,
-    required this.profilePicture,
+    this.profilePicture,
     required this.role,
   });
 

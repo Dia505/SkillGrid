@@ -44,8 +44,9 @@ class ClientRemoteDataSource implements IClientDataSource {
   @override
   Future<ClientEntity> getClientById(String clientId) async {
     try {
-      var response = await _dio.get(ApiEndpoints.findClientById,
-          queryParameters: {'clientId': clientId});
+      final String url = "${ApiEndpoints.findClientById}/$clientId";
+
+      var response = await _dio.get(url);
 
       if (response.statusCode == 200) {
         FindClientByIdDto findClientByIdDto =
