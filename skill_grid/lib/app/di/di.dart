@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
@@ -33,6 +35,7 @@ final getIt = GetIt.instance;
 Future<void> initDependencies() async {
   await _initHiveService();
   await _initApiService();
+  await _initSharedPreferences();
 
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
@@ -50,6 +53,11 @@ _initHiveService() {
 
 _initApiService() {
   getIt.registerLazySingleton<Dio>(() => ApiService(Dio()).dio);
+}
+
+Future<void> _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 }
 
 //Client dependencies
@@ -73,7 +81,7 @@ _initClientRegistrationDependencies() async {
       DeleteClientUseCase(clientRepository: getIt<ClientLocalRepository>()));
 
   getIt.registerLazySingleton<GetClientByIdUseCase>(() =>
-      GetClientByIdUseCase(clientRepository: getIt<ClientLocalRepository>()));
+      GetClientByIdUseCase(clientRepository: getIt<ClientRemoteRepository>()));
 
   getIt.registerFactory<ClientBloc>(() => ClientBloc(
       registerClientUseCase: getIt<RegisterClientUseCase>(),
@@ -117,8 +125,11 @@ _initFreelancerRegistrationDependencies() async {
 
 //Login dependencies
 _initLoginDependencies() async {
-  getIt.registerLazySingleton<ClientLoginUseCase>(
-      () => ClientLoginUseCase(getIt<ClientRemoteRepository>()));
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+      () => TokenSharedPrefs(getIt<SharedPreferences>()));
+
+  getIt.registerLazySingleton<ClientLoginUseCase>(() => ClientLoginUseCase(
+      getIt<ClientRemoteRepository>(), getIt<TokenSharedPrefs>()));
 
   getIt.registerLazySingleton<FreelancerLoginUseCase>(
       () => FreelancerLoginUseCase(getIt<FreelancerRemoteRepository>()));

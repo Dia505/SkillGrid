@@ -30,6 +30,18 @@ class ClientLoginUseCase implements UsecaseWithParams<String, ClientLoginParams>
   @override
   Future<Either<Failure, String>> call(ClientLoginParams params) {
     return clientRepository
-      .loginClient(params.email, params.password);
+      .loginClient(params.email, params.password)
+      .then((value) {
+        return value.fold(
+          (failure) => Left(failure),
+          (token) {
+            tokenSharedPrefs.saveToken(token);
+            tokenSharedPrefs.getToken().then((value) {
+              print(value);
+            });
+            return Right(token);
+          }
+        );
+      });
   }
 }

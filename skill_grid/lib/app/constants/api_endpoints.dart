@@ -8,6 +8,7 @@ class ApiEndpoints {
 
   //Client routes
   static const String registerClient = "client";
+  static const String findClientById = "client/:id";
 
   //Freelancer routes
   static const String registerFreelancer = "freelancer";
