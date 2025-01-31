@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
@@ -38,6 +42,31 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
   ];
 
   String? city;
+
+  checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
+
+  File? _img;
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+
+          context.read<ClientBloc>().add(LoadImage(file: _img!));
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +120,59 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                             style: TextStyle(
                                 color: Color(0xFF322E86), fontSize: 16)),
                         const SizedBox(height: 15),
+                        InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              backgroundColor: const Color(0xFF544FBD),
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (context) => Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        checkCameraPermission();
+                                        _browseImage(ImageSource.camera);
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.camera,
+                                        color: Colors.white,
+                                      ),
+                                      label: const Text('Camera'),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        checkCameraPermission();
+                                        _browseImage(ImageSource.gallery);
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.image,
+                                        color: Colors.white,
+                                      ),
+                                      label: const Text('Gallery'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: _img != null
+                                  ? FileImage(_img!)
+                                  : const AssetImage(
+                                          'assets/images/default_profile_img.png')
+                                      as ImageProvider,
+                            ),
+                          ),
+                        ),
                         Row(
                           children: [
                             CommonTextfield(
@@ -264,6 +346,9 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                final clientState =
+                                    context.read<ClientBloc>().state;
+                                final imageName = clientState.imageName;
                                 context.read<ClientBloc>().add(RegisterClient(
                                     context: context,
                                     firstName: _fnameController.text.trim(),
@@ -271,7 +356,8 @@ class _ClientRegistrationViewState extends State<ClientRegistrationView> {
                                     mobileNo: _mobNumberController.text.trim(),
                                     city: city!,
                                     email: _emailController.text.trim(),
-                                    password: _passwordController.text.trim()));
+                                    password: _passwordController.text.trim(),
+                                    profilePicture: imageName));
                               }
                             },
                             child: BlocBuilder<ClientBloc, ClientState>(

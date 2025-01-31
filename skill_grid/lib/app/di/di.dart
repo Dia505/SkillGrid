@@ -14,6 +14,7 @@ import 'package:skill_grid/features/auth/data/repository/client_repository/clien
 import 'package:skill_grid/features/auth/data/repository/freelancer_repository/freelancer_local_repository.dart';
 import 'package:skill_grid/features/auth/data/repository/freelancer_repository/freelancer_remote_repository.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_upload_image_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/delete_client_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/register_client_use_case.dart';
@@ -96,9 +97,14 @@ _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<GetClientByIdUseCase>(() =>
       GetClientByIdUseCase(clientRepository: getIt<ClientRemoteRepository>()));
 
+  getIt.registerLazySingleton<ClientUploadImageUseCase>(
+    () => ClientUploadImageUseCase(getIt<ClientRemoteRepository>())
+  );
+
   getIt.registerFactory<ClientBloc>(() => ClientBloc(
       registerClientUseCase: getIt<RegisterClientUseCase>(),
-      loginBloc: getIt<LoginBloc>()));
+      loginBloc: getIt<LoginBloc>(),
+      clientUploadImageUseCase: getIt()));
 }
 
 //Freelancer dependencies

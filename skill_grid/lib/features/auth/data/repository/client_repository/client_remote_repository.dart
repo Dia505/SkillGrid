@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/features/auth/data/data_source/remote_data_source/client_remote_data_source.dart';
@@ -50,6 +52,17 @@ class ClientRemoteRepository implements IClientRepository {
           message: e.toString(),
         ),
       );
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadProfilePicture(File file) async {
+    try {
+      final imageName = await _clientRemoteDataSource.uploadProfilePicture(file);
+      return Right(imageName);
+    }
+    catch(e) {
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 }
