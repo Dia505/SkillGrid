@@ -48,20 +48,18 @@ class ClientRemoteDataSource implements IClientDataSource {
           queryParameters: {'clientId': clientId});
 
       if (response.statusCode == 200) {
-        FindClientByIdDto findClientByIdDto = FindClientByIdDto.fromJson(response.data);
+        FindClientByIdDto findClientByIdDto =
+            FindClientByIdDto.fromJson(response.data);
 
         ClientEntity clientEntity = ClientApiModel.toEntity(findClientByIdDto);
 
         return clientEntity;
-      } 
-      else {
+      } else {
         throw Exception(response.statusMessage);
       }
-    } 
-    on DioException catch(e) {
+    } on DioException catch (e) {
       throw Exception(e);
-    } 
-    catch (e) {
+    } catch (e) {
       throw Exception('Error occurred while fetching client: $e');
     }
   }

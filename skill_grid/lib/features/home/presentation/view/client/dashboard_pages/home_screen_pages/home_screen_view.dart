@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/dashboard_sidebar.dart';
 import 'package:skill_grid/core/common/home_ongoing_collab_card.dart';
 import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/dashboard_sidebar.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 
 class HomeScreenView extends StatefulWidget {
@@ -71,7 +72,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   Widget build(BuildContext context) {
     return BlocListener<ClientSidebarBloc, ClientSidebarState>(
       listener: (context, state) {
-        if(state is SidebarOpened) {
+        if (state is SidebarOpened) {
           _scaffoldKey.currentState?.openDrawer();
         }
       },
@@ -103,19 +104,51 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  "Hello John👋",
-                                  style: TextStyle(
-                                      color: Color(0xFFCCCAFF), fontSize: 17),
+                                BlocBuilder<ClientHomeCubit, ClientHomeState>(
+                                  builder: (context, state) {
+                                    if (state is ClientHomeLoaded) {
+                                      final client = state.clientEntity;
+                                      return Text(
+                                        "Hello ${client.firstName}👋",
+                                        style: const TextStyle(
+                                            color: Color(0xFFCCCAFF),
+                                            fontSize: 17),
+                                      );
+                                    } else {
+                                      return const Text(
+                                        "Hello user👋",
+                                        style: TextStyle(
+                                            color: Color(0xFFCCCAFF),
+                                            fontSize: 17),
+                                      );
+                                    }
+                                  },
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    context.read<ClientSidebarBloc>().add(ToggleSidebar());
+                                    context
+                                        .read<ClientSidebarBloc>()
+                                        .add(ToggleSidebar());
                                   },
-                                  child: const CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage: AssetImage(
-                                        "assets/images/client_profile_img.jpg"),
+                                  child: BlocBuilder<ClientHomeCubit, ClientHomeState>(
+                                    builder: (context, state) {
+                                      if (state is ClientHomeLoaded) {
+                                        final client = state.clientEntity;
+                                        return CircleAvatar(
+                                          radius: 30,
+                                          backgroundImage: client.profilePicture != null
+                                            ? NetworkImage(client.profilePicture!)
+                                            : AssetImage("assets/images/default_profile_img.png")
+                                        );
+                                      }
+                                      else {
+                                        return const CircleAvatar(
+                                          radius: 30,
+                                          backgroundImage: AssetImage(
+                                              "assets/images/default_profile_img.png"),
+                                        );
+                                      }
+                                    },
                                   ),
                                 )
                               ],
@@ -154,7 +187,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                   child: ElevatedButton(
                                     onPressed: () {},
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0XFF7C76E4),
+                                        backgroundColor:
+                                            const Color(0XFF7C76E4),
                                         padding: EdgeInsets.zero),
                                     child: const Icon(
                                       Icons.search,
@@ -223,7 +257,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                   serviceCategory.asMap().entries.map((entry) {
                                 var category =
                                     entry.value; // Access the map (category)
-      
+
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 8),
@@ -238,9 +272,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                             size: 30,
                                             color: Colors.white,
                                           )), // Access the icon from the map
-      
+
                                       const SizedBox(height: 8),
-      
+
                                       Text(category['label'],
                                           style: const TextStyle(
                                               fontSize:
@@ -312,7 +346,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     child: Column(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                           child: Image.asset(
                                             service["service_img"],
                                             width: 150,
