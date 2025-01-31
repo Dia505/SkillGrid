@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
+import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/freelancer_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/remote_data_source/client_remote_data_source.dart';
@@ -26,6 +27,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/login/login_blo
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
@@ -36,6 +38,7 @@ Future<void> initDependencies() async {
   await _initHiveService();
   await _initApiService();
   await _initSharedPreferences();
+  await _initTokenHelper();
 
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
@@ -45,6 +48,7 @@ Future<void> initDependencies() async {
   await _initOnboardScreenDependencies();
   await _initClientDashboardDependencies();
   await _initFreelancerDashboardDependencies();
+  await _initClientHomeScreenDependencies();
 }
 
 _initHiveService() {
@@ -58,6 +62,13 @@ _initApiService() {
 Future<void> _initSharedPreferences() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
+_initTokenHelper() {
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+      () => TokenSharedPrefs(getIt<SharedPreferences>()));
+  getIt.registerLazySingleton<TokenHelper>(
+      () => TokenHelper(tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 }
 
 //Client dependencies
@@ -125,9 +136,6 @@ _initFreelancerRegistrationDependencies() async {
 
 //Login dependencies
 _initLoginDependencies() async {
-  getIt.registerLazySingleton<TokenSharedPrefs>(
-      () => TokenSharedPrefs(getIt<SharedPreferences>()));
-
   getIt.registerLazySingleton<ClientLoginUseCase>(() => ClientLoginUseCase(
       getIt<ClientRemoteRepository>(), getIt<TokenSharedPrefs>()));
 
@@ -174,4 +182,11 @@ _initClientDashboardDependencies() async {
 _initFreelancerDashboardDependencies() async {
   getIt.registerFactory<FreelancerDashboardCubit>(
       () => FreelancerDashboardCubit());
+}
+
+//Client home screen dependencies
+_initClientHomeScreenDependencies() async {
+  getIt.registerFactory<ClientHomeCubit>(() => ClientHomeCubit(
+      getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
+      tokenHelper: getIt<TokenHelper>()));
 }
