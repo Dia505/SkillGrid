@@ -8,29 +8,60 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
   final Dio _dio;
   FreelancerRemoteDataSource({required Dio dio}) : _dio = dio;
 
+  //   try {
+  //     Response response =
+  //         await _dio.post(ApiEndpoints.registerFreelancer, data: {
+  //       "first_name": freelancerEntity.firstName,
+  //       "last_name": freelancerEntity.lastName,
+  //       "date_of_birth": freelancerEntity.dateOfBirth,
+  //       "mobile_no": freelancerEntity.mobileNo,
+  //       "address": freelancerEntity.address,
+  //       "city": freelancerEntity.city,
+  //       "email": freelancerEntity.email,
+  //       "password": freelancerEntity.password,
+  //       "job_category": freelancerEntity.jobCategory,
+  //       "profession": freelancerEntity.profession,
+  //       "skills": freelancerEntity.skills,
+  //       "years_of_experience": freelancerEntity.yearsOfExperience,
+  //       "bio": freelancerEntity.bio,
+  //       "available": freelancerEntity.available,
+  //       "profile_picture": freelancerEntity.profilePicture,
+  //       "background_picture": freelancerEntity.backgroundPicture,
+  //       "role": freelancerEntity.role
+  //     });
+  //     print("Response: $response");
+  //     if (response.statusCode == 201) {
+  //       return;
+  //     } else {
+  //       throw Exception(response.statusMessage);
+  //     }
+  //   } on DioException catch (e) {
+  //     throw Exception(e);
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
   @override
   Future<void> registerFreelancer(FreelancerEntity freelancerEntity) async {
     try {
-      Response response =
-          await _dio.post(ApiEndpoints.registerFreelancer, data: {
+      // Prepare the data to send to the API
+      Map<String, dynamic> data = {
         "first_name": freelancerEntity.firstName,
         "last_name": freelancerEntity.lastName,
-        "date_of_birth": freelancerEntity.dateOfBirth,
+        "date_of_birth": freelancerEntity.dateOfBirth.toIso8601String(),
         "mobile_no": freelancerEntity.mobileNo,
         "address": freelancerEntity.address,
         "city": freelancerEntity.city,
         "email": freelancerEntity.email,
-        "password": freelancerEntity.password,
-        "job_category": freelancerEntity.jobCategory,
-        "profession": freelancerEntity.profession,
-        "skills": freelancerEntity.skills,
-        "years_of_experience": freelancerEntity.yearsOfExperience,
-        "bio": freelancerEntity.bio,
-        "available": freelancerEntity.available,
-        "profile_picture": freelancerEntity.profilePicture,
-        "background_picture": freelancerEntity.backgroundPicture,
-        "role": freelancerEntity.role
-      });
+        "password": freelancerEntity.password
+      };
+
+      // Send the data to the API
+      Response response =
+          await _dio.post(ApiEndpoints.registerFreelancer, data: data);
+
+      print("Response: $response");
+
       if (response.statusCode == 201) {
         return;
       } else {
@@ -64,22 +95,15 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
   @override
   Future<String> loginFreelancer(String email, String password) async {
     try {
-      Response response = await _dio.post(
-        ApiEndpoints.login,
-        data: {
-          "email": email,
-          "password": password
-        }
-      );
-      if(response.statusCode == 200) {
+      Response response = await _dio.post(ApiEndpoints.login,
+          data: {"email": email, "password": password});
+      if (response.statusCode == 200) {
         LoginDto loginDto = LoginDto.fromJson(response.data);
         return loginDto.token;
-      }
-      else {
+      } else {
         throw Exception("Login failed: ${response.statusMessage}");
       }
-    }
-    on DioException catch (e) {
+    } on DioException catch (e) {
       throw Exception("Dio Error: ${e.message}");
     } catch (e) {
       throw Exception("An error occurred: ${e.toString()}");

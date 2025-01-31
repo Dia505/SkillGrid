@@ -7,16 +7,17 @@ import 'package:skill_grid/features/auth/domain/repository/client_repository.dar
 class ClientRemoteRepository implements IClientRepository {
   final ClientRemoteDataSource _clientRemoteDataSource;
 
-  ClientRemoteRepository({required ClientRemoteDataSource clientRemoteDataSource})
-    : _clientRemoteDataSource = clientRemoteDataSource;
+  ClientRemoteRepository(
+      {required ClientRemoteDataSource clientRemoteDataSource})
+      : _clientRemoteDataSource = clientRemoteDataSource;
 
   @override
-  Future<Either<Failure, void>> registerClient(ClientEntity clientEntity) async {
+  Future<Either<Failure, void>> registerClient(
+      ClientEntity clientEntity) async {
     try {
       _clientRemoteDataSource.registerClient(clientEntity);
       return const Right(null);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }
   }
@@ -28,18 +29,22 @@ class ClientRemoteRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, ClientEntity>> getClientById(String clientId) {
-    // TODO: implement getClientById
-    throw UnimplementedError();
+  Future<Either<Failure, ClientEntity>> getClientById(String clientId) async {
+    try {
+      final client = await _clientRemoteDataSource.getClientById(clientId);
+      return Right(client);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
   }
 
   @override
-  Future<Either<Failure, String>> loginClient(String email, String password) async {
+  Future<Either<Failure, String>> loginClient(
+      String email, String password) async {
     try {
       final token = await _clientRemoteDataSource.loginClient(email, password);
       return Right(token);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(
         ApiFailure(
           message: e.toString(),

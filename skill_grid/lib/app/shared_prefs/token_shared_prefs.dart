@@ -7,47 +7,22 @@ class TokenSharedPrefs {
 
   TokenSharedPrefs(this._sharedPreferences);
 
-  static const String tokenKey = "token";
-  static const String roleKey = "role";
-
-  // Save token and role
-  Future<Either<Failure, void>> saveTokenRole(String token, String role) async {
+  Future<Either<Failure, void>> saveToken(String token) async {
     try {
-      await _sharedPreferences.setString(tokenKey, token);
-      await _sharedPreferences.setString(roleKey, role);
-      return const Right(null);
-    } catch (e) {
-      return Left(SharedPrefsFailure(message: e.toString()));
+      await _sharedPreferences.setString("token", token);
+      return Right(null);
     }
+    catch(e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    } 
   }
 
-  // Get token
   Future<Either<Failure, String>> getToken() async {
     try {
-      final token = _sharedPreferences.getString(tokenKey);
+      final token = _sharedPreferences.getString("token");
       return Right(token ?? "");
-    } catch (e) {
-      return Left(SharedPrefsFailure(message: e.toString()));
     }
-  }
-
-  // Get role
-  Future<Either<Failure, String>> getRole() async {
-    try {
-      final role = _sharedPreferences.getString(roleKey);
-      return Right(role ?? "");
-    } catch (e) {
-      return Left(SharedPrefsFailure(message: e.toString()));
-    }
-  }
-
-  /// Clear token and role (for logout)
-  Future<Either<Failure, void>> clear() async {
-    try {
-      await _sharedPreferences.remove(tokenKey);
-      await _sharedPreferences.remove(roleKey);
-      return const Right(null);
-    } catch (e) {
+    catch(e) {
       return Left(SharedPrefsFailure(message: e.toString()));
     }
   }

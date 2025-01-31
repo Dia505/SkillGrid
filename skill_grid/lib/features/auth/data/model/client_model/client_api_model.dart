@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:skill_grid/features/auth/data/dto/find_client_by_id_dto.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 
 part 'client_api_model.g.dart';
@@ -52,16 +53,16 @@ class ClientApiModel extends Equatable {
         role: entity.role);
   }
 
-  ClientEntity toEntity() {
+  static ClientEntity toEntity(FindClientByIdDto findClientByIdDto) {
     return ClientEntity(
-        firstName: firstName,
-        lastName: lastName,
-        mobileNo: mobileNo,
-        city: city,
-        email: email,
-        password: password,
-        profilePicture: profilePicture,
-        role: role);
+        firstName: findClientByIdDto.firstName,
+        lastName: findClientByIdDto.lastName,
+        mobileNo: findClientByIdDto.mobileNo,
+        city: findClientByIdDto.city,
+        email: findClientByIdDto.email,
+        password: findClientByIdDto.password,
+        profilePicture: findClientByIdDto.profilePicture,
+        role: findClientByIdDto.role);
   }
 
   @override
