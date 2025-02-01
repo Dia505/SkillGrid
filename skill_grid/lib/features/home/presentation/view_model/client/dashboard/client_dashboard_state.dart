@@ -21,7 +21,10 @@ class ClientDashboardState extends Equatable {
   static ClientDashboardState initial() {
     return ClientDashboardState(selectedIndex: 0, views: [
       MultiBlocProvider(providers: [
-        BlocProvider(create: (context) => ClientSidebarBloc()),
+        BlocProvider(create: (context) => ClientSidebarBloc(
+          getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
+                tokenHelper: getIt<TokenHelper>()
+        )),
         BlocProvider(
             create: (context) => ClientHomeCubit(
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),

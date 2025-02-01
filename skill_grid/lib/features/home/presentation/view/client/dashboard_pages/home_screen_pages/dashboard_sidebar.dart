@@ -2,8 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 
-class DashboardSidebar extends StatelessWidget {
+class DashboardSidebar extends StatefulWidget {
   const DashboardSidebar({super.key});
+
+  @override
+  State<DashboardSidebar> createState() => _DashboardSidebarState();
+}
+
+class _DashboardSidebarState extends State<DashboardSidebar> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ClientSidebarBloc>().loadClient();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,24 +24,56 @@ class DashboardSidebar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 70),
       child: Column(
         children: [
-          const Row(
+          Row(
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage:
-                    AssetImage("assets/images/client_profile_img.jpg"),
+              BlocBuilder<ClientSidebarBloc, ClientSidebarState>(
+                builder: (context, state) {
+                  if (state is ClientSidebarLoaded) {
+                    final client = state.clientEntity;
+                    String imageUrl = client.profilePicture ?? '';
+
+                    return CircleAvatar(
+                        radius: 30,
+                        backgroundImage: client.profilePicture != null
+                            ? NetworkImage(
+                                imageUrl.replaceFirst('localhost', '10.0.2.2'))
+                            : const AssetImage(
+                                "assets/images/default_profile_img.png"));
+                  } else {
+                    return const CircleAvatar(
+                      radius: 30,
+                      backgroundImage:
+                          AssetImage("assets/images/default_profile_img.png"),
+                    );
+                  }
+                },
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Client full name",
-                    style: TextStyle(fontSize: 20, fontFamily: "Inter Bold"),
+                  BlocBuilder<ClientSidebarBloc, ClientSidebarState>(
+                    builder: (context, state) {
+                      if (state is ClientSidebarLoaded) {
+                        final client = state.clientEntity;
+
+                        return Text(
+                          "${client.firstName} ${client.lastName}",
+                          style: const TextStyle(
+                              fontSize: 20, fontFamily: "Inter Bold"),
+                        );
+                      } else {
+                        return const Text(
+                          "Client",
+                          style:
+                              TextStyle(fontSize: 20, fontFamily: "Inter Bold"),
+                        );
+                      }
+                    },
                   ),
-                  Text(
+                  const Text(
                     "Client",
                     style: TextStyle(color: Color(0xFF707070), fontSize: 16),
                   ),
