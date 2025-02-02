@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
+import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
 
 class ClientProfileEditView extends StatefulWidget {
@@ -18,6 +23,7 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   String? selectedCity;
+  File? _img;
 
   @override
   void initState() {
@@ -38,6 +44,36 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
+
+  Future<void> _browseImage(
+      ImageSource imageSource, ClientEntity client) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+        });
+
+        // Ensure clientId is not null before dispatching the event
+        if (client.clientId != null) {
+          context.read<ClientEditProfileBloc>().add(
+                UpdateProfilePicture(file: _img!, clientId: client.clientId!),
+              );
+        } else {
+          debugPrint("Error: client.clientId is null");
+        }
+      }
+    } catch (e) {
+      debugPrint("Exception thrown: ${e.toString()}");
+    }
   }
 
   @override
@@ -68,15 +104,15 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
         backgroundColor: const Color(0xFF322E86),
       ),
       body: BlocBuilder<ClientEditProfileBloc, ClientEditProfileState>(
-        builder: (context, state) {
-          if (state is ClientEditProfileLoaded) {
-            final client = state.clientEntity;
-            fnameController.text = client.firstName;
-            lnameController.text = client.lastName;
-            mobNumberController.text = client.mobileNo;
-            emailController.text = client.email;
-            selectedCity = client.city;
-          }
+          builder: (context, state) {
+        if (state is ClientEditProfileLoaded) {
+          final client = state.clientEntity;
+          print("Loaded Client ID: ${client.clientId}");
+          fnameController.text = client.firstName;
+          lnameController.text = client.lastName;
+          mobNumberController.text = client.mobileNo;
+          emailController.text = client.email;
+          selectedCity = client.city;
 
           return SingleChildScrollView(
             child: Padding(
@@ -102,13 +138,23 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     ElevatedButton.icon(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        checkCameraPermission();
+                                        _browseImage(
+                                            ImageSource.camera, client);
+                                        Navigator.pop(context);
+                                      },
                                       icon: const Icon(Icons.camera,
                                           color: Colors.white),
                                       label: const Text('Camera'),
                                     ),
                                     ElevatedButton.icon(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        checkCameraPermission();
+                                        _browseImage(
+                                            ImageSource.gallery, client);
+                                        Navigator.pop(context);
+                                      },
                                       icon: const Icon(Icons.image,
                                           color: Colors.white),
                                       label: const Text('Gallery'),
@@ -118,29 +164,16 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                               ),
                             );
                           },
-                          child: BlocBuilder<ClientEditProfileBloc,
-                              ClientEditProfileState>(
-                            builder: (context, state) {
-                              if (state is ClientEditProfileLoaded) {
-                                final client = state.clientEntity;
-                                String imageUrl = client.profilePicture ?? '';
-
-                                return CircleAvatar(
-                                    radius: 55,
-                                    backgroundImage: client.profilePicture !=
-                                            null
-                                        ? NetworkImage(imageUrl.replaceFirst(
-                                            'localhost', '10.0.2.2'))
-                                        : const AssetImage(
-                                            "assets/images/default_profile_img.png"));
-                              } else {
-                                return const CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: AssetImage(
-                                      "assets/images/default_profile_img.png"),
-                                );
-                              }
-                            },
+                          child: CircleAvatar(
+                            radius: 55,
+                            backgroundImage: _img != null
+                                ? FileImage(_img!)
+                                : client.profilePicture != null
+                                    ? NetworkImage(client.profilePicture!
+                                        .replaceFirst('localhost', '10.0.2.2'))
+                                    : const AssetImage(
+                                            "assets/images/default_profile_img.png")
+                                        as ImageProvider,
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -175,8 +208,7 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                                   setState(() {
                                     selectedCity = value;
                                   });
-                                  print(
-                                      'Selected city: $selectedCity'); // Debugging line
+                                  print('Selected city: $selectedCity');
                                 },
                               ),
                               const SizedBox(height: 7),
@@ -193,17 +225,16 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                         const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
-                            // if (formKey.currentState!.validate()) {
-                            //   context.read<ClientEditProfileBloc>().add(
-                            //     UpdateClientProfile(
-                            //       firstName: fnameController.text,
-                            //       lastName: lnameController.text,
-                            //       mobileNo: mobNumberController.text,
-                            //       email: emailController.text,
-                            //       city: selectedCity,
-                            //     ),
-                            //   );
-                            // }
+                            if (formKey.currentState!.validate()) {
+                              if (_img != null) {
+                                context.read<ClientEditProfileBloc>().add(
+                                      UpdateProfilePicture(
+                                        file: _img!,
+                                        clientId: client.clientId!,
+                                      ),
+                                    );
+                              }
+                            }
                           },
                           child: const Text("Save"),
                         ),
@@ -214,8 +245,10 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
               ),
             ),
           );
-        },
-      ),
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      }),
     );
   }
 }

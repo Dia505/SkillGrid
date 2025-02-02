@@ -10,4 +10,5 @@ abstract interface class IClientRepository {
   Future<Either<Failure, ClientEntity>> getClientById(String clientId);
   Future<Either<Failure, String>> loginClient(String email, String password);
   Future<Either<Failure, String>> uploadProfilePicture(File file);
+  Future<Either<Failure, String>> updateProfilePicture(String clientId, File file, String? token);
 }

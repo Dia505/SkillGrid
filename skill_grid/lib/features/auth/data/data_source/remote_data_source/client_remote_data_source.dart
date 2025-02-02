@@ -119,7 +119,7 @@ class ClientRemoteDataSource implements IClientDataSource {
   }
   
   @override
-  Future<String> updateProfilePicture(String clientId, File file, String token) async {
+  Future<String> updateProfilePicture(String clientId, File file, String? token) async {
     try {
       final String url = "${ApiEndpoints.updateClientProfilePicture}/$clientId/profile-picture";
       String fileName = file.path.split("/").last;

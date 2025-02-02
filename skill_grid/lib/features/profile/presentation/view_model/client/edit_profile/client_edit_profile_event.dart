@@ -17,3 +17,16 @@ class NavigateToClientProfile extends ClientEditProfileEvent {
     required this.destination
   });
 }
+
+class UpdateProfilePicture extends ClientEditProfileEvent {
+  final String clientId;
+  final File file;
+
+  const UpdateProfilePicture({
+    required this.clientId,
+    required this.file,
+  });
+
+  @override
+  List<Object?> get props => [clientId, file];
+}

@@ -57,7 +57,7 @@ class ClientLocalDataSource implements IClientDataSource {
 
   @override
   Future<String> updateProfilePicture(
-      String clientId, File file, String token) async {
+      String clientId, File file, String? token) async {
     try {
       final clientHiveModel = await _hiveService.getClientById(clientId);
 

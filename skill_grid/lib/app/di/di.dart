@@ -18,6 +18,7 @@ import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/delete_client_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/register_client_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_profile_picture_usecase.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/delete_freelancer_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/freelancer_login_usec_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_all_freelancer_use_case.dart';
@@ -202,9 +203,14 @@ _initClientHomeScreenDependencies() async {
 }
 
 _initEditClientProfileDependencies() async {
+  getIt.registerLazySingleton<UpdateClientProfilePictureUsecase>(
+    () => UpdateClientProfilePictureUsecase(clientRepository: getIt<ClientRemoteRepository>())
+  );
+
   getIt.registerFactory<ClientEditProfileBloc>(() => ClientEditProfileBloc(
     getClientByIdUseCase: getIt<GetClientByIdUseCase>(), 
-    tokenHelper: getIt<TokenHelper>()
+    tokenHelper: getIt<TokenHelper>(),
+    updateClientProfilePictureUsecase: getIt<UpdateClientProfilePictureUsecase>()
   ));
 }
 
