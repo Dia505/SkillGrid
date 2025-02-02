@@ -39,6 +39,22 @@ class HiveService {
     return client;
   }
 
+  Future<void> updateClientProfilePicture(
+      String clientId, String profilePicturePath) async {
+    var box = await Hive.openBox<ClientHiveModel>(HiveTableConstant.clientBox);
+
+    final client = box.get(clientId);
+
+    if (client == null) {
+      throw Exception("Client not found");
+    }
+
+    final updatedClient = client.copyWith(profilePicture: profilePicturePath);
+
+    // Save the updated client back to Hive
+    await box.put(clientId, updatedClient);
+  }
+
   //--------------------Freelancer Queries------------------------------
   Future<String> registerFreelancer(FreelancerHiveModel freelancer) async {
     var box = await Hive.openBox<FreelancerHiveModel>(

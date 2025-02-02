@@ -54,4 +54,23 @@ class ClientLocalDataSource implements IClientDataSource {
     // TODO: implement uploadProfilePicture
     throw UnimplementedError();
   }
+
+  @override
+  Future<String> updateProfilePicture(
+      String clientId, File file, String token) async {
+    try {
+      final clientHiveModel = await _hiveService.getClientById(clientId);
+
+      if (clientHiveModel == null) {
+        throw Exception("Client not found");
+      }
+
+      // Directly update the profile picture using the file path
+      await _hiveService.updateClientProfilePicture(clientId, file.path);
+
+      return file.path;
+    } catch (e) {
+      throw Exception("Failed to update profile picture: $e");
+    }
+  }
 }
