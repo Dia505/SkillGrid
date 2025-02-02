@@ -65,4 +65,14 @@ class ClientRemoteRepository implements IClientRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, String>> updateProfilePicture(String clientId, File file, String? token) async {
+    try {
+      final updatedImagePath = await _clientRemoteDataSource.updateProfilePicture(clientId, file, token);
+      return Right(updatedImagePath);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

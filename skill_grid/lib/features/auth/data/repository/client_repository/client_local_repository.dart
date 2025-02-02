@@ -57,4 +57,14 @@ class ClientLocalRepository implements IClientRepository {
     // TODO: implement uploadProfilePicture
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<Failure, String>> updateProfilePicture(String clientId, File file, String? token) async {
+    try {
+      final updatedImagePath = await _clientLocalDataSource.updateProfilePicture(clientId, file, token);
+      return Right(updatedImagePath);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }
