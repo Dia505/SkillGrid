@@ -6,7 +6,6 @@ import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
-import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
 part 'client_sidebar_event.dart';
@@ -32,7 +31,10 @@ class ClientSidebarBloc extends Bloc<ClientSidebarEvent, ClientSidebarState> {
         event.context,
         MaterialPageRoute(
           builder: (context) =>
-              BlocProvider.value(value: _clientProfileBloc, child: event.destination),
+              BlocProvider.value(
+                value: _clientProfileBloc, 
+                child: event.destination
+              ),
         ),
       );
     });

@@ -10,8 +10,10 @@ sealed class ClientProfileEvent extends Equatable {
 
 class NavigateToEditClientProfile extends ClientProfileEvent {
   final BuildContext context;
+  final Widget destination;
 
   const NavigateToEditClientProfile({
-    required this.context
+    required this.context,
+    required this.destination
   });
 }

@@ -6,42 +6,30 @@ import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
 
-part 'client_profile_event.dart';
-part 'client_profile_state.dart';
+part 'client_edit_profile_event.dart';
+part 'client_edit_profile_state.dart';
 
-class ClientProfileBloc extends Bloc<ClientProfileEvent, ClientProfileState> {
+class ClientEditProfileBloc
+    extends Bloc<ClientEditProfileEvent, ClientEditProfileState> {
   final GetClientByIdUseCase _getClientByIdUseCase;
   final TokenHelper _tokenHelper;
-  final ClientEditProfileBloc _clientEditProfileBloc;
 
-  ClientProfileBloc(
+  ClientEditProfileBloc(
       {required GetClientByIdUseCase getClientByIdUseCase,
       required TokenHelper tokenHelper,
-      required ClientEditProfileBloc clientEditProfileBloc})
+      })
       : _getClientByIdUseCase = getClientByIdUseCase,
         _tokenHelper = tokenHelper,
-        _clientEditProfileBloc = clientEditProfileBloc,
-        super(ClientProfileInitial()) {
-    on<NavigateToEditClientProfile>((event, emit) {
-      Navigator.pushReplacement(
-        event.context,
-        MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
-              value: _clientEditProfileBloc, child: event.destination),
-        ),
-      );
-    });
-  }
+        super(ClientEditProfileInitial());
 
   Future<void> loadClient() async {
-    emit(ClientProfileLoading());
+    emit(ClientEditProfileLoading());
 
     try {
       final userId = await _tokenHelper.getUserIdFromToken();
       if (userId == null) {
-        emit(const ClientProfileError("Client id not found"));
+        emit(const ClientEditProfileError("Client id not found"));
         return;
       }
 
@@ -50,16 +38,16 @@ class ClientProfileBloc extends Bloc<ClientProfileEvent, ClientProfileState> {
 
       result.fold(
         (failure) {
-          emit(ClientProfileError(failure.message));
+          emit(ClientEditProfileError(failure.message));
           print("Error in cubit: ${failure.message}");
         },
         (clientEntity) {
-          emit(ClientProfileLoaded(clientEntity));
+          emit(ClientEditProfileLoaded(clientEntity));
           print("Client loaded: ${clientEntity.toString()}");
         },
       );
     } catch (e) {
-      emit(ClientProfileError("Error occurred: $e"));
+      emit(ClientEditProfileError("Error occurred: $e"));
       print("Exception occurred: $e");
     }
   }
