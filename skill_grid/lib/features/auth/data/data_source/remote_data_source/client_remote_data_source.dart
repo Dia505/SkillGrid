@@ -117,4 +117,45 @@ class ClientRemoteDataSource implements IClientDataSource {
       throw Exception(e);
     }
   }
+  
+  @override
+  Future<String> updateProfilePicture(String clientId, File file, String token) async {
+    try {
+      final String url = "${ApiEndpoints.updateClientProfilePicture}/$clientId/profile-picture";
+      String fileName = file.path.split("/").last;
+
+      FormData formData = FormData.fromMap(
+        {
+        "profile_picture": await MultipartFile.fromFile(
+            file.path, 
+            filename: fileName
+          ),
+        }
+      );
+
+      Response response = await _dio.put(
+        url,
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token", 
+            "Content-Type": "multipart/form-data",
+          },
+        ),
+      );
+
+      if(response.statusCode == 200) {
+        return response.data["profile_picture"];
+      }
+      else {
+        throw Exception(response.statusMessage);
+      }
+    }
+    on DioException catch(e) {
+      throw Exception(e);
+    }
+    catch(e) {
+      throw Exception(e);
+    }
+  }
 }

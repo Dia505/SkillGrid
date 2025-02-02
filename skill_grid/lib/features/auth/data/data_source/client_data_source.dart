@@ -8,4 +8,5 @@ abstract interface class IClientDataSource {
   Future<ClientEntity> getClientById(String clientId);
   Future<String> loginClient(String email, String password);
   Future<String> uploadProfilePicture(File file);
+  Future<String> updateProfilePicture(String clientId, File file, String token);
 }
