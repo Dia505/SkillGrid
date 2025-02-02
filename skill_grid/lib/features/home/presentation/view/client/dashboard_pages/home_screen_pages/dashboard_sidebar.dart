@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
 
 class DashboardSidebar extends StatefulWidget {
   const DashboardSidebar({super.key});
@@ -97,7 +98,10 @@ class _DashboardSidebarState extends State<DashboardSidebar> {
                 onTap: () {
                   context
                       .read<ClientSidebarBloc>()
-                      .add(NavigateToClientProfile(context: context));
+                      .add(NavigateToClientProfile(
+                        context: context,
+                        destination: const ClientProfileView()
+                      ));
                 },
                 child: const Row(
                   children: [

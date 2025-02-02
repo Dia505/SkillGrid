@@ -30,7 +30,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelan
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_cubit.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
@@ -200,7 +200,7 @@ _initClientHomeScreenDependencies() async {
 }
 
 _initClientProfileDependencies() async {
-  getIt.registerFactory<ClientProfileCubit>(() => ClientProfileCubit(
+  getIt.registerFactory<ClientProfileBloc>(() => ClientProfileBloc(
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
       tokenHelper: getIt<TokenHelper>()));
 }

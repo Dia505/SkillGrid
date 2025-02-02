@@ -12,8 +12,10 @@ class ToggleSidebar extends ClientSidebarEvent {}
 
 class NavigateToClientProfile extends ClientSidebarEvent {
   final BuildContext context;
+  final Widget destination;
 
   const NavigateToClientProfile({
-    required this.context
+    required this.context,
+    required this.destination
   });
 }
