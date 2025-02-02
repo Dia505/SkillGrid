@@ -1,4 +1,4 @@
-part of 'client_profile_cubit.dart';
+part of 'client_profile_bloc.dart';
 
 abstract class ClientProfileState extends Equatable {
   const ClientProfileState();
@@ -6,6 +6,8 @@ abstract class ClientProfileState extends Equatable {
   @override
   List<Object?> get props => [];
 }
+
+class NavigatingToEditClientProfile extends ClientProfileState {}
 
 class ClientProfileInitial extends ClientProfileState {}
 

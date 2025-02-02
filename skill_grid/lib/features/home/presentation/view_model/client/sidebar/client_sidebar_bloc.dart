@@ -7,6 +7,7 @@ import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
 part 'client_sidebar_event.dart';
 part 'client_sidebar_state.dart';
@@ -14,16 +15,27 @@ part 'client_sidebar_state.dart';
 class ClientSidebarBloc extends Bloc<ClientSidebarEvent, ClientSidebarState> {
   final GetClientByIdUseCase _getClientByIdUseCase;
   final TokenHelper _tokenHelper;
+  final ClientProfileBloc _clientProfileBloc;
 
   bool _isSidebarClosed = true;
 
   ClientSidebarBloc({
     required GetClientByIdUseCase getClientByIdUseCase,
     required TokenHelper tokenHelper,
+    required ClientProfileBloc clientProfileBloc
   })  : _getClientByIdUseCase = getClientByIdUseCase,
         _tokenHelper = tokenHelper,
+        _clientProfileBloc = clientProfileBloc,
         super(ClientSidebarInitial()) {
-    on<NavigateToClientProfile>(_onNavigateToClientProfile);
+    on<NavigateToClientProfile>((event, emit) {
+      Navigator.pushReplacement(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) =>
+              BlocProvider.value(value: _clientProfileBloc, child: event.destination),
+        ),
+      );
+    });
     on<ToggleSidebar>((event, emit) {
       if (_isSidebarClosed) {
         _isSidebarClosed = false;
@@ -67,16 +79,5 @@ class ClientSidebarBloc extends Bloc<ClientSidebarEvent, ClientSidebarState> {
           "Error occurred: $e")); // Emit error if an exception occurs
       print("Exception occurred: $e");
     }
-  }
-
-  void _onNavigateToClientProfile(
-      NavigateToClientProfile event, Emitter<ClientSidebarState> emit) {
-    emit(NavigatingToClientProfile());
-
-    // Navigate to the client profile view
-    Navigator.push(
-      event.context,
-      MaterialPageRoute(builder: (context) => const ClientProfileView()),
-    );
   }
 }

@@ -10,6 +10,7 @@ import 'package:skill_grid/features/home/presentation/view/client/dashboard_page
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
 class ClientDashboardState extends Equatable {
   final int selectedIndex;
@@ -21,10 +22,11 @@ class ClientDashboardState extends Equatable {
   static ClientDashboardState initial() {
     return ClientDashboardState(selectedIndex: 0, views: [
       MultiBlocProvider(providers: [
-        BlocProvider(create: (context) => ClientSidebarBloc(
-          getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
-                tokenHelper: getIt<TokenHelper>()
-        )),
+        BlocProvider(
+            create: (context) => ClientSidebarBloc(
+                getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
+                tokenHelper: getIt<TokenHelper>(),
+                clientProfileBloc: getIt<ClientProfileBloc>())),
         BlocProvider(
             create: (context) => ClientHomeCubit(
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
