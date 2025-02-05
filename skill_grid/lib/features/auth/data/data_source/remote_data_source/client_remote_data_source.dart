@@ -49,11 +49,11 @@ class ClientRemoteDataSource implements IClientDataSource {
       final String url = "${ApiEndpoints.findClientById}/$clientId";
 
       var response = await _dio.get(url,
-      options: Options(
-        headers: {
-            'Authorization': 'Bearer $token',
-          },
-      ));
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
 
       if (response.statusCode == 200) {
         FindClientByIdDto findClientByIdDto =
@@ -94,72 +94,117 @@ class ClientRemoteDataSource implements IClientDataSource {
   Future<String> uploadProfilePicture(File file) async {
     try {
       String fileName = file.path.split("/").last;
-      FormData formData = FormData.fromMap(
-        {
-          "profile_picture": await MultipartFile.fromFile(
-            file.path,
-            filename: fileName
-          )
-        }
-      );
+      FormData formData = FormData.fromMap({
+        "profile_picture":
+            await MultipartFile.fromFile(file.path, filename: fileName)
+      });
 
-      Response response = await _dio.post(
-        ApiEndpoints.uploadProfilePicture,
-        data: formData
-      );
+      Response response =
+          await _dio.post(ApiEndpoints.uploadProfilePicture, data: formData);
 
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         return response.data["data"];
-      }
-      else {
+      } else {
         throw Exception(response.statusMessage);
       }
-    }
-    on DioException catch(e) {
+    } on DioException catch (e) {
       throw Exception(e);
-    }
-    catch(e) {
+    } catch (e) {
       throw Exception(e);
     }
   }
-  
+
   @override
-  Future<String> updateProfilePicture(String clientId, File file, String? token) async {
+  Future<String> updateProfilePicture(
+      String clientId, File file, String? token) async {
     try {
-      final String url = "${ApiEndpoints.updateClientProfilePicture}/$clientId/profile-picture";
+      final String url =
+          "${ApiEndpoints.updateClientProfilePicture}/$clientId/profile-picture";
       String fileName = file.path.split("/").last;
 
-      FormData formData = FormData.fromMap(
-        {
-        "profile_picture": await MultipartFile.fromFile(
-            file.path, 
-            filename: fileName
-          ),
-        }
-      );
+      FormData formData = FormData.fromMap({
+        "profile_picture":
+            await MultipartFile.fromFile(file.path, filename: fileName),
+      });
 
       Response response = await _dio.put(
         url,
         data: formData,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token", 
+            "Authorization": "Bearer $token",
             "Content-Type": "multipart/form-data",
           },
         ),
       );
 
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         return response.data["profile_picture"];
-      }
-      else {
+      } else {
         throw Exception(response.statusMessage);
       }
-    }
-    on DioException catch(e) {
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
       throw Exception(e);
     }
-    catch(e) {
+  }
+
+  @override
+  Future<void> updateClient(
+      String clientId, ClientEntity updatedClient, String? token) async {
+    try {
+      final String url = "${ApiEndpoints.updateClient}/$clientId";
+      Map<String, dynamic> updateData = {};
+
+    // Get the current client data from the database or API
+    final currentClient = await _dio.get("${ApiEndpoints.findClientById}/$clientId",
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ));
+    
+    final currentClientData = currentClient.data;
+
+    // Update only the fields that have actually changed
+    if (updatedClient.firstName != currentClientData['first_name']) {
+      updateData["first_name"] = updatedClient.firstName;
+    }
+    if (updatedClient.lastName != currentClientData['last_name']) {
+      updateData["last_name"] = updatedClient.lastName;
+    }
+    if (updatedClient.mobileNo != currentClientData['mobile_no']) {
+      updateData["mobile_no"] = updatedClient.mobileNo;
+    }
+    if (updatedClient.city != currentClientData['city']) {
+      updateData["city"] = updatedClient.city;
+    }
+    if (updatedClient.email != currentClientData['email']) {
+      updateData["email"] = updatedClient.email;
+    }
+    if (updatedClient.password != currentClientData['password']) {
+      updateData["password"] = updatedClient.password;
+    }
+
+    // Proceed to update only changed fields
+    if (updateData.isNotEmpty) {
+      var response = await _dio.put(url,
+          data: updateData,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+
+      if (response.statusCode == 200) {
+        print("Client updated successfully.");
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    }} on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
       throw Exception(e);
     }
   }

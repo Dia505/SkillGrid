@@ -73,4 +73,26 @@ class ClientLocalDataSource implements IClientDataSource {
       throw Exception("Failed to update profile picture: $e");
     }
   }
+
+  @override
+  Future<void> updateClient(
+      String clientId, ClientEntity updatedClient, String? token) async {
+    try {
+      final clientHiveModel = await _hiveService.getClientById(clientId);
+
+      if (clientHiveModel == null) {
+        throw Exception("Client not found");
+      }
+
+      await _hiveService.updateClient(clientId,
+          newFirstName: updatedClient.firstName,
+          newLastName: updatedClient.lastName,
+          newMobileNo: updatedClient.mobileNo,
+          newCity: updatedClient.city,
+          newEmail: updatedClient.email,
+          newPassword: updatedClient.password);
+    } catch (e) {
+      throw Exception("Failed to update client data: $e");
+    }
+  }
 }

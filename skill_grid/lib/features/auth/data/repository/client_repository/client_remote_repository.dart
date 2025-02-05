@@ -75,4 +75,14 @@ class ClientRemoteRepository implements IClientRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> updateClient(String clientId, ClientEntity updatedClient, String? token) async {
+    try {
+      await _clientRemoteDataSource.updateClient(clientId, updatedClient, token);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

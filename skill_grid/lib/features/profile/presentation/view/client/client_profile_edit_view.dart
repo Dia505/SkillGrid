@@ -234,14 +234,37 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                         ElevatedButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
+                              final clientBloc =
+                                  context.read<ClientEditProfileBloc>();
+
+                              // First, check if the profile picture needs updating
                               if (_img != null) {
-                                context.read<ClientEditProfileBloc>().add(
-                                      UpdateProfilePicture(
-                                          file: _img!,
-                                          clientId: client.clientId!),
-                                    );
+                                clientBloc.add(UpdateProfilePicture(
+                                  file: _img!,
+                                  clientId: client.clientId!,
+                                ));
                               }
-                              Navigator.pop(context);
+
+                              // Dispatch UpdateClient event for bio updates
+                              clientBloc.add(UpdateClient(
+                                clientId: client.clientId!,
+                                firstName: fnameController.text.isNotEmpty
+                                    ? fnameController.text
+                                    : null,
+                                lastName: lnameController.text.isNotEmpty
+                                    ? lnameController.text
+                                    : null,
+                                mobileNo: mobNumberController.text.isNotEmpty
+                                    ? mobNumberController.text
+                                    : null,
+                                city: selectedCity,
+                                email: emailController.text.isNotEmpty
+                                    ? emailController.text
+                                    : null,
+                                password: passwordController.text.isNotEmpty
+                                    ? passwordController.text
+                                    : null,
+                              ));
                             }
                           },
                           child: const Text("Save"),

@@ -32,9 +32,11 @@ class ClientLocalRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, ClientEntity>> getClientById(String clientId, String? token) async {
+  Future<Either<Failure, ClientEntity>> getClientById(
+      String clientId, String? token) async {
     try {
-      final clientEntity = await _clientLocalDataSource.getClientById(clientId, token);
+      final clientEntity =
+          await _clientLocalDataSource.getClientById(clientId, token);
       return Right(clientEntity);
     } catch (e) {
       return Left(LocalDatabaseFailure(
@@ -43,7 +45,8 @@ class ClientLocalRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, String>> loginClient(String email, String password) async {
+  Future<Either<Failure, String>> loginClient(
+      String email, String password) async {
     try {
       final token = await _clientLocalDataSource.loginClient(email, password);
       return Right(token);
@@ -57,14 +60,27 @@ class ClientLocalRepository implements IClientRepository {
     // TODO: implement uploadProfilePicture
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<Either<Failure, String>> updateProfilePicture(String clientId, File file, String? token) async {
+  Future<Either<Failure, String>> updateProfilePicture(
+      String clientId, File file, String? token) async {
     try {
-      final updatedImagePath = await _clientLocalDataSource.updateProfilePicture(clientId, file, token);
+      final updatedImagePath = await _clientLocalDataSource
+          .updateProfilePicture(clientId, file, token);
       return Right(updatedImagePath);
     } catch (e) {
-      return Left(ApiFailure(message: e.toString()));
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateClient(
+      String clientId, ClientEntity updatedClient, String? token) async {
+    try {
+      await _clientLocalDataSource.updateClient(clientId, updatedClient, token);
+      return const Right(null);
+    } catch (e) {
+      return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
     }
   }
 }
