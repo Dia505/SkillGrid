@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
+import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
 
 class ClientProfileEditView extends StatefulWidget {
@@ -102,6 +103,13 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
         elevation: 0,
         centerTitle: true,
         backgroundColor: const Color(0xFF322E86),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            context.read<ClientEditProfileBloc>().add(NavigateToClientProfile(
+                context: context, destination: const ClientProfileView()));
+          },
+        ),
       ),
       body: BlocBuilder<ClientEditProfileBloc, ClientEditProfileState>(
           builder: (context, state) {
@@ -230,11 +238,11 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                               if (_img != null) {
                                 context.read<ClientEditProfileBloc>().add(
                                       UpdateProfilePicture(
-                                        file: _img!,
-                                        clientId: client.clientId!,
-                                      ),
+                                          file: _img!,
+                                          clientId: client.clientId!),
                                     );
                               }
+                              Navigator.pop(context);
                             }
                           },
                           child: const Text("Save"),

@@ -206,7 +206,9 @@ _initClientHomeScreenDependencies() async {
 _initEditClientProfileDependencies() async {
   getIt.registerLazySingleton<UpdateClientProfilePictureUsecase>(() =>
       UpdateClientProfilePictureUsecase(
-          clientRepository: getIt<ClientRemoteRepository>()));
+          clientRepository: getIt<ClientRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+          tokenHelper: getIt<TokenHelper>()));
 
   getIt.registerFactory<ClientEditProfileBloc>(() => ClientEditProfileBloc(
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
