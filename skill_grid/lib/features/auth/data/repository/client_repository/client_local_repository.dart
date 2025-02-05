@@ -32,9 +32,9 @@ class ClientLocalRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, ClientEntity>> getClientById(String clientId) async {
+  Future<Either<Failure, ClientEntity>> getClientById(String clientId, String? token) async {
     try {
-      final clientEntity = await _clientLocalDataSource.getClientById(clientId);
+      final clientEntity = await _clientLocalDataSource.getClientById(clientId, token);
       return Right(clientEntity);
     } catch (e) {
       return Left(LocalDatabaseFailure(

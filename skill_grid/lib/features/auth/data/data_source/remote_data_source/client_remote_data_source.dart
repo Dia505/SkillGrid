@@ -44,11 +44,16 @@ class ClientRemoteDataSource implements IClientDataSource {
   }
 
   @override
-  Future<ClientEntity> getClientById(String clientId) async {
+  Future<ClientEntity> getClientById(String clientId, String? token) async {
     try {
       final String url = "${ApiEndpoints.findClientById}/$clientId";
 
-      var response = await _dio.get(url);
+      var response = await _dio.get(url,
+      options: Options(
+        headers: {
+            'Authorization': 'Bearer $token',
+          },
+      ));
 
       if (response.statusCode == 200) {
         FindClientByIdDto findClientByIdDto =

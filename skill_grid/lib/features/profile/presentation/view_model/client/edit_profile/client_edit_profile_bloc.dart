@@ -22,12 +22,14 @@ class ClientEditProfileBloc
   ClientEditProfileBloc(
       {required GetClientByIdUseCase getClientByIdUseCase,
       required TokenHelper tokenHelper,
-      required UpdateClientProfilePictureUsecase updateClientProfilePictureUsecase
-      })
+      required UpdateClientProfilePictureUsecase
+          updateClientProfilePictureUsecase})
       : _getClientByIdUseCase = getClientByIdUseCase,
         _tokenHelper = tokenHelper,
         _updateClientProfilePictureUsecase = updateClientProfilePictureUsecase,
-        super(ClientEditProfileInitial());
+        super(ClientEditProfileInitial()) {
+    on<UpdateProfilePicture>(_onUpdateProfilePicture);
+  }
 
   Future<void> loadClient() async {
     emit(ClientEditProfileLoading());
@@ -58,20 +60,37 @@ class ClientEditProfileBloc
     }
   }
 
-  Future<void> updateProfilePicture(String clientId, File file, String? token) async {
-    emit(ClientEditProfileLoading());  // Show loading indicator
+  void _onUpdateProfilePicture(
+      UpdateProfilePicture event, Emitter<ClientEditProfileState> emit) async {
+    emit(ClientEditProfileLoading());
 
     try {
       final result = await _updateClientProfilePictureUsecase(
-        UpdateClientProfilePictureParams(clientId: clientId, file: file, token: token ?? ""),
+        UpdateClientProfilePictureParams(
+            clientId: event.clientId,
+            file: event.file,
+            token: event.token ?? ""),
       );
 
       result.fold(
         (failure) {
-          emit(ClientEditProfileError(failure.message)); // Emit error state
+          emit(ClientEditProfileError(failure.message));
         },
         (updatedImagePath) {
-          emit(ClientEditProfileSuccess(profilePicturePath: updatedImagePath)); // Emit success state
+          // Access the clientEntity by casting the state to ClientEditProfileLoaded
+          if (state is ClientEditProfileLoaded) {
+            final currentClientEntity =
+                (state as ClientEditProfileLoaded).clientEntity;
+            final updatedClientEntity = currentClientEntity.copyWith(
+              profilePicture: updatedImagePath,
+            );
+
+            // Emit the loaded state with the updated client data
+            emit(ClientEditProfileLoaded(updatedClientEntity));
+          } else {
+            // Handle the case where the state is not ClientEditProfileLoaded
+            emit(const ClientEditProfileError("Client data not loaded"));
+          }
         },
       );
     } catch (e) {
