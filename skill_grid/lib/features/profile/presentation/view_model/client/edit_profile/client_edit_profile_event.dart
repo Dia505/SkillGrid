@@ -21,12 +21,10 @@ class NavigateToClientProfile extends ClientEditProfileEvent {
 class UpdateProfilePicture extends ClientEditProfileEvent {
   final String clientId;
   final File file;
-  final String? token;
 
   const UpdateProfilePicture({
     required this.clientId,
     required this.file,
-    this.token
   });
 
   @override

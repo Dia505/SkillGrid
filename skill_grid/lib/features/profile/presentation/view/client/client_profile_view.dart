@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_edit_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
@@ -32,6 +33,13 @@ class _ClientProfileViewState extends State<ClientProfileView> {
         elevation: 0,
         centerTitle: true,
         backgroundColor: const Color(0xFF322E86),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            context.read<ClientProfileBloc>().add(NavigateToClientDashboard(
+                context: context, destination: const ClientDashboard()));
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30),

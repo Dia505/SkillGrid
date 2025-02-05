@@ -17,3 +17,13 @@ class NavigateToEditClientProfile extends ClientProfileEvent {
     required this.destination
   });
 }
+
+class NavigateToClientDashboard extends ClientProfileEvent {
+  final BuildContext context;
+  final Widget destination;
+
+  const NavigateToClientDashboard({
+    required this.context,
+    required this.destination
+  });
+}

@@ -4,11 +4,13 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_profile_picture_usecase.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
 part 'client_edit_profile_event.dart';
 part 'client_edit_profile_state.dart';
@@ -29,6 +31,20 @@ class ClientEditProfileBloc
         _updateClientProfilePictureUsecase = updateClientProfilePictureUsecase,
         super(ClientEditProfileInitial()) {
     on<UpdateProfilePicture>(_onUpdateProfilePicture);
+
+    on<NavigateToClientProfile>((event, emit) {
+      final clientProfileBloc = getIt<ClientProfileBloc>();
+      
+      Navigator.pushReplacement(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+            value: clientProfileBloc, 
+            child: event.destination
+          ),
+        ),
+      );
+    });
   }
 
   Future<void> loadClient() async {
@@ -68,8 +84,7 @@ class ClientEditProfileBloc
       final result = await _updateClientProfilePictureUsecase(
         UpdateClientProfilePictureParams(
             clientId: event.clientId,
-            file: event.file,
-            token: event.token ?? ""),
+            file: event.file),
       );
 
       result.fold(
@@ -77,20 +92,7 @@ class ClientEditProfileBloc
           emit(ClientEditProfileError(failure.message));
         },
         (updatedImagePath) {
-          // Access the clientEntity by casting the state to ClientEditProfileLoaded
-          if (state is ClientEditProfileLoaded) {
-            final currentClientEntity =
-                (state as ClientEditProfileLoaded).clientEntity;
-            final updatedClientEntity = currentClientEntity.copyWith(
-              profilePicture: updatedImagePath,
-            );
-
-            // Emit the loaded state with the updated client data
-            emit(ClientEditProfileLoaded(updatedClientEntity));
-          } else {
-            // Handle the case where the state is not ClientEditProfileLoaded
-            emit(const ClientEditProfileError("Client data not loaded"));
-          }
+          emit(ClientEditProfileSuccess(profilePicturePath: updatedImagePath)); // Emit success state
         },
       );
     } catch (e) {
