@@ -55,6 +55,33 @@ class HiveService {
     await box.put(clientId, updatedClient);
   }
 
+  Future<void> updateClient(String clientId,
+      {String? newFirstName,
+      String? newLastName,
+      String? newEmail,
+      String? newMobileNo,
+      String? newCity,
+      String? newPassword}) async {
+    var box = await Hive.openBox<ClientHiveModel>(HiveTableConstant.clientBox);
+
+    final client = box.get(clientId);
+
+    if (client == null) {
+      throw Exception("Client not found");
+    }
+
+    final updatedClient = client.copyWith(
+      firstName: newFirstName ?? client.firstName,
+      lastName: newLastName ?? client.lastName,
+      email: newEmail ?? client.email,
+      mobileNo: newMobileNo ?? client.mobileNo,
+      city: newCity ?? client.city,
+      password: newPassword ?? client.password,
+    );
+
+    await box.put(clientId, updatedClient);
+  }
+
   //--------------------Freelancer Queries------------------------------
   Future<String> registerFreelancer(FreelancerHiveModel freelancer) async {
     var box = await Hive.openBox<FreelancerHiveModel>(

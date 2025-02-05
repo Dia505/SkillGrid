@@ -27,11 +27,13 @@ class ClientEditProfileError extends ClientEditProfileState {
   List<Object?> get props => [message];
 }
 
-class ClientEditProfileSuccess extends ClientEditProfileState {
+class ClientProfilePictureUpdateSuccess extends ClientEditProfileState {
   final String profilePicturePath;  
 
-  const ClientEditProfileSuccess({required this.profilePicturePath});
+  const ClientProfilePictureUpdateSuccess({required this.profilePicturePath});
 
   @override
   List<Object?> get props => [profilePicturePath];
 }
+
+class ClientUpdateSuccess extends ClientEditProfileState {}
