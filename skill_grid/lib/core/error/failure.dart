@@ -26,3 +26,9 @@ class SharedPrefsFailure extends Failure {
     required super.message
   });
 }
+
+class RoleMismatchFailure extends Failure {
+  const RoleMismatchFailure({
+    required super.message
+  });
+}

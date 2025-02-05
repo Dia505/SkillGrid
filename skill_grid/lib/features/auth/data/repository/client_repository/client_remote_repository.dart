@@ -31,9 +31,9 @@ class ClientRemoteRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, ClientEntity>> getClientById(String clientId) async {
+  Future<Either<Failure, ClientEntity>> getClientById(String clientId, String? token) async {
     try {
-      final client = await _clientRemoteDataSource.getClientById(clientId);
+      final client = await _clientRemoteDataSource.getClientById(clientId, token);
       return Right(client);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));

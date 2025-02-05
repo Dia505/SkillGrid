@@ -97,12 +97,13 @@ _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<DeleteClientUseCase>(() =>
       DeleteClientUseCase(clientRepository: getIt<ClientLocalRepository>()));
 
-  getIt.registerLazySingleton<GetClientByIdUseCase>(() =>
-      GetClientByIdUseCase(clientRepository: getIt<ClientRemoteRepository>()));
+  getIt.registerLazySingleton<GetClientByIdUseCase>(() => GetClientByIdUseCase(
+      clientRepository: getIt<ClientRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      tokenHelper: getIt<TokenHelper>()));
 
   getIt.registerLazySingleton<ClientUploadImageUseCase>(
-    () => ClientUploadImageUseCase(getIt<ClientRemoteRepository>())
-  );
+      () => ClientUploadImageUseCase(getIt<ClientRemoteRepository>()));
 
   getIt.registerFactory<ClientBloc>(() => ClientBloc(
       registerClientUseCase: getIt<RegisterClientUseCase>(),
@@ -203,15 +204,15 @@ _initClientHomeScreenDependencies() async {
 }
 
 _initEditClientProfileDependencies() async {
-  getIt.registerLazySingleton<UpdateClientProfilePictureUsecase>(
-    () => UpdateClientProfilePictureUsecase(clientRepository: getIt<ClientRemoteRepository>())
-  );
+  getIt.registerLazySingleton<UpdateClientProfilePictureUsecase>(() =>
+      UpdateClientProfilePictureUsecase(
+          clientRepository: getIt<ClientRemoteRepository>()));
 
   getIt.registerFactory<ClientEditProfileBloc>(() => ClientEditProfileBloc(
-    getClientByIdUseCase: getIt<GetClientByIdUseCase>(), 
-    tokenHelper: getIt<TokenHelper>(),
-    updateClientProfilePictureUsecase: getIt<UpdateClientProfilePictureUsecase>()
-  ));
+      getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
+      tokenHelper: getIt<TokenHelper>(),
+      updateClientProfilePictureUsecase:
+          getIt<UpdateClientProfilePictureUsecase>()));
 }
 
 _initClientProfileDependencies() async {

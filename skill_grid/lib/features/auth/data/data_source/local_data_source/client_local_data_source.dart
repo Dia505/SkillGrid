@@ -30,7 +30,7 @@ class ClientLocalDataSource implements IClientDataSource {
   }
 
   @override
-  Future<ClientEntity> getClientById(String clientId) async {
+  Future<ClientEntity> getClientById(String clientId, String? token) async {
     try {
       final clientHiveModel = await _hiveService.getClientById(clientId);
       return clientHiveModel!.toEntity();

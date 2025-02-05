@@ -26,4 +26,23 @@ class TokenHelper {
       },
     );
   }
+
+  Future<String?> getRoleFromToken() async {
+    final Either<Failure, String> token = await _tokenSharedPrefs.getToken();
+
+    return token.fold(
+      (failure) {
+        return null;
+      },
+      (token) {
+        try {
+          Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+          return decodedToken["role"];
+        }
+        catch(e) {
+          return null;
+        }
+      }
+    );
+  }
 }
