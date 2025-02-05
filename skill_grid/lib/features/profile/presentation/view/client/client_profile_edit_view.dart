@@ -113,6 +113,7 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
       ),
       body: BlocBuilder<ClientEditProfileBloc, ClientEditProfileState>(
           builder: (context, state) {
+        print("Current state: $state");
         if (state is ClientEditProfileLoaded) {
           final client = state.clientEntity;
           print("Loaded Client ID: ${client.clientId}");
