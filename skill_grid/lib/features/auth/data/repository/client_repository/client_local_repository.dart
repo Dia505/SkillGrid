@@ -22,9 +22,9 @@ class ClientLocalRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteClient(String clientId) async {
+  Future<Either<Failure, void>> deleteClient(String clientId, String? token) async {
     try {
-      await _clientLocalDataSource.deleteClient(clientId);
+      await _clientLocalDataSource.deleteClient(clientId, token);
       return const Right(null);
     } catch (e) {
       return Left(LocalDatabaseFailure(message: "Error deleting client: $e"));

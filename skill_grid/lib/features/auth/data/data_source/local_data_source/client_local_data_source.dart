@@ -21,7 +21,7 @@ class ClientLocalDataSource implements IClientDataSource {
   }
 
   @override
-  Future<void> deleteClient(String clientId) async {
+  Future<void> deleteClient(String clientId, String? token) async {
     try {
       await _hiveService.deleteClient(clientId);
     } catch (e) {

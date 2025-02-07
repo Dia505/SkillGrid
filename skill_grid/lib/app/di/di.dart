@@ -95,7 +95,10 @@ _initClientRegistrationDependencies() async {
       RegisterClientUseCase(clientRepository: getIt<ClientRemoteRepository>()));
 
   getIt.registerLazySingleton<DeleteClientUseCase>(() =>
-      DeleteClientUseCase(clientRepository: getIt<ClientLocalRepository>()));
+      DeleteClientUseCase(
+        clientRepository: getIt<ClientLocalRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      ));
 
   getIt.registerLazySingleton<GetClientByIdUseCase>(() => GetClientByIdUseCase(
       clientRepository: getIt<ClientRemoteRepository>(),

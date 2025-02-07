@@ -25,9 +25,14 @@ class ClientRemoteRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteClient(String clientId) {
-    // TODO: implement deleteClient
-    throw UnimplementedError();
+  Future<Either<Failure, void>> deleteClient(String clientId, String? token) async {
+    try {
+      _clientRemoteDataSource.deleteClient(clientId, token);
+      return Right(null);
+    }
+    catch(e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
   }
 
   @override
