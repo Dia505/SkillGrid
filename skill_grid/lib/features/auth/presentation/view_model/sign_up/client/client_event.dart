@@ -8,14 +8,6 @@ sealed class ClientEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadImage extends ClientEvent {
-  final File file;
-
-  const LoadImage({
-    required this.file
-  });
-}
-
 class RegisterClient extends ClientEvent {
   final BuildContext context;
   final String firstName;
@@ -24,7 +16,6 @@ class RegisterClient extends ClientEvent {
   final String city;
   final String email;
   final String password;
-  final String? profilePicture;
 
   const RegisterClient({
     required this.context,
@@ -34,7 +25,6 @@ class RegisterClient extends ClientEvent {
     required this.city,
     required this.email,
     required this.password,
-    this.profilePicture
   });
 }
 

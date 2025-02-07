@@ -50,12 +50,6 @@ class ClientLocalDataSource implements IClientDataSource {
   }
 
   @override
-  Future<String> uploadProfilePicture(File file) {
-    // TODO: implement uploadProfilePicture
-    throw UnimplementedError();
-  }
-
-  @override
   Future<String> updateProfilePicture(
       String clientId, File file, String? token) async {
     try {

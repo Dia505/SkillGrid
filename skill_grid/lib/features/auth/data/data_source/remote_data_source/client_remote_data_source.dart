@@ -91,30 +91,6 @@ class ClientRemoteDataSource implements IClientDataSource {
   }
 
   @override
-  Future<String> uploadProfilePicture(File file) async {
-    try {
-      String fileName = file.path.split("/").last;
-      FormData formData = FormData.fromMap({
-        "profile_picture":
-            await MultipartFile.fromFile(file.path, filename: fileName)
-      });
-
-      Response response =
-          await _dio.post(ApiEndpoints.uploadProfilePicture, data: formData);
-
-      if (response.statusCode == 200) {
-        return response.data["data"];
-      } else {
-        throw Exception(response.statusMessage);
-      }
-    } on DioException catch (e) {
-      throw Exception(e);
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  @override
   Future<String> updateProfilePicture(
       String clientId, File file, String? token) async {
     try {
