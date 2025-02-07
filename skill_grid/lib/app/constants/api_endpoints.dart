@@ -12,6 +12,7 @@ class ApiEndpoints {
   static const String imageUrl = "http://10.0.2.2:3000/client_images/";
   static const String updateClientProfilePicture = "client";
   static const String updateClient = "client";
+  static const String deleteClient = "client";
 
   //Freelancer routes
   static const String registerFreelancer = "freelancer";

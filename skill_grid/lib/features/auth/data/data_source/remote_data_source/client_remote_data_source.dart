@@ -38,9 +38,27 @@ class ClientRemoteDataSource implements IClientDataSource {
   }
 
   @override
-  Future<void> deleteClient(String clientId) {
-    // TODO: implement deleteClient
-    throw UnimplementedError();
+  Future<void> deleteClient(String clientId, String? token) async {
+    try {
+      final String url = "${ApiEndpoints.deleteClient}/$clientId";
+
+      var response = await _dio.delete(url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception('Error occurred while deleting client: $e');
+    }
   }
 
   @override
@@ -133,52 +151,54 @@ class ClientRemoteDataSource implements IClientDataSource {
       final String url = "${ApiEndpoints.updateClient}/$clientId";
       Map<String, dynamic> updateData = {};
 
-    // Get the current client data from the database or API
-    final currentClient = await _dio.get("${ApiEndpoints.findClientById}/$clientId",
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
-        ));
-    
-    final currentClientData = currentClient.data;
+      // Get the current client data from the database or API
+      final currentClient =
+          await _dio.get("${ApiEndpoints.findClientById}/$clientId",
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer $token',
+                },
+              ));
 
-    // Update only the fields that have actually changed
-    if (updatedClient.firstName != currentClientData['first_name']) {
-      updateData["first_name"] = updatedClient.firstName;
-    }
-    if (updatedClient.lastName != currentClientData['last_name']) {
-      updateData["last_name"] = updatedClient.lastName;
-    }
-    if (updatedClient.mobileNo != currentClientData['mobile_no']) {
-      updateData["mobile_no"] = updatedClient.mobileNo;
-    }
-    if (updatedClient.city != currentClientData['city']) {
-      updateData["city"] = updatedClient.city;
-    }
-    if (updatedClient.email != currentClientData['email']) {
-      updateData["email"] = updatedClient.email;
-    }
-    if (updatedClient.password != currentClientData['password']) {
-      updateData["password"] = updatedClient.password;
-    }
+      final currentClientData = currentClient.data;
 
-    // Proceed to update only changed fields
-    if (updateData.isNotEmpty) {
-      var response = await _dio.put(url,
-          data: updateData,
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $token',
-            },
-          ));
-
-      if (response.statusCode == 200) {
-        print("Client updated successfully.");
-      } else {
-        throw Exception(response.statusMessage);
+      // Update only the fields that have actually changed
+      if (updatedClient.firstName != currentClientData['first_name']) {
+        updateData["first_name"] = updatedClient.firstName;
       }
-    }} on DioException catch (e) {
+      if (updatedClient.lastName != currentClientData['last_name']) {
+        updateData["last_name"] = updatedClient.lastName;
+      }
+      if (updatedClient.mobileNo != currentClientData['mobile_no']) {
+        updateData["mobile_no"] = updatedClient.mobileNo;
+      }
+      if (updatedClient.city != currentClientData['city']) {
+        updateData["city"] = updatedClient.city;
+      }
+      if (updatedClient.email != currentClientData['email']) {
+        updateData["email"] = updatedClient.email;
+      }
+      if (updatedClient.password != currentClientData['password']) {
+        updateData["password"] = updatedClient.password;
+      }
+
+      // Proceed to update only changed fields
+      if (updateData.isNotEmpty) {
+        var response = await _dio.put(url,
+            data: updateData,
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ));
+
+        if (response.statusCode == 200) {
+          print("Client updated successfully.");
+        } else {
+          throw Exception(response.statusMessage);
+        }
+      }
+    } on DioException catch (e) {
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
