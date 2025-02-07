@@ -134,7 +134,8 @@ _initFreelancerRegistrationDependencies() async {
 
   getIt.registerLazySingleton<GetFreelancerByIdUseCase>(() =>
       GetFreelancerByIdUseCase(
-          freelancerRepository: getIt<FreelancerLocalRepository>()));
+          freelancerRepository: getIt<FreelancerRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 
   getIt.registerLazySingleton<GetAllFreelancerUseCase>(() =>
       GetAllFreelancerUseCase(

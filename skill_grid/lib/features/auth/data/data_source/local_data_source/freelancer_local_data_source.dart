@@ -29,7 +29,7 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
   }
 
   @override
-  Future<FreelancerEntity> getFreelancerById(String freelancerId) async {
+  Future<FreelancerEntity> getFreelancerById(String freelancerId, String? token) async {
     try {
       final freelancerHiveModel =
           await _hiveService.getFreelancerById(freelancerId);

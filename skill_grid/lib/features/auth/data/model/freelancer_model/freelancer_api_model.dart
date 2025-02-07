@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:skill_grid/features/auth/data/dto/find_freelancer_by_id_dto.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 
 part 'freelancer_api_model.g.dart';
@@ -91,25 +92,25 @@ class FreelancerApiModel extends Equatable {
         role: entity.role);
   }
 
-  FreelancerEntity toEntity() {
+  static FreelancerEntity toEntity(FindFreelancerByIdDto findFreelancerByIdDto) {
     return FreelancerEntity(
-        firstName: firstName,
-        lastName: lastName,
-        dateOfBirth: dateOfBirth,
-        mobileNo: mobileNo,
-        address: address,
-        city: city,
-        email: email,
-        password: password,
-        jobCategory: jobCategory,
-        profession: profession,
-        skills: skills,
-        yearsOfExperience: yearsOfExperience,
-        bio: bio,
-        available: available,
-        profilePicture: profilePicture,
-        backgroundPicture: backgroundPicture,
-        role: role);
+        firstName: findFreelancerByIdDto.firstName,
+        lastName: findFreelancerByIdDto.lastName,
+        dateOfBirth: findFreelancerByIdDto.dateOfBirth,
+        mobileNo: findFreelancerByIdDto.mobileNo,
+        address: findFreelancerByIdDto.address,
+        city: findFreelancerByIdDto.city,
+        email: findFreelancerByIdDto.email,
+        password: findFreelancerByIdDto.password,
+        jobCategory: findFreelancerByIdDto.jobCategory,
+        profession: findFreelancerByIdDto.profession,
+        skills: findFreelancerByIdDto.skills,
+        yearsOfExperience: findFreelancerByIdDto.yearsOfExperience,
+        bio: findFreelancerByIdDto.bio,
+        available: findFreelancerByIdDto.available,
+        profilePicture: findFreelancerByIdDto.profilePicture,
+        backgroundPicture: findFreelancerByIdDto.backgroundPicture,
+        role: findFreelancerByIdDto.role);
   }
 
   @override
