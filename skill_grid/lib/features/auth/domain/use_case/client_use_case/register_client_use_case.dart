@@ -12,7 +12,6 @@ class CreateClientParams extends Equatable {
   final String city;
   final String email;
   final String password;
-  final String? profilePicture;
 
   const CreateClientParams({
     required this.firstName,
@@ -20,9 +19,16 @@ class CreateClientParams extends Equatable {
     required this.mobileNo,
     required this.city,
     required this.email,
-    required this.password,
-    this.profilePicture
+    required this.password
   });
+
+  const CreateClientParams.empty()
+    : firstName = "_empty.firstName",
+      lastName = "_empty.lastName",
+      mobileNo = "_empty.mobileNo",
+      city = "_empty.city",
+      email = "_empty.email",
+      password = "_empty.password";
 
   @override
   List<Object?> get props => [firstName, lastName, mobileNo, city, email, password];
@@ -41,8 +47,7 @@ class RegisterClientUseCase implements UsecaseWithParams<void, CreateClientParam
         mobileNo: params.mobileNo, 
         city: params.city, 
         email: params.email, 
-        password: params.password,
-        profilePicture: params.profilePicture
+        password: params.password
       )
     );
   }

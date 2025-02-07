@@ -56,12 +56,6 @@ class ClientLocalRepository implements IClientRepository {
   }
 
   @override
-  Future<Either<Failure, String>> uploadProfilePicture(File file) {
-    // TODO: implement uploadProfilePicture
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, String>> updateProfilePicture(
       String clientId, File file, String? token) async {
     try {

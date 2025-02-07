@@ -3,32 +3,24 @@ part of 'client_bloc.dart';
 class ClientState extends Equatable {
   final bool isLoading;
   final bool isSuccess;
-  final String? imageName;
 
-  ClientState({
-    required this.isLoading,
-    required this.isSuccess,
-    this.imageName
-  });
+  const ClientState({required this.isLoading, required this.isSuccess});
 
-  ClientState.initial()
-    : isLoading = false,
-      isSuccess = false,
-      imageName = null;
+  const ClientState.initial()
+      : isLoading = false,
+        isSuccess = false;
 
   ClientState copyWith({
     bool? isLoading,
     bool? isSuccess,
-    String? imageName
   }) {
     return ClientState(
-      isLoading: isLoading ?? this.isLoading, 
+      isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
-      imageName: imageName ?? this.imageName
     );
   }
-  
+
   @override
   // TODO: implement props
-  List<Object?> get props => [isLoading, isSuccess, imageName];
+  List<Object?> get props => [isLoading, isSuccess];
 }
