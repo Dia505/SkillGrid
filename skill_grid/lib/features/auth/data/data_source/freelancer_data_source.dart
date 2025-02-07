@@ -7,4 +7,5 @@ abstract interface class IFreelancerDataSource {
   Future<List<FreelancerEntity>> getAllFreelancers();
   Future<String> loginFreelancer(String email, String password);
   Future<void> updateFreelancer(FreelancerEntity freelancerEntity);
+  Future<List<FreelancerEntity>> searchFreelancers(String searchQuery);
 }

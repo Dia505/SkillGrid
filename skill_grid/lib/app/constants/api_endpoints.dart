@@ -17,6 +17,7 @@ class ApiEndpoints {
   //Freelancer routes
   static const String registerFreelancer = "freelancer";
   static const String findFreelancerById = "freelancer";
+  static const String searchFreelancers = "freelancer/search";
 
   //Login routes
   static const String login = "auth/login";

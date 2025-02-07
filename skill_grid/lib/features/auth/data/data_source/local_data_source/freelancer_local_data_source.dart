@@ -71,4 +71,10 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
       throw Exception("Error updating freelancer: $e");
     }
   }
+  
+  @override
+  Future<List<FreelancerEntity>> searchFreelancers(String searchQuery) {
+    // TODO: implement searchFreelancers
+    throw UnimplementedError();
+  }
 }

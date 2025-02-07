@@ -63,4 +63,19 @@ class FreelancerRemoteRepository implements IFreelancerRepository {
     // TODO: implement updateFreelancer
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<Failure, List<FreelancerEntity>>> searchFreelancers(String searchQuery) async {
+    try {
+      final freelancers = await _freelancerRemoteDataSource.searchFreelancers(searchQuery);
+      return Right(freelancers);
+    }
+    catch (e) {
+      return Left(
+        ApiFailure(
+          message: e.toString(),
+        ),
+      );
+    }
+  }
 }
