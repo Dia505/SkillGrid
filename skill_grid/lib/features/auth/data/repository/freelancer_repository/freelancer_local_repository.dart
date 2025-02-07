@@ -78,4 +78,10 @@ class FreelancerLocalRepository implements IFreelancerRepository {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<FreelancerEntity>>> searchFreelancers(String searchQuery) {
+    // TODO: implement searchFreelancers
+    throw UnimplementedError();
+  }
 }
