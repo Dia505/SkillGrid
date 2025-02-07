@@ -1,46 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:skill_grid/app/constants/api_endpoints.dart';
 import 'package:skill_grid/features/auth/data/data_source/freelancer_data_source.dart';
+import 'package:skill_grid/features/auth/data/dto/find_freelancer_by_id_dto.dart';
 import 'package:skill_grid/features/auth/data/dto/login_dto.dart';
+import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_api_model.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 
 class FreelancerRemoteDataSource implements IFreelancerDataSource {
   final Dio _dio;
   FreelancerRemoteDataSource({required Dio dio}) : _dio = dio;
 
-  //   try {
-  //     Response response =
-  //         await _dio.post(ApiEndpoints.registerFreelancer, data: {
-  //       "first_name": freelancerEntity.firstName,
-  //       "last_name": freelancerEntity.lastName,
-  //       "date_of_birth": freelancerEntity.dateOfBirth,
-  //       "mobile_no": freelancerEntity.mobileNo,
-  //       "address": freelancerEntity.address,
-  //       "city": freelancerEntity.city,
-  //       "email": freelancerEntity.email,
-  //       "password": freelancerEntity.password,
-  //       "job_category": freelancerEntity.jobCategory,
-  //       "profession": freelancerEntity.profession,
-  //       "skills": freelancerEntity.skills,
-  //       "years_of_experience": freelancerEntity.yearsOfExperience,
-  //       "bio": freelancerEntity.bio,
-  //       "available": freelancerEntity.available,
-  //       "profile_picture": freelancerEntity.profilePicture,
-  //       "background_picture": freelancerEntity.backgroundPicture,
-  //       "role": freelancerEntity.role
-  //     });
-  //     print("Response: $response");
-  //     if (response.statusCode == 201) {
-  //       return;
-  //     } else {
-  //       throw Exception(response.statusMessage);
-  //     }
-  //   } on DioException catch (e) {
-  //     throw Exception(e);
-  //   } catch (e) {
-  //     throw Exception(e);
-  //   }
-  // }
   @override
   Future<void> registerFreelancer(FreelancerEntity freelancerEntity) async {
     try {
@@ -87,9 +56,33 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
   }
 
   @override
-  Future<FreelancerEntity> getFreelancerById(String freelancerId) {
-    // TODO: implement getFreelancerById
-    throw UnimplementedError();
+  Future<FreelancerEntity> getFreelancerById(
+      String freelancerId, String? token) async {
+    try {
+      final String url = "${ApiEndpoints.findFreelancerById}/$freelancerId";
+
+      var response = await _dio.get(url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+
+      if (response.statusCode == 200) {
+        FindFreelancerByIdDto findFreelancerByIdDto =
+            FindFreelancerByIdDto.fromJson(response.data);
+
+        FreelancerEntity freelancerEntity = FreelancerApiModel.toEntity(findFreelancerByIdDto);
+
+        return freelancerEntity;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception('Error occurred while fetching freelancer: $e');
+    }
   }
 
   @override

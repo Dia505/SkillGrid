@@ -34,9 +34,13 @@ class FreelancerRemoteRepository implements IFreelancerRepository {
   }
 
   @override
-  Future<Either<Failure, FreelancerEntity>> getFreelancerById(String freelancerId) {
-    // TODO: implement getFreelancerById
-    throw UnimplementedError();
+  Future<Either<Failure, FreelancerEntity>> getFreelancerById(String freelancerId, String? token) async {
+    try {
+      final freelancer = await _freelancerRemoteDataSource.getFreelancerById(freelancerId, token);
+      return Right(freelancer);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
   }
 
   @override

@@ -33,10 +33,10 @@ class FreelancerLocalRepository implements IFreelancerRepository {
 
   @override
   Future<Either<Failure, FreelancerEntity>> getFreelancerById(
-      String freelancerId) async {
+      String freelancerId, String? token) async {
     try {
       final freelancerEntity =
-          await _freelancerLocalDataSource.getFreelancerById(freelancerId);
+          await _freelancerLocalDataSource.getFreelancerById(freelancerId, token);
       return Right(freelancerEntity);
     } catch (e) {
       return Left(LocalDatabaseFailure(
