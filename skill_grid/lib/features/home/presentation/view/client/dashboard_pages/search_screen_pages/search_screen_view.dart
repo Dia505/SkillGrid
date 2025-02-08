@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/search_screen_container.dart';
-import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_filter_view.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 
 class SearchScreenView extends StatefulWidget {
   const SearchScreenView({super.key});
@@ -47,6 +49,11 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                               color: Color(0xFF707070), width: 2),
                         ),
                       ),
+                      onChanged: (searchQuery) {
+                        context
+                            .read<SearchBloc>()
+                            .add(SearchFreelancers(searchQuery));
+                      },
                     ),
                   ),
                   ElevatedButton(
@@ -82,87 +89,65 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FreelancerProfileView(),
-                  ),
-                );
+            BlocBuilder<SearchBloc, SearchState>(
+              builder: (context, state) {
+                if (state is SearchLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is SearchError) {
+                  return Center(child: Text('Error: ${state.message}'));
+                } else if (state is SearchLoaded) {
+                  if (state.freelancers.isEmpty) {
+                    return const Center(child: Text('No freelancers found.'));
+                  }
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: ListView.builder(
+                        itemCount: state.freelancers.length,
+                        itemBuilder: (context, index) {
+                          final freelancer = state.freelancers[index];
+
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const FreelancerProfileView(),
+                                ),
+                              );
+                            },
+                            child: SearchScreenContainer(
+                              freelancerProfileImgPath:
+                                  freelancer.profilePicture ??
+                                      "assets/images/default_profile_img.png",
+                              freelancerName:
+                                  '${freelancer.firstName} ${freelancer.lastName}',
+                              profession: freelancer.profession ?? "",
+                              address: freelancer.address + freelancer.city,
+                              hourlyRate: 1500,
+                              searchScreenImages: const [
+                                "assets/images/gettyimages-480952865-612x612.jpg",
+                                "assets/images/panel-discussion-event-stockcake.jpg",
+                                "assets/images/istockphoto-1137781483-612x612.jpg"
+                              ],
+                              skills: freelancer.skills
+                                      ?.split(',')
+                                      .map((e) => e.trim())
+                                      .toList() ??
+                                  [],
+                            ),
+                          );
+                        }),
+                  );
+                }
+                return const Center(child: Text("Unexpected state."));
               },
-              child: const SearchScreenContainer(
-                freelancerProfileImgPath:
-                    "assets/images/istockphoto-1395071229-612x612.jpg",
-                freelancerName: "Krishna Basnet",
-                profession: "Photographer & Videographer",
-                address: "Kalimati, Kathmandu",
-                hourlyRate: 1500,
-                searchScreenImages: [
-                  "assets/images/gettyimages-480952865-612x612.jpg",
-                  "assets/images/panel-discussion-event-stockcake.jpg",
-                  "assets/images/istockphoto-1137781483-612x612.jpg"
-                ],
-                skills: [
-                  "Event Photography",
-                  "Commercial Photography",
-                  "Videography",
-                  "Adobe photoshop",
-                  "Davinci resolve",
-                  "Professional photoshoots"
-                ],
-              ),
             ),
             const Divider(
               color: Colors.grey,
               thickness: 1,
-              indent: 20, 
-              endIndent: 20, 
-            ),
-            const SearchScreenContainer(
-              freelancerProfileImgPath:
-                  "assets/images/gettyimages-484274251-612x612.jpg",
-              freelancerName: "Amaira Yadav",
-              profession: "Photographer",
-              address: "Maharajgunj, Kathmandu",
-              hourlyRate: 5000,
-              searchScreenImages: [
-                "assets/images/Screenshot 2024-12-01 003357.png",
-                "assets/images/98f8b4e72c6023a2a15dfdab64a1a80c.jpg",
-                "assets/images/gettyimages-1386266678-612x612.jpg"
-              ],
-              skills: [
-                "Fashion Photography",
-                "Commercial Photography",
-                "Photo editing",
-                "Adobe photoshop",
-                "Professional photoshoots"
-              ],
-            ),
-            const Divider(
-              color: Colors.grey,
-              thickness: 1,
-              indent: 20, 
-              endIndent: 20, 
-            ),
-            const SearchScreenContainer(
-              freelancerProfileImgPath:
-                  "assets/images/indian_girl_stock_img.jpg",
-              freelancerName: "Rita Singh",
-              profession: "Photographer",
-              address: "Sanepa, Lalitpur",
-              hourlyRate: 3000,
-              searchScreenImages: [
-                "assets/images/food-photographer-ideas.jpg",
-                "assets/images/gettyimages-1829241109-612x612.jpg",
-                "assets/images/istockphoto-1394055240-612x612.jpg"
-              ],
-              skills: [
-                "Food Photography",
-                "Commercial Photography",
-                "Photo editing",
-                "Adobe photoshop"
-              ],
+              indent: 20,
+              endIndent: 20,
             ),
           ],
         )),

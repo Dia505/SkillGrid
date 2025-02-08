@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/calendar_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/home_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/notification_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
@@ -32,7 +34,10 @@ class ClientDashboardState extends Equatable {
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
                 tokenHelper: getIt<TokenHelper>()))
       ], child: const HomeScreenView()),
-      const SearchScreenView(),
+      BlocProvider(
+          create: (context) => SearchBloc(
+              searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()),
+          child: const SearchScreenView()),
       const CalendarScreenView(),
       const NotificationScreenView()
     ]);

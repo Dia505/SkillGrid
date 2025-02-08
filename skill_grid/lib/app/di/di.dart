@@ -24,12 +24,14 @@ import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/fre
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_all_freelancer_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/register_freelancer_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_freelancer/join_as_client_freelancer_cubit.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
@@ -55,6 +57,7 @@ Future<void> initDependencies() async {
   await _initClientHomeScreenDependencies();
   await _initClientProfileDependencies();
   await _initEditClientProfileDependencies();
+  await _initSearchFreelancersDependencies();
 }
 
 _initHiveService() {
@@ -94,8 +97,7 @@ _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<RegisterClientUseCase>(() =>
       RegisterClientUseCase(clientRepository: getIt<ClientRemoteRepository>()));
 
-  getIt.registerLazySingleton<DeleteClientUseCase>(() =>
-      DeleteClientUseCase(
+  getIt.registerLazySingleton<DeleteClientUseCase>(() => DeleteClientUseCase(
         clientRepository: getIt<ClientLocalRepository>(),
         tokenSharedPrefs: getIt<TokenSharedPrefs>(),
       ));
@@ -203,6 +205,7 @@ _initClientHomeScreenDependencies() async {
       tokenHelper: getIt<TokenHelper>()));
 }
 
+//Edit client profile dependencies
 _initEditClientProfileDependencies() async {
   getIt.registerLazySingleton<UpdateClientProfilePictureUsecase>(() =>
       UpdateClientProfilePictureUsecase(
@@ -223,9 +226,20 @@ _initEditClientProfileDependencies() async {
       updateClientUseCase: getIt<UpdateClientUseCase>()));
 }
 
+//Client profile dependencies
 _initClientProfileDependencies() async {
   getIt.registerFactory<ClientProfileBloc>(() => ClientProfileBloc(
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
       tokenHelper: getIt<TokenHelper>(),
       clientEditProfileBloc: getIt<ClientEditProfileBloc>()));
+}
+
+//Search screen dependencies
+_initSearchFreelancersDependencies() async {
+  getIt.registerLazySingleton<SearchFreelancersUseCase>(() =>
+      SearchFreelancersUseCase(
+          freelancerRepository: getIt<FreelancerRemoteRepository>()));
+
+  getIt.registerFactory<SearchBloc>(() =>
+      SearchBloc(searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()));
 }
