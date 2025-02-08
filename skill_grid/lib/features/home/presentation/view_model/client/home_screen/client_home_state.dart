@@ -1,4 +1,4 @@
-part of "client_home_cubit.dart";
+part of "client_home_bloc.dart";
 
 abstract class ClientHomeState extends Equatable {
   const ClientHomeState();
@@ -26,3 +26,22 @@ class ClientHomeError extends ClientHomeState {
   @override
   List<Object?> get props => [message];
 }
+
+class ClientHomeSearchLoading extends ClientHomeState {}
+
+class ClientHomeSearchLoaded extends ClientHomeState {
+  final List<FreelancerEntity> freelancers;
+  const ClientHomeSearchLoaded(this.freelancers);
+
+  @override
+  List<Object?> get props => [freelancers];
+}
+
+class ClientHomeSearchError extends ClientHomeState {
+  final String message;
+  const ClientHomeSearchError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+

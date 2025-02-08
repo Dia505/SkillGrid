@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/home_ongoing_collab_card.dart';
 import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/dashboard_sidebar.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 
 class HomeScreenView extends StatefulWidget {
@@ -71,7 +72,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   @override
   void initState() {
     super.initState();
-    context.read<ClientHomeCubit>().loadClient();
+    context.read<ClientHomeBloc>().loadClient();
   }
 
   @override
@@ -110,7 +111,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                BlocBuilder<ClientHomeCubit, ClientHomeState>(
+                                BlocBuilder<ClientHomeBloc, ClientHomeState>(
                                   builder: (context, state) {
                                     if (state is ClientHomeLoaded) {
                                       final client = state.clientEntity;
@@ -136,7 +137,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                         .read<ClientSidebarBloc>()
                                         .add(ToggleSidebar());
                                   },
-                                  child: BlocBuilder<ClientHomeCubit,
+                                  child: BlocBuilder<ClientHomeBloc,
                                       ClientHomeState>(
                                     builder: (context, state) {
                                       if (state is ClientHomeLoaded) {
@@ -198,7 +199,24 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                   width: 50,
                                   height: 48,
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      final searchQuery =
+                                          _searchController.text.trim();
+                                      if (searchQuery.isNotEmpty) {
+                                        // Dispatch the event to search freelancers
+                                        context.read<ClientHomeBloc>().add(
+                                            SearchFreelancers(searchQuery, context));
+
+                                        // Navigate to the SearchScreenView after search
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => SearchScreenView(
+                                                searchQuery: searchQuery),
+                                          ),
+                                        );
+                                      }
+                                    },
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             const Color(0XFF7C76E4),

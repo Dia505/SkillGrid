@@ -31,7 +31,7 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 420,
+      height: 430,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
       child: Column(
@@ -41,27 +41,40 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              CircleAvatar(
-                backgroundImage: AssetImage(widget.freelancerProfileImgPath),
-                radius: 40,
-              ),
-              Column(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.freelancerName,
-                    style:
-                        const TextStyle(fontFamily: "Inter Bold", fontSize: 19),
+                  CircleAvatar(
+                    backgroundImage: widget.freelancerProfileImgPath.isNotEmpty
+                        ? NetworkImage(
+                            "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}") // Adjust base URL
+                        : const AssetImage(
+                                "assets/images/default_profile_img.png")
+                            as ImageProvider,
+                    radius: 40,
                   ),
-                  Text(
-                    widget.profession,
-                    style: const TextStyle(
-                        fontSize: 15, fontFamily: "Inter Medium"),
+                  const SizedBox(
+                    width: 15,
                   ),
-                  Text(
-                    widget.address,
-                    style:
-                        const TextStyle(color: Color(0XFF707070), fontSize: 13),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.freelancerName,
+                        style: const TextStyle(
+                            fontFamily: "Inter Bold", fontSize: 19),
+                      ),
+                      Text(
+                        widget.profession,
+                        style: const TextStyle(
+                            fontSize: 15, fontFamily: "Inter Medium"),
+                      ),
+                      Text(
+                        widget.address,
+                        style: const TextStyle(
+                            color: Color(0XFF707070), fontSize: 13),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -135,44 +148,47 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
 
     int remainingSkillsCount = skills.length - displayedSkills.length;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-          spacing: 8.0, //horizontal spacing between each item
-          runSpacing: 5.0, //vertical spacing between each row
-          children: [
-            for (var skill in displayedSkills)
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFCCCAFF),
-                  borderRadius: BorderRadius.circular(15),
+    return SizedBox(
+      width: 290,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8.0, //horizontal spacing between each item
+            runSpacing: 5.0, //vertical spacing between each row
+            children: [
+              for (var skill in displayedSkills)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFCCCAFF),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    skill,
+                    style:
+                        const TextStyle(color: Color(0xFF625D5D), fontSize: 12),
+                  ),
                 ),
-                child: Text(
-                  skill,
-                  style:
-                      const TextStyle(color: Color(0xFF625D5D), fontSize: 12),
+              if (remainingSkillsCount > 0)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFCCCAFF),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    "+$remainingSkillsCount",
+                    style:
+                        const TextStyle(color: Color(0xFF625D5D), fontSize: 12),
+                  ),
                 ),
-              ),
-            if (remainingSkillsCount > 0)
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFCCCAFF),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  "+$remainingSkillsCount",
-                  style:
-                      const TextStyle(color: Color(0xFF625D5D), fontSize: 12),
-                ),
-              ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
