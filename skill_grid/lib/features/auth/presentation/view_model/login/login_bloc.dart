@@ -11,7 +11,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelan
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view/freelancer/freelancer_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 
 part 'login_event.dart';
@@ -98,8 +98,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         emit(state.copyWith(isLoading: false, isSuccess: true, role: 'client'));
 
-        final clientHomeCubit = getIt<ClientHomeCubit>();
-        clientHomeCubit.loadClient();
+        final clientHomeBloc = getIt<ClientHomeBloc>();
+        clientHomeBloc.loadClient();
 
         add(NavigateHomeScreenEvent(
           context: event.context,

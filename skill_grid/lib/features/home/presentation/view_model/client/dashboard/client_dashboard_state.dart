@@ -9,7 +9,7 @@ import 'package:skill_grid/features/home/presentation/view/client/dashboard_page
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/home_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/notification_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
@@ -30,9 +30,10 @@ class ClientDashboardState extends Equatable {
                 tokenHelper: getIt<TokenHelper>(),
                 clientProfileBloc: getIt<ClientProfileBloc>())),
         BlocProvider(
-            create: (context) => ClientHomeCubit(
+            create: (context) => ClientHomeBloc(
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
-                tokenHelper: getIt<TokenHelper>()))
+                tokenHelper: getIt<TokenHelper>(),
+                searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()))
       ], child: const HomeScreenView()),
       BlocProvider(
           create: (context) => SearchBloc(

@@ -30,7 +30,7 @@ import 'package:skill_grid/features/auth/presentation/view_model/login/login_blo
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
@@ -200,9 +200,10 @@ _initFreelancerDashboardDependencies() async {
 
 //Client home screen dependencies
 _initClientHomeScreenDependencies() async {
-  getIt.registerFactory<ClientHomeCubit>(() => ClientHomeCubit(
+  getIt.registerFactory<ClientHomeBloc>(() => ClientHomeBloc(
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
-      tokenHelper: getIt<TokenHelper>()));
+      tokenHelper: getIt<TokenHelper>(),
+      searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()));
 }
 
 //Edit client profile dependencies
