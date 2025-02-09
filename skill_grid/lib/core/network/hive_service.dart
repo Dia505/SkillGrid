@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:skill_grid/app/constants/hive_table_constant.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
+import 'package:skill_grid/features/freelancer_service/data/model/freelancer_service_hive_model.dart';
 
 class HiveService {
   static Future<void> init() async {
@@ -13,6 +14,7 @@ class HiveService {
 
     Hive.registerAdapter(ClientHiveModelAdapter());
     Hive.registerAdapter(FreelancerHiveModelAdapter());
+    Hive.registerAdapter(FreelancerServiceHiveModelAdapter());
   }
 
   //-------------------------Client Queries--------------------------------------
@@ -155,6 +157,40 @@ class HiveService {
       throw Exception(
           "Freelancer with ID ${freelancer.freelancerId} does not exist.");
     }
+  }
+
+  Future<List<FreelancerHiveModel>> searchFreelancers(
+      String searchQuery) async {
+    var box = await Hive.openBox<FreelancerHiveModel>(
+      HiveTableConstant.freelancerBox,
+    );
+
+    return box.values
+        .where((freelancer) =>
+            freelancer.firstName
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase()) ||
+            freelancer.lastName
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase()) ||
+            (freelancer.profession?.toLowerCase() ?? '')
+                .contains(searchQuery.toLowerCase()) ||
+            (freelancer.jobCategory?.toLowerCase() ?? '')
+                .contains(searchQuery.toLowerCase()))
+        .toList();
+  }
+
+  //------------------Freelancer Service Queries---------------------
+  Future<List<FreelancerServiceHiveModel>> getFreelancerServiceByFreelancerId(
+      String freelancerId) async {
+    var box = await Hive.openBox<FreelancerServiceHiveModel>(
+      HiveTableConstant.freelancerServiceBox,
+    );
+
+    return box.values
+        .where(
+            (freelancerService) => freelancerService.freelancer.freelancerId == freelancerId)
+        .toList();
   }
 
   Future<void> clearAll() async {

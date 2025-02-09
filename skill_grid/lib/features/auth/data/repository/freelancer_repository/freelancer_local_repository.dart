@@ -80,8 +80,13 @@ class FreelancerLocalRepository implements IFreelancerRepository {
   }
   
   @override
-  Future<Either<Failure, List<FreelancerEntity>>> searchFreelancers(String searchQuery) {
-    // TODO: implement searchFreelancers
-    throw UnimplementedError();
+  Future<Either<Failure, List<FreelancerEntity>>> searchFreelancers(String searchQuery) async {
+    try {
+      final freelancerList = await _freelancerLocalDataSource.searchFreelancers(searchQuery);
+      return Right(freelancerList);
+    }
+    catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
   }
 }
