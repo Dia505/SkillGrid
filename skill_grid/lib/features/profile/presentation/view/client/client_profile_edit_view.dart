@@ -64,10 +64,12 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
         });
 
         // Ensure clientId is not null before dispatching the event
-        if (client.clientId != null) {
-          context.read<ClientEditProfileBloc>().add(
-                UpdateProfilePicture(file: _img!, clientId: client.clientId!),
-              );
+        if (client.clientId != null && mounted) {
+          final clientBloc = context.read<ClientEditProfileBloc>();
+          if (mounted) {
+            clientBloc.add(UpdateProfilePicture(
+                file: _img!, clientId: client.clientId!, context: context));
+          }
         } else {
           debugPrint("Error: client.clientId is null");
         }
@@ -113,10 +115,8 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
       ),
       body: BlocBuilder<ClientEditProfileBloc, ClientEditProfileState>(
           builder: (context, state) {
-        print("Current state: $state");
         if (state is ClientEditProfileLoaded) {
           final client = state.clientEntity;
-          print("Loaded Client ID: ${client.clientId}");
           fnameController.text = client.firstName;
           lnameController.text = client.lastName;
           mobNumberController.text = client.mobileNo;
@@ -217,7 +217,8 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                                   setState(() {
                                     selectedCity = value;
                                   });
-                                  print('Selected city: $selectedCity');
+                                  print(
+                                      'Selected city updated to: $selectedCity');
                                 },
                               ),
                               const SizedBox(height: 7),
@@ -243,6 +244,7 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                                 clientBloc.add(UpdateProfilePicture(
                                   file: _img!,
                                   clientId: client.clientId!,
+                                  context: context,
                                 ));
                               }
 
@@ -265,6 +267,7 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                                 password: passwordController.text.isNotEmpty
                                     ? passwordController.text
                                     : null,
+                                context: context,
                               ));
                             }
                           },

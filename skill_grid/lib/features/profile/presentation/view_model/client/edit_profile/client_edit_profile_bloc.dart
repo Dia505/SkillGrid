@@ -5,12 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
+import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_profile_picture_usecase.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_use_case.dart';
+import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
 part 'client_edit_profile_event.dart';
@@ -96,6 +98,14 @@ class ClientEditProfileBloc
         (updatedImagePath) {
           emit(ClientProfilePictureUpdateSuccess(
               profilePicturePath: updatedImagePath)); // Emit success state
+          add(NavigateToClientProfile(
+              context: event.context, destination: const ClientProfileView()));
+
+          showSnackBar(
+            context: event.context, 
+            message: "Profile picture updated!",
+            color: Colors.green
+          );
         },
       );
     } catch (e) {
@@ -110,16 +120,28 @@ class ClientEditProfileBloc
 
     try {
       final result = await _updateClientUseCase(UpdateClientParams(
-          clientId: event.clientId,
-          firstName: event.firstName,
-          lastName: event.lastName,
-          mobileNo: event.mobileNo,
-          city: event.city,
-          email: event.email,
-          password: event.password));
+        clientId: event.clientId,
+        firstName: event.firstName,
+        lastName: event.lastName,
+        mobileNo: event.mobileNo,
+        city: event.city,
+        email: event.email,
+        password: event.password,
+      ));
+
       await result.fold(
         (failure) async => emit(ClientEditProfileError(failure.message)),
-        (_) async => emit(ClientUpdateSuccess()),
+        (_) async {
+          emit(ClientUpdateSuccess());
+
+          add(NavigateToClientProfile(context: event.context, destination: const ClientProfileView()));
+
+          showSnackBar(
+            context: event.context, 
+            message: "Profile updated!",
+            color: Colors.green
+          );
+        },
       );
     } catch (e, stacktrace) {
       emit(ClientEditProfileError("Error occurred: $e"));

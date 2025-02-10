@@ -20,15 +20,16 @@ class UpdateProfilePicture extends ClientEditProfileEvent {
   final String clientId;
   final File file;
   final String? token;
+  final BuildContext context;
 
-  const UpdateProfilePicture({
-    required this.clientId,
-    required this.file,
-    this.token
-  });
+  const UpdateProfilePicture(
+      {required this.clientId,
+      required this.file,
+      this.token,
+      required this.context});
 
   @override
-  List<Object?> get props => [clientId, file];
+  List<Object?> get props => [clientId, file, context];
 }
 
 class UpdateClient extends ClientEditProfileEvent {
@@ -39,6 +40,7 @@ class UpdateClient extends ClientEditProfileEvent {
   final String? city;
   final String? email;
   final String? password;
+  final BuildContext context;
 
   const UpdateClient(
       {required this.clientId,
@@ -47,9 +49,10 @@ class UpdateClient extends ClientEditProfileEvent {
       this.mobileNo,
       this.city,
       this.email,
-      this.password});
+      this.password,
+      required this.context});
 
   @override
   List<Object?> get props =>
-      [clientId, firstName, lastName, mobileNo, city, email, password];
+      [clientId, firstName, lastName, mobileNo, city, email, password, context];
 }
