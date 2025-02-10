@@ -4,6 +4,7 @@ import 'package:skill_grid/app/constants/hive_table_constant.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
 import 'package:skill_grid/features/freelancer_service/data/model/freelancer_service_hive_model.dart';
+import 'package:skill_grid/features/portfolio/data/model/portfolio_hive_model.dart';
 
 class HiveService {
   static Future<void> init() async {
@@ -188,8 +189,32 @@ class HiveService {
     );
 
     return box.values
-        .where(
-            (freelancerService) => freelancerService.freelancer.freelancerId == freelancerId)
+        .where((freelancerService) =>
+            freelancerService.freelancer.freelancerId == freelancerId)
+        .toList();
+  }
+
+  //--------------------Portfolio Queries-----------------------
+  Future<PortfolioHiveModel> getPortfolioByFreelancerServiceId(
+      String freelancerServiceId) async {
+    var box =
+        await Hive.openBox<PortfolioHiveModel>(HiveTableConstant.portfolioBox);
+
+    return box.values.firstWhere(
+      (portfolio) =>
+          portfolio.freelancerService.freelancerServiceId ==
+          freelancerServiceId
+    );
+  }
+
+  Future<List<PortfolioHiveModel>> getPortfolioByFreelancerId(
+      String freelancerId) async {
+    var box =
+        await Hive.openBox<PortfolioHiveModel>(HiveTableConstant.portfolioBox);
+
+    return box.values
+        .where((portfolio) =>
+            portfolio.freelancerService.freelancer.freelancerId == freelancerId)
         .toList();
   }
 

@@ -40,7 +40,7 @@ class FreelancerLocalRepository implements IFreelancerRepository {
       return Right(freelancerEntity);
     } catch (e) {
       return Left(LocalDatabaseFailure(
-          message: "Error getting client information: $e"));
+          message: "Error getting freelancer information: $e"));
     }
   }
 

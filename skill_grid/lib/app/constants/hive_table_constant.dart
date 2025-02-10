@@ -12,4 +12,7 @@ class HiveTableConstant {
 
   static const int freelancerServiceTableId = 3;
   static const String freelancerServiceBox = "freelancerServiceBox";
+
+  static const int portfolioTableId = 4;
+  static const String portfolioBox = "portfolioBox";
 }
