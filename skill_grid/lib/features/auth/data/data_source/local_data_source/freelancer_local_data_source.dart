@@ -73,7 +73,7 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
   }
 
   @override
-  Future<List<FreelancerEntity>> searchFreelancers(String searchQuery) async {
+  Future<List<FreelancerEntity>> searchFreelancers(String searchQuery) {
     try {
       return _hiveService.searchFreelancers(searchQuery).then((value) {
         return value.map((e) => e.toEntity()).toList();
