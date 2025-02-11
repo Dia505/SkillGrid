@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 
-import '../mock_token_shared_prefs.dart';
+import '../mock_token_shared_prefs.mock.dart';
 import 'mock_freelancer_repository.dart';
 
 void main() {
