@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_profile_picture_usecase.dart';
 
-import '../mock_token_helper.dart';
-import '../mock_token_shared_prefs.dart';
-import 'mock_client_repository.dart';
+import '../mock_token_helper.mock.dart';
+import '../mock_token_shared_prefs.mock.dart';
+import 'mock_client_repository.mock.dart';
 
 void main() {
   late MockClientRepository repository;
