@@ -18,11 +18,22 @@ class PortfolioRemoteDataSource implements IPortfolioDataSource {
           "${ApiEndpoints.getPortfolioByFreelancerId}/$freelancerId";
       var response = await _dio.get(url);
 
+      print("Raw Response JSON: ${response.toString()}");
+      print("Response Type: ${response.data.runtimeType}");
+
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data;
+        if (response.data is! List) {
+          throw Exception("Unexpected response format: Expected a list.");
+        }
+
+        List<dynamic> data = response.data as List<dynamic>;
+
+        // Debugging file_path type
+        print("file_path Type: ${data.first["file_path"].runtimeType}");
 
         List<GetPortfolioByFreelancerIdDto> portfolioDto = data
-            .map((json) => GetPortfolioByFreelancerIdDto.fromJson(json))
+            .map((json) => GetPortfolioByFreelancerIdDto.fromJson(
+                json as Map<String, dynamic>))
             .toList();
 
         List<PortfolioApiModel> portfolioApiModels =
@@ -48,18 +59,19 @@ class PortfolioRemoteDataSource implements IPortfolioDataSource {
       var response = await _dio.get(url);
 
       if (response.statusCode == 200) {
-        GetPortfolioByFreelancerServiceIdDto getPortfolioByFreelancerServiceIdDto =
+        GetPortfolioByFreelancerServiceIdDto
+            getPortfolioByFreelancerServiceIdDto =
             GetPortfolioByFreelancerServiceIdDto.fromJson(response.data);
 
         PortfolioEntity portfolioEntity =
-            PortfolioApiModel.getPortfolioByFreelancerServiceIdDtoToEntity(getPortfolioByFreelancerServiceIdDto);
+            PortfolioApiModel.getPortfolioByFreelancerServiceIdDtoToEntity(
+                getPortfolioByFreelancerServiceIdDto);
 
         return portfolioEntity;
       } else {
         throw Exception(response.statusMessage);
       }
-    }
-    on DioException catch (e) {
+    } on DioException catch (e) {
       throw Exception("Dio Error: ${e.message}");
     } catch (e) {
       throw Exception("An error occurred: ${e.toString()}");

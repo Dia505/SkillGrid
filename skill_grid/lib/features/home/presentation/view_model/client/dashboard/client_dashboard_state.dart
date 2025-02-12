@@ -5,6 +5,7 @@ import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
+import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/calendar_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/home_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/notification_screen_view.dart';
@@ -12,6 +13,8 @@ import 'package:skill_grid/features/home/presentation/view/client/dashboard_page
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
+import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 
 class ClientDashboardState extends Equatable {
@@ -37,7 +40,9 @@ class ClientDashboardState extends Equatable {
       ], child: const HomeScreenView()),
       BlocProvider(
           create: (context) => SearchBloc(
-              searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()),
+              searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
+              getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
+              getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>()),
           child: const SearchScreenView()),
       const CalendarScreenView(),
       const NotificationScreenView()

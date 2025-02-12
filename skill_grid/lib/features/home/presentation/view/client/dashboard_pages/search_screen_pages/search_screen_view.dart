@@ -143,6 +143,10 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                     itemCount: state.freelancers.length,
                     itemBuilder: (context, index) {
                       final freelancer = state.freelancers[index];
+                      final portfolioImages = state.portfolioMap[freelancer.freelancerId];
+                      final avgHourlyRate = state.avgHourlyRateMap[freelancer.freelancerId] ?? 0;
+
+                      print("Portfolio images for freelancer ${freelancer.freelancerId}: $portfolioImages");
 
                       return Column(
                         children: [
@@ -165,12 +169,8 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                               profession: freelancer.profession ?? "",
                               address:
                                   '${freelancer.address}, ${freelancer.city}',
-                              hourlyRate: 1500,
-                              searchScreenImages: const [
-                                "assets/images/gettyimages-480952865-612x612.jpg",
-                                "assets/images/panel-discussion-event-stockcake.jpg",
-                                "assets/images/istockphoto-1137781483-612x612.jpg"
-                              ],
+                              hourlyRate: avgHourlyRate,
+                              searchScreenImages: portfolioImages ?? [],
                               skills: freelancer.skills
                                       ?.split(',')
                                       .map((e) => e.trim())

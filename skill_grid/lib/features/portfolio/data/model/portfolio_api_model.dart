@@ -18,12 +18,11 @@ class PortfolioApiModel extends Equatable {
   @JsonKey(name: 'freelancer_service_id')
   final FreelancerServiceApiModel freelancerService;
 
-  const PortfolioApiModel({
-    this.portfolioId,
-    required this.filePath,
-    required this.uploadDate,
-    required this.freelancerService
-  });
+  const PortfolioApiModel(
+      {this.portfolioId,
+      required this.filePath,
+      required this.uploadDate,
+      required this.freelancerService});
 
   factory PortfolioApiModel.fromJson(Map<String, dynamic> json) =>
       _$PortfolioApiModelFromJson(json);
@@ -32,44 +31,42 @@ class PortfolioApiModel extends Equatable {
 
   factory PortfolioApiModel.fromEntity(PortfolioEntity entity) {
     return PortfolioApiModel(
-      portfolioId: entity.portfolioId,
-      filePath: entity.filePath, 
-      uploadDate: entity.uploadDate, 
-      freelancerService: FreelancerServiceApiModel.fromEntity(entity.freelancerService)
-    );
+        portfolioId: entity.portfolioId,
+        filePath: entity.filePath,
+        uploadDate: entity.uploadDate,
+        freelancerService:
+            FreelancerServiceApiModel.fromEntity(entity.freelancerService));
   }
 
   PortfolioEntity toEntity() {
     return PortfolioEntity(
-      portfolioId:  portfolioId,
-      filePath: filePath, 
-      uploadDate: uploadDate, 
-      freelancerService: freelancerService.toEntity()
-    );
+        portfolioId: portfolioId,
+        filePath: filePath,
+        uploadDate: uploadDate,
+        freelancerService: freelancerService.toEntity());
   }
 
-  static List<PortfolioEntity> toEntityList(
-          List<PortfolioApiModel> models) =>
+  static List<PortfolioEntity> toEntityList(List<PortfolioApiModel> models) =>
       models.map((model) => model.toEntity()).toList();
 
   static PortfolioApiModel fromDto(GetPortfolioByFreelancerIdDto dto) {
     return PortfolioApiModel(
-      portfolioId: dto.portfolioId,
-      filePath: dto.filePath, 
-      uploadDate: dto.uploadDate, 
-      freelancerService: dto.freelancerService
-    );
+        portfolioId: dto.portfolioId,
+        filePath: dto.filePath,
+        uploadDate: dto.uploadDate,
+        freelancerService: dto.freelancerService);
   }
 
-  static PortfolioEntity getPortfolioByFreelancerServiceIdDtoToEntity(GetPortfolioByFreelancerServiceIdDto dto) {
+  static PortfolioEntity getPortfolioByFreelancerServiceIdDtoToEntity(
+      GetPortfolioByFreelancerServiceIdDto dto) {
     return PortfolioEntity(
-      portfolioId: dto.portfolioId,
-      filePath: dto.filePath, 
-      uploadDate: dto.uploadDate, 
-      freelancerService: dto.freelancerService.toEntity()
-    );
+        portfolioId: dto.portfolioId,
+        filePath: dto.filePath,
+        uploadDate: dto.uploadDate,
+        freelancerService: dto.freelancerService.toEntity());
   }
 
   @override
-  List<Object?> get props => [portfolioId, filePath, uploadDate, freelancerService];
+  List<Object?> get props =>
+      [portfolioId, filePath, uploadDate, freelancerService];
 }
