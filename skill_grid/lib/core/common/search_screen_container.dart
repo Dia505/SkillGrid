@@ -30,6 +30,10 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
 
   @override
   Widget build(BuildContext context) {
+    activeIndex = activeIndex >= widget.searchScreenImages.length
+      ? widget.searchScreenImages.length - 1
+      : activeIndex;
+
     return Container(
       height: 430,
       width: double.infinity,
@@ -117,7 +121,7 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
       margin: const EdgeInsets.symmetric(horizontal: 12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
-        child: Image.asset(
+        child: Image.network(
           carouselData, // Dynamically get image from carouselData
           fit: BoxFit.cover,
           alignment: Alignment.topCenter,
@@ -127,16 +131,22 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
   }
 
   // Indicator for the carousel
-  Widget buildIndicator() => AnimatedSmoothIndicator(
-        activeIndex: activeIndex,
-        count: widget.searchScreenImages.length,
-        effect: const JumpingDotEffect(
-          dotHeight: 8,
-          dotWidth: 8,
-          activeDotColor: Color(0xFF8984F2),
-          dotColor: Colors.grey,
-        ),
-      );
+  Widget buildIndicator() {
+    if (widget.searchScreenImages.isEmpty) {
+      return Container(); // Return an empty container if no images are available
+    }
+
+    return AnimatedSmoothIndicator(
+      activeIndex: activeIndex,
+      count: widget.searchScreenImages.length,
+      effect: const JumpingDotEffect(
+        dotHeight: 8,
+        dotWidth: 8,
+        activeDotColor: Color(0xFF8984F2),
+        dotColor: Colors.grey,
+      ),
+    );
+  }
 
   Widget buildSkillsSection(List<String> skills) {
     const int maxSkillsToShow = 4; // Show up to 6 skills before showing "+X"

@@ -13,10 +13,13 @@ class SearchLoading extends SearchState {}
 
 class SearchLoaded extends SearchState {
   final List<FreelancerEntity> freelancers;
-  SearchLoaded(this.freelancers);
+  final Map<String, List<String>> portfolioMap;
+  final Map<String, int> avgHourlyRateMap;
+
+  const SearchLoaded(this.freelancers, this.portfolioMap, this.avgHourlyRateMap);
 }
 
 class SearchError extends SearchState {
   final String message;
-  SearchError(this.message);
+  const SearchError(this.message);
 }

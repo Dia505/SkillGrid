@@ -29,10 +29,21 @@ import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
+import 'package:skill_grid/features/freelancer_service/data/data_source/local_data_source/freelancer_service_local_data_source.dart';
+import 'package:skill_grid/features/freelancer_service/data/data_source/remote_data_source/freelancer_service_remote_data_source.dart';
+import 'package:skill_grid/features/freelancer_service/data/repository/local_repository/freelancer_service_local_repository.dart';
+import 'package:skill_grid/features/freelancer_service/data/repository/remote_repository/freelancer_service_remote_repository.dart';
+import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
+import 'package:skill_grid/features/portfolio/data/data_source/local_data_source/portfolio_local_data_source.dart';
+import 'package:skill_grid/features/portfolio/data/data_source/remote_data_source/portfolio_remote_data_source.dart';
+import 'package:skill_grid/features/portfolio/data/repository/local_repository/portfolio_local_repository.dart';
+import 'package:skill_grid/features/portfolio/data/repository/remote_repository/portfolio_remote_repository.dart';
+import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
@@ -57,6 +68,8 @@ Future<void> initDependencies() async {
   await _initClientHomeScreenDependencies();
   await _initClientProfileDependencies();
   await _initEditClientProfileDependencies();
+  await _initFreelancerServiceDependencies();
+  await _initPortfolioDependencies();
   await _initSearchFreelancersDependencies();
 }
 
@@ -235,12 +248,55 @@ _initClientProfileDependencies() async {
       clientEditProfileBloc: getIt<ClientEditProfileBloc>()));
 }
 
+//Freelancer Service dependencies
+_initFreelancerServiceDependencies() async {
+  getIt.registerLazySingleton<FreelancerServiceLocalDataSource>(
+      () => FreelancerServiceLocalDataSource(hiveService: getIt()));
+  getIt.registerLazySingleton<FreelancerServiceRemoteDataSource>(
+      () => FreelancerServiceRemoteDataSource(dio: getIt<Dio>()));
+
+  getIt.registerLazySingleton<FreelancerServiceLocalRepository>(
+    () => FreelancerServiceLocalRepository(freelancerServiceLocalDataSource: getIt<FreelancerServiceLocalDataSource>())
+  );
+  getIt.registerLazySingleton<FreelancerServiceRemoteRepository>(
+    () => FreelancerServiceRemoteRepository(freelancerServiceRemoteDataSource: getIt<FreelancerServiceRemoteDataSource>())
+  );
+
+  getIt.registerLazySingleton<GetFreelancerServiceByFreelancerIdUseCase>(
+    () => GetFreelancerServiceByFreelancerIdUseCase(freelancerServiceRepository: getIt<FreelancerServiceRemoteRepository>())
+  );
+}
+
+//Portfolio dependencies
+_initPortfolioDependencies() async {
+  getIt.registerLazySingleton<PortfolioLocalDataSource>(
+    () => PortfolioLocalDataSource(hiveService: getIt())
+  );
+  getIt.registerLazySingleton<PortfolioRemoteDataSource>(
+    () => PortfolioRemoteDataSource(dio: getIt<Dio>())
+  );
+
+  getIt.registerLazySingleton<PortfolioLocalRepository>(
+    () => PortfolioLocalRepository(portfolioLocalDataSource: getIt<PortfolioLocalDataSource>())
+  );
+  getIt.registerLazySingleton<PortfolioRemoteRepository>(
+    () => PortfolioRemoteRepository(portfolioRemoteDataSource: getIt<PortfolioRemoteDataSource>())
+  );
+
+  getIt.registerLazySingleton<GetPortfolioByFreelancerIdUseCase>(() =>
+      GetPortfolioByFreelancerIdUseCase(
+          portfolioRepository: getIt<PortfolioRemoteRepository>()));
+}
+
 //Search screen dependencies
 _initSearchFreelancersDependencies() async {
   getIt.registerLazySingleton<SearchFreelancersUseCase>(() =>
       SearchFreelancersUseCase(
           freelancerRepository: getIt<FreelancerRemoteRepository>()));
 
-  getIt.registerFactory<SearchBloc>(() =>
-      SearchBloc(searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()));
+  getIt.registerFactory<SearchBloc>(() => SearchBloc(
+      searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
+      getPortfolioByFreelancerServiceIdUseCase:
+          getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
+      getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>()));
 }
