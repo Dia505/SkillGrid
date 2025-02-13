@@ -32,13 +32,17 @@ class _CommonDropdownState<T> extends State<CommonDropdown<T>> {
   void didUpdateWidget(covariant CommonDropdown<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
-      selectedValue = widget.value; // Update state if parent changes
+      setState(() {
+        selectedValue =
+            widget.value; // ✅ Ensure state updates when value changes
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     print('Dropdown value: $selectedValue');
+
     return SizedBox(
       width: widget.width,
       child: DropdownButtonFormField<T>(
@@ -46,7 +50,10 @@ class _CommonDropdownState<T> extends State<CommonDropdown<T>> {
         items: widget
             .items, // Pass the items directly as they are already DropdownMenuItem
         onChanged: (T? value) {
-          widget.onChanged(value); // Notify parent of the change
+          setState(() {
+            selectedValue = value; // ✅ Update local state
+          });
+          widget.onChanged(value); // ✅ Notify parent widget
         },
         validator: (value) {
           if (value == null) {

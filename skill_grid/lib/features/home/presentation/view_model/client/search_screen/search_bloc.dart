@@ -30,6 +30,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             getFreelancerSerivceByFreelancerIdUseCase,
         super(SearchInitial()) {
     on<SearchFreelancers>(_onSearchFreelancers);
+    on<FilterByCity>(_onFilterByCity);
   }
 
   Future<void> _onSearchFreelancers(
@@ -67,14 +68,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
                         GetPortfolioByFreelancerServiceIdParams(
                             freelancerServiceId: service.freelancerServiceId!));
 
-                portfolioResult.fold(
-                  (failure) => [],
-                  (portfolios) {
-                    portfolioImages.addAll(portfolios
-                        .map((portfolio) => portfolio.filePath)
-                        .toList());
-                  },
-                );
+                await portfolioResult.fold((failure) async => 0,
+                    (portfolio) async {
+                  portfolioImages.addAll(portfolio.filePath);
+                });
               }
 
               portfolioMap[freelancer.freelancerId!] = portfolioImages;
@@ -96,5 +93,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
 
     return (totalHourlyRate / services.length).round();
+  }
+
+  Future<void> _onFilterByCity(
+      FilterByCity event, Emitter<SearchState> emit) async {
+    if (state is SearchLoaded) {
+      final currentState = state as SearchLoaded;
+      final filteredFreelancers = currentState.freelancers
+          .where((freelancer) => freelancer.city == event.city)
+          .toList();
+      print("Filtered: $filteredFreelancers");
+      print("Filtered count: ${filteredFreelancers.length}");
+
+      emit(SearchLoaded(filteredFreelancers, currentState.portfolioMap,
+          currentState.avgHourlyRateMap,
+          selectedCity: event.city));
+    }
   }
 }

@@ -12,3 +12,8 @@ class SearchFreelancers extends SearchEvent {
   final String searchQuery;
   const SearchFreelancers(this.searchQuery);
 }
+
+class FilterByCity extends SearchEvent {
+  final String city;
+  const FilterByCity(this.city);
+}
