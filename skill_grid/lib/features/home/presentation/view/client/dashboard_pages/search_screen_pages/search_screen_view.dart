@@ -59,16 +59,20 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                 ElevatedButton(
                   onPressed: () {
                     showModalBottomSheet(
-                      context: context,
-                      isScrollControlled:
-                          true, // Makes the sheet scrollable if content is long
-                      backgroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(16)),
-                      ),
-                      builder: (context) => const SearchFilterView(),
-                    );
+                        context: context,
+                        isScrollControlled:
+                            true, // Makes the sheet scrollable if content is long
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(16)),
+                        ),
+                        builder: (BuildContext searchFilterContext) {
+                          return BlocProvider.value(
+                            value: context.read<SearchBloc>(),
+                            child: const SearchFilterView(),
+                          );
+                        });
                   },
                   style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(
@@ -114,6 +118,7 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                   ])),
                 );
               } else if (state is SearchLoaded) {
+                print("Freelancers after filtering: ${state.freelancers}");
                 if (state.freelancers.isEmpty) {
                   return Center(
                       child: Column(children: [
@@ -143,10 +148,13 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                     itemCount: state.freelancers.length,
                     itemBuilder: (context, index) {
                       final freelancer = state.freelancers[index];
-                      final portfolioImages = state.portfolioMap[freelancer.freelancerId];
-                      final avgHourlyRate = state.avgHourlyRateMap[freelancer.freelancerId] ?? 0;
+                      final portfolioImages =
+                          state.portfolioMap[freelancer.freelancerId];
+                      final avgHourlyRate =
+                          state.avgHourlyRateMap[freelancer.freelancerId] ?? 0;
 
-                      print("Portfolio images for freelancer ${freelancer.freelancerId}: $portfolioImages");
+                      print(
+                          "Portfolio images for freelancer ${freelancer.freelancerId}: $portfolioImages");
 
                       return Column(
                         children: [

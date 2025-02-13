@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 
 class SearchFilterView extends StatefulWidget {
   const SearchFilterView({super.key});
@@ -67,7 +69,9 @@ class _SearchFilterViewState extends State<SearchFilterView> {
             items: cityList,
             onChanged: (value) {
               if (value != null) {
-                city = value;
+                setState(() {
+                  city = value;
+                });
               }
             },
           ),
@@ -146,6 +150,7 @@ class _SearchFilterViewState extends State<SearchFilterView> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
+                  context.read<SearchBloc>().add(FilterByCity(city!));
                   Navigator.pop(context); // Close the filter page
                 },
                 child: const Text("Apply"),

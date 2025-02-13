@@ -286,6 +286,10 @@ _initPortfolioDependencies() async {
   getIt.registerLazySingleton<GetPortfolioByFreelancerIdUseCase>(() =>
       GetPortfolioByFreelancerIdUseCase(
           portfolioRepository: getIt<PortfolioRemoteRepository>()));
+
+  getIt.registerLazySingleton<GetPortfolioByFreelancerServiceIdUseCase>(
+    () => GetPortfolioByFreelancerServiceIdUseCase(portfolioRepository: getIt<PortfolioRemoteRepository>())
+  );
 }
 
 //Search screen dependencies

@@ -9,8 +9,7 @@ part of 'portfolio_api_model.dart';
 PortfolioApiModel _$PortfolioApiModelFromJson(Map<String, dynamic> json) =>
     PortfolioApiModel(
       portfolioId: json['_id'] as String?,
-      filePath:
-          (json['file_path'] as List<dynamic>).map((e) => e as String).toList(),
+      filePath: (json['file_path'] as List?)?.map((e) => e as String).toList() ?? [],
       uploadDate: DateTime.parse(json['upload_date'] as String),
       freelancerService: FreelancerServiceApiModel.fromJson(
           json['freelancer_service_id'] as Map<String, dynamic>),
