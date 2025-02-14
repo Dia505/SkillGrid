@@ -14,10 +14,10 @@ class PortfolioRemoteRepository implements IPortfolioRepository {
   Future<Either<Failure, List<PortfolioEntity>>> getPortfolioByFreelancerId(
       String freelancerId) async {
     try {
-      final portfolioList = await _portfolioRemoteDataSource.getPortfolioByFreelancerId(freelancerId);
+      final portfolioList = await _portfolioRemoteDataSource
+          .getPortfolioByFreelancerId(freelancerId);
       return Right(portfolioList);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(
         ApiFailure(
           message: e.toString(),
@@ -30,10 +30,11 @@ class PortfolioRemoteRepository implements IPortfolioRepository {
   Future<Either<Failure, PortfolioEntity>> getPortfolioByFreelancerServiceId(
       String freelancerServiceId) async {
     try {
-      final portfolio = await _portfolioRemoteDataSource.getPortfolioByFreelancerServiceId(freelancerServiceId);
+      final portfolio = await _portfolioRemoteDataSource
+          .getPortfolioByFreelancerServiceId(freelancerServiceId);
+      print("repo, $portfolio");
       return Right(portfolio);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(
         ApiFailure(
           message: e.toString(),

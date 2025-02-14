@@ -93,132 +93,137 @@ class _SearchScreenViewState extends State<SearchScreenView> {
               ],
             ),
           ),
-          BlocBuilder<SearchBloc, SearchState>(
-            builder: (context, state) {
-              if (state is SearchLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is SearchError) {
+          BlocListener<SearchBloc, SearchState>(
+            listener: (context, state) {
+              if (state is SearchLoaded) {
+                print(
+                    "UI Updated with filtered results: ${state.freelancers.length}");
+              }
+            },
+            child: BlocBuilder<SearchBloc, SearchState>(
+              builder: (context, state) {
+                if (state is SearchLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is SearchError) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 100),
+                    child: Center(
+                        child: Column(children: [
+                      Image.asset(
+                        "assets/images/no_result_found.png",
+                        width: 250,
+                        height: 250,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Looks like there are no results for that. Keep searching!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                  );
+                } else if (state is SearchLoaded) {
+                  if (state.freelancers.isEmpty) {
+                    return Center(
+                        child: Column(children: [
+                      Image.asset(
+                        "assets/images/no_result_found.png",
+                        width: 150,
+                        height: 150,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Looks like there are no results for that. Keep searching!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ]));
+                  }
+                  return Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(
+                          bottom: kBottomNavigationBarHeight +
+                              40), // Ensures content is above nav bar
+                      physics:
+                          const AlwaysScrollableScrollPhysics(), // Enables scrolling even if few results
+                      shrinkWrap:
+                          true, // Tells the ListView to take as much space as needed
+                      itemCount: state.freelancers.length,
+                      itemBuilder: (context, index) {
+                        final freelancer = state.freelancers[index];
+                        final portfolioImages =
+                            state.portfolioMap[freelancer.freelancerId];
+                        final avgHourlyRate =
+                            state.avgHourlyRateMap[freelancer.freelancerId] ??
+                                0;
+
+                        return Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const FreelancerProfileView(),
+                                  ),
+                                );
+                              },
+                              child: SearchScreenContainer(
+                                freelancerProfileImgPath:
+                                    freelancer.profilePicture ??
+                                        "assets/images/default_profile_img.png",
+                                freelancerName:
+                                    '${freelancer.firstName} ${freelancer.lastName}',
+                                profession: freelancer.profession ?? "",
+                                address:
+                                    '${freelancer.address}, ${freelancer.city}',
+                                hourlyRate: avgHourlyRate,
+                                // searchScreenImages: portfolioImages ?? [],
+                                skills: freelancer.skills
+                                        ?.split(',')
+                                        .map((e) => e.trim())
+                                        .toList() ??
+                                    [],
+                              ),
+                            ),
+                            if (index != state.freelancers.length - 1)
+                              const Divider(
+                                color: Colors.grey,
+                                thickness: 1,
+                                indent: 20,
+                                endIndent: 20,
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                }
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 25, vertical: 100),
                   child: Center(
                       child: Column(children: [
                     Image.asset(
-                      "assets/images/no_result_found.png",
-                      width: 250,
-                      height: 250,
+                      "assets/images/search_freelancer_initial.png",
+                      width: 300,
+                      height: 300,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 10),
                     const Text(
-                      "Looks like there are no results for that. Keep searching!",
+                      "Discover talent to help you grow🚀",
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontFamily: "Inter SemiBold"),
                     ),
                   ])),
                 );
-              } else if (state is SearchLoaded) {
-                print("Freelancers after filtering: ${state.freelancers}");
-                if (state.freelancers.isEmpty) {
-                  return Center(
-                      child: Column(children: [
-                    Image.asset(
-                      "assets/images/no_result_found.png",
-                      width: 150,
-                      height: 150,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      "Looks like there are no results for that. Keep searching!",
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ]));
-                }
-                return Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.only(
-                        bottom: kBottomNavigationBarHeight +
-                            40), // Ensures content is above nav bar
-                    physics:
-                        const AlwaysScrollableScrollPhysics(), // Enables scrolling even if few results
-                    shrinkWrap:
-                        true, // Tells the ListView to take as much space as needed
-                    itemCount: state.freelancers.length,
-                    itemBuilder: (context, index) {
-                      final freelancer = state.freelancers[index];
-                      final portfolioImages =
-                          state.portfolioMap[freelancer.freelancerId];
-                      final avgHourlyRate =
-                          state.avgHourlyRateMap[freelancer.freelancerId] ?? 0;
-
-                      print(
-                          "Portfolio images for freelancer ${freelancer.freelancerId}: $portfolioImages");
-
-                      return Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const FreelancerProfileView(),
-                                ),
-                              );
-                            },
-                            child: SearchScreenContainer(
-                              freelancerProfileImgPath:
-                                  freelancer.profilePicture ??
-                                      "assets/images/default_profile_img.png",
-                              freelancerName:
-                                  '${freelancer.firstName} ${freelancer.lastName}',
-                              profession: freelancer.profession ?? "",
-                              address:
-                                  '${freelancer.address}, ${freelancer.city}',
-                              hourlyRate: avgHourlyRate,
-                              searchScreenImages: portfolioImages ?? [],
-                              skills: freelancer.skills
-                                      ?.split(',')
-                                      .map((e) => e.trim())
-                                      .toList() ??
-                                  [],
-                            ),
-                          ),
-                          if (index != state.freelancers.length - 1)
-                            const Divider(
-                              color: Colors.grey,
-                              thickness: 1,
-                              indent: 20,
-                              endIndent: 20,
-                            ),
-                        ],
-                      );
-                    },
-                  ),
-                );
-              }
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 100),
-                child: Center(
-                    child: Column(children: [
-                  Image.asset(
-                    "assets/images/search_freelancer_initial.png",
-                    width: 300,
-                    height: 300,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Discover talent to help you grow🚀",
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontSize: 18, fontFamily: "Inter SemiBold"),
-                  ),
-                ])),
-              );
-            },
+              },
+            ),
           ),
         ],
       )),

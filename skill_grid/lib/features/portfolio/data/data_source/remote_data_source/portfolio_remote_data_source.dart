@@ -66,7 +66,7 @@ class PortfolioRemoteDataSource implements IPortfolioDataSource {
         PortfolioEntity portfolioEntity =
             PortfolioApiModel.getPortfolioByFreelancerServiceIdDtoToEntity(
                 getPortfolioByFreelancerServiceIdDto);
-
+              
         return portfolioEntity;
       } else {
         throw Exception(response.statusMessage);
