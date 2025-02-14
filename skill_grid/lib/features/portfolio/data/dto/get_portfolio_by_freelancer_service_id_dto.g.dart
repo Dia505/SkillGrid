@@ -11,7 +11,7 @@ GetPortfolioByFreelancerServiceIdDto
         GetPortfolioByFreelancerServiceIdDto(
           portfolioId: json['_id'] as String?,
           filePath: (json['file_path'] as List<dynamic>)
-              .map((e) => e as String)
+              .map((e) => e.toString())
               .toList(),
           uploadDate: DateTime.parse(json['upload_date'] as String),
           freelancerService: FreelancerServiceApiModel.fromJson(

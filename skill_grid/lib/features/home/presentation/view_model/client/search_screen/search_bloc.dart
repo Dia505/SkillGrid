@@ -30,7 +30,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             getFreelancerSerivceByFreelancerIdUseCase,
         super(SearchInitial()) {
     on<SearchFreelancers>(_onSearchFreelancers);
-    on<FilterByCity>(_onFilterByCity);
+    on<FilterByCriteria>(_onFilterByCriteria);
   }
 
   Future<void> _onSearchFreelancers(
@@ -95,19 +95,61 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     return (totalHourlyRate / services.length).round();
   }
 
-  Future<void> _onFilterByCity(
-      FilterByCity event, Emitter<SearchState> emit) async {
+  Future<void> _onFilterByCriteria(
+      FilterByCriteria event, Emitter<SearchState> emit) async {
     if (state is SearchLoaded) {
       final currentState = state as SearchLoaded;
-      final filteredFreelancers = currentState.freelancers
-          .where((freelancer) => freelancer.city == event.city)
-          .toList();
+
+      var filteredFreelancers = currentState.freelancers;
+
+      // Filter by city if selected
+      if (event.city != null && event.city!.isNotEmpty) {
+        filteredFreelancers = filteredFreelancers
+            .where((freelancer) => freelancer.city == event.city)
+            .toList();
+      }
+
+      // Filter by hourly rate if selected
+      if (event.hourlyRates.isNotEmpty) {
+      filteredFreelancers = filteredFreelancers.where((freelancer) {
+        final hourlyRate =
+            currentState.avgHourlyRateMap[freelancer.freelancerId] ?? 0;
+        return event.hourlyRates.any(
+            (selectedRange) => _isFreelancerInHourlyRateRange(hourlyRate, selectedRange));
+      }).toList();
+    }
+
       print("Filtered: $filteredFreelancers");
       print("Filtered count: ${filteredFreelancers.length}");
+      print(
+          "Emitting SearchLoaded with ${filteredFreelancers.length} freelancers");
 
-      emit(SearchLoaded(filteredFreelancers, currentState.portfolioMap,
-          currentState.avgHourlyRateMap,
-          selectedCity: event.city));
+      emit(SearchLoaded(
+        filteredFreelancers,
+        currentState.portfolioMap,
+        currentState.avgHourlyRateMap,
+        selectedCity: event.city,
+        selectedHourlyRate: event.hourlyRates.join(", "),
+      ));
+    }
+  }
+
+  bool _isFreelancerInHourlyRateRange(int hourlyRate, String selectedRange) {
+    switch (selectedRange) {
+      case "< Rs. 1000":
+        return hourlyRate < 1000;
+      case "Rs. 1000 - Rs. 2000":
+        return hourlyRate >= 1000 && hourlyRate <= 2000;
+      case "Rs. 2000 - Rs. 3000":
+        return hourlyRate >= 2000 && hourlyRate <= 3000;
+      case "Rs. 3000 - Rs. 4000":
+        return hourlyRate >= 3000 && hourlyRate <= 4000;
+      case "Rs. 4000 - Rs. 5000":
+        return hourlyRate >= 4000 && hourlyRate <= 5000;
+      case "> Rs. 5000":
+        return hourlyRate > 5000 && hourlyRate <= 100000;
+      default:
+        return true; // No filtering if range is invalid
     }
   }
 }
