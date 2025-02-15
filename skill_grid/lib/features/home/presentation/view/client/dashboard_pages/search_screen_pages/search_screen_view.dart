@@ -41,7 +41,7 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: const BorderSide(
-                            color: Color(0XFF707070), width: 2),
+                            color: Color(0xFF707070), width: 2),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),

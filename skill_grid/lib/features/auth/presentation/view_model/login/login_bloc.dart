@@ -61,13 +61,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Widget destinationWidget;
 
       if (event.role == 'client') {
-        print("Navigating to client dashboard");
         destinationWidget = BlocProvider<ClientDashboardCubit>.value(
           value: _clientDashboardCubit,
           child: const ClientDashboard(),
         );
       } else {
-        print("Navigating to freelancer dashboard");
         destinationWidget = BlocProvider<FreelancerDashboardCubit>.value(
           value: _freelancerDashboardCubit,
           child: const FreelancerDashboard(),
@@ -92,7 +90,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       print("Client Login Result: $clientResult");
 
       if (clientResult.isRight()) {
-        final user = clientResult
+        clientResult
             .getOrElse(() => throw Exception("Unexpected null user"));
         print("Login success. User role: client");
 
@@ -116,7 +114,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       print("Freelancer Login Result: $freelancerResult");
 
       if (freelancerResult.isRight()) {
-        final user = freelancerResult
+        freelancerResult
             .getOrElse(() => throw Exception("Unexpected null user"));
         print("Login success. User role: freelancer");
 

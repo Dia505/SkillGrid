@@ -378,7 +378,7 @@ class _SendOfferViewState extends State<SendOfferView> {
                           backgroundColor: const Color(0XFFE7E7FF),
                           shape: RoundedRectangleBorder(
                             side: const BorderSide(
-                              color: Color(0XFF544FBD) ?? Colors.transparent,
+                              color: Color(0XFF544FBD),
                               width: 2, // Border width
                             ),
                             borderRadius: BorderRadius.circular(

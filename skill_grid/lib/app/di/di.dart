@@ -46,6 +46,12 @@ import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_f
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
+import 'package:skill_grid/features/review/data/data_source/local_data_source/review_local_data_source.dart';
+import 'package:skill_grid/features/review/data/data_source/remote_data_source/review_remote_data_source.dart';
+import 'package:skill_grid/features/review/data/repository/local_repository/review_local_repository.dart';
+import 'package:skill_grid/features/review/data/repository/remote_repository/review_remote_repository.dart';
+import 'package:skill_grid/features/review/domain/use_case/get_review_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/review/domain/use_case/get_review_by_rating_use_case.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
@@ -71,6 +77,7 @@ Future<void> initDependencies() async {
   await _initFreelancerServiceDependencies();
   await _initPortfolioDependencies();
   await _initSearchFreelancersDependencies();
+  await _initReviewDependencies();
 }
 
 _initHiveService() {
@@ -292,6 +299,30 @@ _initPortfolioDependencies() async {
   );
 }
 
+//Review dependencies
+_initReviewDependencies() async {
+  getIt.registerLazySingleton<ReviewLocalDataSource>(
+    () => ReviewLocalDataSource(hiveService: getIt())
+  );
+  getIt.registerLazySingleton<ReviewRemoteDataSource>(
+    () => ReviewRemoteDataSource(dio: getIt<Dio>())
+  );
+  
+  getIt.registerLazySingleton<ReviewLocalRepository>(
+    () => ReviewLocalRepository(reviewLocalDataSource: getIt<ReviewLocalDataSource>())
+  );
+  getIt.registerLazySingleton<ReviewRemoteRepository>(
+    () => ReviewRemoteRepository(reviewRemoteDataSource: getIt<ReviewRemoteDataSource>())
+  );
+
+  getIt.registerLazySingleton<GetReviewByFreelancerIdUseCase>(
+    () => GetReviewByFreelancerIdUseCase(reviewRepository: getIt<ReviewRemoteRepository>())
+  );
+  getIt.registerLazySingleton<GetReviewByRatingUseCase>(
+    () => GetReviewByRatingUseCase(reviewRepository: getIt<ReviewRemoteRepository>())
+  );
+}
+
 //Search screen dependencies
 _initSearchFreelancersDependencies() async {
   getIt.registerLazySingleton<SearchFreelancersUseCase>(() =>
@@ -302,5 +333,7 @@ _initSearchFreelancersDependencies() async {
       searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
       getPortfolioByFreelancerServiceIdUseCase:
           getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
-      getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>()));
+      getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
+      getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>()));
 }
+

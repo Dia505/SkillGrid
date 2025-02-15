@@ -44,7 +44,7 @@ class _SearchFilterViewState extends State<SearchFilterView> {
 
   String? selectedCity;
   final Set<String> selectedHourlyRates = {};
-  double _selectedRating = 0.0;
+  double selectedRating = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +122,7 @@ class _SearchFilterViewState extends State<SearchFilterView> {
               return Icon(
                 Icons.star,
                 color:
-                    index < _selectedRating.ceil() ? Colors.amber : Colors.grey,
+                    index < selectedRating.ceil() ? Colors.amber : Colors.grey,
                 size: 36,
               );
             }),
@@ -130,16 +130,16 @@ class _SearchFilterViewState extends State<SearchFilterView> {
           const SizedBox(height: 16),
           // Slider
           Slider(
-            value: _selectedRating,
-            min: 0.0,
-            max: 5.0,
+            value: selectedRating,
+            min: 0,
+            max: 5,
             divisions: 5,
-            label: _selectedRating.toStringAsFixed(0),
+            label: selectedRating.toStringAsFixed(0),
             activeColor: Colors.amber,
             inactiveColor: Colors.grey.shade300,
             onChanged: (value) {
               setState(() {
-                _selectedRating = value;
+                selectedRating = value;
               });
             },
           ),
@@ -151,7 +151,7 @@ class _SearchFilterViewState extends State<SearchFilterView> {
               child: ElevatedButton(
                 onPressed: () {
                   context.read<SearchBloc>().add(FilterByCriteria(
-                      selectedCity, selectedHourlyRates.toList()));
+                      selectedCity, selectedHourlyRates.toList(), selectedRating.toInt()));
                   Navigator.pop(context); // Close the filter page
                 },
                 child: const Text("Apply"),
