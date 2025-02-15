@@ -5,6 +5,7 @@ import 'package:skill_grid/features/auth/data/model/client_model/client_hive_mod
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
 import 'package:skill_grid/features/freelancer_service/data/model/freelancer_service_hive_model.dart';
 import 'package:skill_grid/features/portfolio/data/model/portfolio_hive_model.dart';
+import 'package:skill_grid/features/review/data/model/review_hive_model.dart';
 
 class HiveService {
   static Future<void> init() async {
@@ -16,6 +17,8 @@ class HiveService {
     Hive.registerAdapter(ClientHiveModelAdapter());
     Hive.registerAdapter(FreelancerHiveModelAdapter());
     Hive.registerAdapter(FreelancerServiceHiveModelAdapter());
+    Hive.registerAdapter(PortfolioHiveModelAdapter());
+    Hive.registerAdapter(ReviewHiveModelAdapter());
   }
 
   //-------------------------Client Queries--------------------------------------
@@ -218,6 +221,25 @@ class HiveService {
         .toList();
   }
 
+  //----------------------Review Queries------------------------
+  Future<List<ReviewHiveModel>> getReviewByFreelancerId(String freelancerId) async {
+    var box = await Hive.openBox<ReviewHiveModel>(HiveTableConstant.reviewBox);
+
+    return box.values
+      .where((review) =>
+        review.freelancer.freelancerId == freelancerId
+      ).toList();
+  }
+
+  Future<List<ReviewHiveModel>> getReviewByRating(int rating) async {
+    var box = await Hive.openBox<ReviewHiveModel>(HiveTableConstant.reviewBox);
+
+    return box.values
+      .where((review) =>
+        review.rating == rating
+      ).toList();
+  }
+
   Future<void> clearAll() async {
     await Hive.deleteBoxFromDisk(HiveTableConstant.clientBox);
     await Hive.deleteBoxFromDisk(HiveTableConstant.freelancerBox);
@@ -226,4 +248,6 @@ class HiveService {
   Future<void> close() async {
     await Hive.close();
   }
+
+  //
 }

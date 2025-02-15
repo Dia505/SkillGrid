@@ -21,4 +21,7 @@ class HiveTableConstant {
 
   static const int projectDurationTableId = 6;
   static const String projectDurationBox = "projectDurationBox";
+
+  static const int reviewTableId = 7;
+  static const String reviewBox = "reviewBox";
 }
