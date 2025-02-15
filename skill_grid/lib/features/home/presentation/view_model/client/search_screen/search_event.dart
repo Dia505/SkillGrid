@@ -16,5 +16,6 @@ class SearchFreelancers extends SearchEvent {
 class FilterByCriteria extends SearchEvent {
   final String? city;
   final List<String> hourlyRates;
-  const FilterByCriteria(this.city, this.hourlyRates);
+  final int? rating;
+  const FilterByCriteria(this.city, this.hourlyRates, this.rating);
 }

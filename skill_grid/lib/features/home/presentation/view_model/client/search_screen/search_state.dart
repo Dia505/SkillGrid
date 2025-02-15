@@ -15,26 +15,31 @@ class SearchLoaded extends SearchState {
   final List<FreelancerEntity> freelancers;
   final Map<String, List<String>> portfolioMap;
   final Map<String, int> avgHourlyRateMap;
+  final Map<String, int> avgRatingMap;
   final String? selectedCity;
   final String? selectedHourlyRate;
+  final int? selectedRating;
 
   const SearchLoaded(
     this.freelancers, 
     this.portfolioMap, 
     this.avgHourlyRateMap,
-    {this.selectedCity, this.selectedHourlyRate});
+    this.avgRatingMap,
+    {this.selectedCity, this.selectedHourlyRate, this.selectedRating});
 
   @override
   List<Object?> get props =>
-      [freelancers, portfolioMap, avgHourlyRateMap, selectedCity, selectedHourlyRate];
+      [freelancers, portfolioMap, avgHourlyRateMap, avgRatingMap, selectedCity, selectedHourlyRate, selectedRating];
 
-  SearchLoaded copyWith({String? selectedCity, String? selectedHourlyRate}) {
+  SearchLoaded copyWith({String? selectedCity, String? selectedHourlyRate, int? selectedRating}) {
     return SearchLoaded(
       freelancers,
       portfolioMap,
       avgHourlyRateMap,
+      avgRatingMap,
       selectedCity: selectedCity ?? this.selectedCity,
-      selectedHourlyRate: selectedHourlyRate ?? this.selectedHourlyRate
+      selectedHourlyRate: selectedHourlyRate ?? this.selectedHourlyRate,
+      selectedRating: selectedRating ?? this.selectedRating
     );
   }
 }

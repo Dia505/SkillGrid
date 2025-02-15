@@ -16,6 +16,7 @@ import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
+import 'package:skill_grid/features/review/domain/use_case/get_review_by_freelancer_id_use_case.dart';
 
 class ClientDashboardState extends Equatable {
   final int selectedIndex;
@@ -42,7 +43,8 @@ class ClientDashboardState extends Equatable {
           create: (context) => SearchBloc(
               searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
               getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
-              getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>()),
+              getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
+              getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>()),
           child: const SearchScreenView()),
       const CalendarScreenView(),
       const NotificationScreenView()

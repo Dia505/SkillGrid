@@ -6,6 +6,8 @@ import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/sea
 import 'package:skill_grid/features/freelancer_service/domain/entity/freelancer_service_entity.dart';
 import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
+import 'package:skill_grid/features/review/domain/entity/review_entity.dart';
+import 'package:skill_grid/features/review/domain/use_case/get_review_by_freelancer_id_use_case.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -16,18 +18,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _getPortfolioByFreelancerServiceIdUseCase;
   final GetFreelancerServiceByFreelancerIdUseCase
       _getFreelancerSerivceByFreelancerIdUseCase;
+  final GetReviewByFreelancerIdUseCase _getReviewByFreelancerIdUseCase;
 
   SearchBloc(
       {required SearchFreelancersUseCase searchFreelancersUseCase,
       required GetPortfolioByFreelancerServiceIdUseCase
           getPortfolioByFreelancerServiceIdUseCase,
       required GetFreelancerServiceByFreelancerIdUseCase
-          getFreelancerSerivceByFreelancerIdUseCase})
+          getFreelancerSerivceByFreelancerIdUseCase,
+      required GetReviewByFreelancerIdUseCase getReviewByFreelancerIdUseCase})
       : _searchFreelancersUseCase = searchFreelancersUseCase,
         _getPortfolioByFreelancerServiceIdUseCase =
             getPortfolioByFreelancerServiceIdUseCase,
         _getFreelancerSerivceByFreelancerIdUseCase =
             getFreelancerSerivceByFreelancerIdUseCase,
+        _getReviewByFreelancerIdUseCase = getReviewByFreelancerIdUseCase,
         super(SearchInitial()) {
     on<SearchFreelancers>(_onSearchFreelancers);
     on<FilterByCriteria>(_onFilterByCriteria);
@@ -48,38 +53,64 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       (freelancers) async {
         final Map<String, List<String>> portfolioMap = {};
         final Map<String, int> avgHourlyRateMap = {};
+        final Map<String, int> avgRatingMap = {};
 
-        for (var freelancer in freelancers) {
-          final freelancerServices =
+        // Process all freelancers concurrently
+        await Future.wait(freelancers.map((freelancer) async {
+          final freelancerId = freelancer.freelancerId!;
+
+          // Fetch freelancer services concurrently
+          final freelancerServicesResult =
               await _getFreelancerSerivceByFreelancerIdUseCase(
                   GetFreelancerServiceByFreelancerIdParams(
-                      freelancerId: freelancer.freelancerId!));
+                      freelancerId: freelancerId));
 
-          await freelancerServices.fold(
-            (failure) async => 0,
+          await freelancerServicesResult.fold(
+            (failure) async => null, // Log error if necessary
             (services) async {
-              final averageHourlyRate = _calculateAverageHourlyRate(services);
-              avgHourlyRateMap[freelancer.freelancerId!] = averageHourlyRate;
+              avgHourlyRateMap[freelancerId] =
+                  _calculateAverageHourlyRate(services);
 
-              List<String> portfolioImages = [];
-              for (var service in services) {
+              // Fetch portfolios concurrently
+              final List<Future<List<String>>> portfolioFutures =
+                  services.map((service) async {
                 final portfolioResult =
                     await _getPortfolioByFreelancerServiceIdUseCase(
                         GetPortfolioByFreelancerServiceIdParams(
                             freelancerServiceId: service.freelancerServiceId!));
 
-                await portfolioResult.fold((failure) async => 0,
-                    (portfolio) async {
-                  portfolioImages.addAll(portfolio.filePath);
-                });
-              }
+                return portfolioResult.fold(
+                  (failure) => <String>[], // Return empty list on failure
+                  (portfolio) => portfolio.filePath
+                      .map((e) => e)
+                      .toList(), // Ensure List<String>
+                );
+              }).toList();
 
-              portfolioMap[freelancer.freelancerId!] = portfolioImages;
+              final portfolios = await Future.wait(portfolioFutures);
+              portfolioMap[freelancerId] =
+                  portfolios.expand((list) => list).toList();
             },
           );
-        }
 
-        emit(SearchLoaded(freelancers, portfolioMap, avgHourlyRateMap));
+          // Fetch reviews concurrently
+          final reviewsResult = await _getReviewByFreelancerIdUseCase(
+              GetReviewByFreelancerIdParams(freelancerId: freelancerId));
+
+          await reviewsResult.fold(
+            (failure) async => null, // Log error if necessary
+            (reviews) async {
+              avgRatingMap[freelancerId] = _calculateAverageRating(reviews);
+            },
+          );
+        }));
+
+        avgRatingMap.forEach((freelancerId, avgRating) {
+          print('Freelancer ID: $freelancerId, Average Rating: $avgRating');
+        });
+
+        emit(SearchLoaded(
+            freelancers, portfolioMap, avgHourlyRateMap, avgRatingMap));
       },
     );
   }
@@ -93,6 +124,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
 
     return (totalHourlyRate / services.length).round();
+  }
+
+  int _calculateAverageRating(List<ReviewEntity> reviews) {
+    if (reviews.isEmpty) return 0;
+
+    final totalRatings = reviews.fold<int>(
+        0, (previousValue, review) => previousValue + review.rating);
+
+    return (totalRatings / reviews.length).round();
   }
 
   Future<void> _onFilterByCriteria(
@@ -111,26 +151,33 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       // Filter by hourly rate if selected
       if (event.hourlyRates.isNotEmpty) {
-      filteredFreelancers = filteredFreelancers.where((freelancer) {
-        final hourlyRate =
-            currentState.avgHourlyRateMap[freelancer.freelancerId] ?? 0;
-        return event.hourlyRates.any(
-            (selectedRange) => _isFreelancerInHourlyRateRange(hourlyRate, selectedRange));
-      }).toList();
-    }
+        filteredFreelancers = filteredFreelancers.where((freelancer) {
+          final hourlyRate =
+              currentState.avgHourlyRateMap[freelancer.freelancerId] ?? 0;
+          return event.hourlyRates.any((selectedRange) =>
+              _isFreelancerInHourlyRateRange(hourlyRate, selectedRange));
+        }).toList();
+      }
+
+      //Filter by rating if selected
+      if (event.rating != null && event.rating! > 0) {
+        filteredFreelancers = filteredFreelancers.where((freelancer) {
+          final rating =
+              currentState.avgRatingMap[freelancer.freelancerId] ?? 0;
+          print("Freelancer ${freelancer.freelancerId} - Rating: $rating");
+          return rating == event.rating!;
+        }).toList();
+      }
 
       print("Filtered: $filteredFreelancers");
       print("Filtered count: ${filteredFreelancers.length}");
-      print(
-          "Emitting SearchLoaded with ${filteredFreelancers.length} freelancers");
+      print("Emitting SearchLoaded with ${filteredFreelancers.length} freelancers");
 
-      emit(SearchLoaded(
-        filteredFreelancers,
-        currentState.portfolioMap,
-        currentState.avgHourlyRateMap,
-        selectedCity: event.city,
-        selectedHourlyRate: event.hourlyRates.join(", "),
-      ));
+      emit(SearchLoaded(filteredFreelancers, currentState.portfolioMap,
+          currentState.avgHourlyRateMap, currentState.avgRatingMap,
+          selectedCity: event.city,
+          selectedHourlyRate: event.hourlyRates.join(", "),
+          selectedRating: event.rating));
     }
   }
 
