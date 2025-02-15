@@ -77,7 +77,7 @@ class ClientRemoteDataSource implements IClientDataSource {
         FindClientByIdDto findClientByIdDto =
             FindClientByIdDto.fromJson(response.data);
 
-        ClientEntity clientEntity = ClientApiModel.toEntity(findClientByIdDto);
+        ClientEntity clientEntity = ClientApiModel.findClientByIdDtoToEntity(findClientByIdDto);
 
         return clientEntity;
       } else {
