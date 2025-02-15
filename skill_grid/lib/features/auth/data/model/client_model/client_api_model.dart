@@ -53,7 +53,7 @@ class ClientApiModel extends Equatable {
         role: entity.role);
   }
 
-  static ClientEntity toEntity(FindClientByIdDto findClientByIdDto) {
+  static ClientEntity findClientByIdDtoToEntity(FindClientByIdDto findClientByIdDto) {
     return ClientEntity(
         clientId: findClientByIdDto.clientId,
         firstName: findClientByIdDto.firstName,
@@ -87,6 +87,19 @@ class ClientApiModel extends Equatable {
       profilePicture: profilePicture ?? this.profilePicture,
       role: role ?? this.role,
     );
+  }
+
+  ClientEntity toEntity() {
+    return ClientEntity(
+        clientId: clientId,
+        firstName: firstName,
+        lastName: lastName,
+        mobileNo: mobileNo,
+        city: city,
+        email: email,
+        password: password,
+        profilePicture: profilePicture,
+        role: role);
   }
 
   @override
