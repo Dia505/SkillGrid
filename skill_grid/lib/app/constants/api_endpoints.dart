@@ -28,4 +28,8 @@ class ApiEndpoints {
   //Portfolio routes
   static const String getPortfolioByFreelancerServiceId = "portfolio/freelancer-service";
   static const String getPortfolioByFreelancerId = "portfolio/freelancer";
+
+  //Review routes
+  static const String getReviewByFreelancerId = "review/freelancer";
+  static const String getReviewByRating = "review/rating";
 }
