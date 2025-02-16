@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CommonDropdown<T> extends StatefulWidget {
-  const CommonDropdown({
-    super.key,
-    required this.items,
-    required this.onChanged,
-    this.width = double.infinity,
-    this.hintText
-  });
+  const CommonDropdown(
+      {super.key,
+      required this.items,
+      required this.onChanged,
+      this.width = double.infinity,
+      this.hintText,
+      this.value});
 
   final List<DropdownMenuItem<T>> items;
   final ValueChanged<T?> onChanged; // Callback to notify parent widget
   final double width;
   final String? hintText;
+  final T? value;
 
   @override
   State<CommonDropdown<T>> createState() => _CommonDropdownState<T>();
@@ -24,22 +25,35 @@ class _CommonDropdownState<T> extends State<CommonDropdown<T>> {
   @override
   void initState() {
     super.initState();
-    selectedValue = null; // Ensure no initial value is selected
+    selectedValue = widget.value; // Initialize with the passed value
+  }
+
+  @override
+  void didUpdateWidget(covariant CommonDropdown<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      setState(() {
+        selectedValue =
+            widget.value; // ✅ Ensure state updates when value changes
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    print('Dropdown value: $selectedValue');
+
     return SizedBox(
       width: widget.width,
-      
       child: DropdownButtonFormField<T>(
-        value: selectedValue, // This will be null by default
-        items: widget.items, // Pass the items directly as they are already DropdownMenuItem
+        value: selectedValue,
+        items: widget
+            .items, // Pass the items directly as they are already DropdownMenuItem
         onChanged: (T? value) {
           setState(() {
-            selectedValue = value;
+            selectedValue = value; // ✅ Update local state
           });
-          widget.onChanged(value); // Notify parent of the change
+          widget.onChanged(value); // ✅ Notify parent widget
         },
         validator: (value) {
           if (value == null) {
@@ -48,7 +62,8 @@ class _CommonDropdownState<T> extends State<CommonDropdown<T>> {
           return null;
         },
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(11),
             borderSide: const BorderSide(color: Color(0xFF322E86), width: 1),

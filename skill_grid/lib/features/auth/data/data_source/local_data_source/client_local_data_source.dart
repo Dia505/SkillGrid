@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:skill_grid/core/network/hive_service.dart';
 import 'package:skill_grid/features/auth/data/data_source/client_data_source.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
@@ -19,7 +21,7 @@ class ClientLocalDataSource implements IClientDataSource {
   }
 
   @override
-  Future<void> deleteClient(String clientId) async {
+  Future<void> deleteClient(String clientId, String? token) async {
     try {
       await _hiveService.deleteClient(clientId);
     } catch (e) {
@@ -28,7 +30,7 @@ class ClientLocalDataSource implements IClientDataSource {
   }
 
   @override
-  Future<ClientEntity> getClientById(String clientId) async {
+  Future<ClientEntity> getClientById(String clientId, String? token) async {
     try {
       final clientHiveModel = await _hiveService.getClientById(clientId);
       return clientHiveModel!.toEntity();
@@ -44,6 +46,47 @@ class ClientLocalDataSource implements IClientDataSource {
       return Future.value("Success");
     } catch (e) {
       return Future.error(e);
+    }
+  }
+
+  @override
+  Future<String> updateProfilePicture(
+      String clientId, File file, String? token) async {
+    try {
+      final clientHiveModel = await _hiveService.getClientById(clientId);
+
+      if (clientHiveModel == null) {
+        throw Exception("Client not found");
+      }
+
+      // Directly update the profile picture using the file path
+      await _hiveService.updateClientProfilePicture(clientId, file.path);
+
+      return file.path;
+    } catch (e) {
+      throw Exception("Failed to update profile picture: $e");
+    }
+  }
+
+  @override
+  Future<void> updateClient(
+      String clientId, ClientEntity updatedClient, String? token) async {
+    try {
+      final clientHiveModel = await _hiveService.getClientById(clientId);
+
+      if (clientHiveModel == null) {
+        throw Exception("Client not found");
+      }
+
+      await _hiveService.updateClient(clientId,
+          newFirstName: updatedClient.firstName,
+          newLastName: updatedClient.lastName,
+          newMobileNo: updatedClient.mobileNo,
+          newCity: updatedClient.city,
+          newEmail: updatedClient.email,
+          newPassword: updatedClient.password);
+    } catch (e) {
+      throw Exception("Failed to update client data: $e");
     }
   }
 }

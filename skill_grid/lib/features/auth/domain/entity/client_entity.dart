@@ -23,6 +23,40 @@ class ClientEntity extends Equatable {
     this.role = "client"
   });
 
+  ClientEntity copyWith({
+    String? firstName,
+    String? lastName,
+    String? mobileNo,
+    String? city,
+    String? email,
+    String? password,
+    String? profilePicture,
+    String? role,
+  }) {
+    return ClientEntity(
+      clientId: clientId,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      mobileNo: mobileNo ?? this.mobileNo,
+      city: city ?? this.city,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      profilePicture: profilePicture ?? this.profilePicture,
+      role: role ?? this.role,
+    );
+  }
+
+  const ClientEntity.empty()
+    : clientId = "_empty.clientId",
+      firstName = "_empty.firstName",
+      lastName = "_empty.lastName",
+      mobileNo = "_empty.mobileNo",
+      city = "_empty.city",
+      email = "_empty.email",
+      password = "_empty.password",
+      profilePicture = "_empty.profilePicture",
+      role = "_empty.role";
+
   @override
   List<Object?> get props =>
       [clientId, firstName, lastName, mobileNo, city, email, password, profilePicture, role];

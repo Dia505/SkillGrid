@@ -33,14 +33,14 @@ class FreelancerLocalRepository implements IFreelancerRepository {
 
   @override
   Future<Either<Failure, FreelancerEntity>> getFreelancerById(
-      String freelancerId) async {
+      String freelancerId, String? token) async {
     try {
       final freelancerEntity =
-          await _freelancerLocalDataSource.getFreelancerById(freelancerId);
+          await _freelancerLocalDataSource.getFreelancerById(freelancerId, token);
       return Right(freelancerEntity);
     } catch (e) {
       return Left(LocalDatabaseFailure(
-          message: "Error getting client information: $e"));
+          message: "Error getting freelancer information: $e"));
     }
   }
 
@@ -75,6 +75,17 @@ class FreelancerLocalRepository implements IFreelancerRepository {
       await _freelancerLocalDataSource.updateFreelancer(freelancerEntity);
       return const Right(null); 
     } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, List<FreelancerEntity>>> searchFreelancers(String searchQuery) async {
+    try {
+      final freelancerList = await _freelancerLocalDataSource.searchFreelancers(searchQuery);
+      return Right(freelancerList);
+    }
+    catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }

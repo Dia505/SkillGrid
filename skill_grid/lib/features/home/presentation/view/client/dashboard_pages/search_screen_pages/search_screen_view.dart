@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/search_screen_container.dart';
-import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_filter_view.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 
 class SearchScreenView extends StatefulWidget {
-  const SearchScreenView({super.key});
+  final String searchQuery;
+  const SearchScreenView({super.key, this.searchQuery = ''});
 
   @override
   State<SearchScreenView> createState() => _SearchScreenViewState();
@@ -15,43 +18,47 @@ class _SearchScreenViewState extends State<SearchScreenView> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: SingleChildScrollView(
-        child: SafeArea(
-            child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, left: 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 60,
-                    width: 314,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        hintStyle: const TextStyle(fontSize: 15),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          size: 30,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                              color: Color(0XFF707070), width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                              color: Color(0xFF707070), width: 2),
-                        ),
+      child: SafeArea(
+          child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20, left: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 60,
+                  width: 314,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      hintStyle: const TextStyle(fontSize: 15),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        size: 30,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                            color: Color(0xFF707070), width: 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                            color: Color(0xFF707070), width: 2),
                       ),
                     ),
+                    onChanged: (searchQuery) {
+                      context
+                          .read<SearchBloc>()
+                          .add(SearchFreelancers(searchQuery));
+                    },
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showModalBottomSheet(
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showModalBottomSheet(
                         context: context,
                         isScrollControlled:
                             true, // Makes the sheet scrollable if content is long
@@ -60,113 +67,166 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(16)),
                         ),
-                        builder: (context) => const SearchFilterView(),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(
-                          side: BorderSide(
-                            color: Color(0xFF544FBD),
-                            width: 3,
-                          ),
+                        builder: (BuildContext searchFilterContext) {
+                          return BlocProvider.value(
+                            value: context.read<SearchBloc>(),
+                            child: const SearchFilterView(),
+                          );
+                        });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(
+                        side: BorderSide(
+                          color: Color(0xFF544FBD),
+                          width: 3,
                         ),
-                        padding: const EdgeInsets.all(0),
-                        backgroundColor: const Color(0xFFE7E7FF),
-                        fixedSize: const Size(50, 50)),
-                    child: const Icon(
-                      Icons.tune,
-                      color: Color(0xFF544FBD),
-                      size: 30,
-                    ),
+                      ),
+                      padding: const EdgeInsets.all(0),
+                      backgroundColor: const Color(0xFFE7E7FF),
+                      fixedSize: const Size(50, 50)),
+                  child: const Icon(
+                    Icons.tune,
+                    color: Color(0xFF544FBD),
+                    size: 30,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FreelancerProfileView(),
-                  ),
+          ),
+          BlocListener<SearchBloc, SearchState>(
+            listener: (context, state) {
+              if (state is SearchLoaded) {
+                print(
+                    "UI Updated with filtered results: ${state.freelancers.length}");
+              }
+            },
+            child: BlocBuilder<SearchBloc, SearchState>(
+              builder: (context, state) {
+                if (state is SearchLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is SearchError) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 100),
+                    child: Center(
+                        child: Column(children: [
+                      Image.asset(
+                        "assets/images/no_result_found.png",
+                        width: 250,
+                        height: 250,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Looks like there are no results for that. Keep searching!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ])),
+                  );
+                } else if (state is SearchLoaded) {
+                  if (state.freelancers.isEmpty) {
+                    return Center(
+                        child: Column(children: [
+                      Image.asset(
+                        "assets/images/no_result_found.png",
+                        width: 150,
+                        height: 150,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Looks like there are no results for that. Keep searching!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ]));
+                  }
+                  return Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(
+                          bottom: kBottomNavigationBarHeight +
+                              40), // Ensures content is above nav bar
+                      physics:
+                          const AlwaysScrollableScrollPhysics(), // Enables scrolling even if few results
+                      shrinkWrap:
+                          true, // Tells the ListView to take as much space as needed
+                      itemCount: state.freelancers.length,
+                      itemBuilder: (context, index) {
+                        final freelancer = state.freelancers[index];
+                        final portfolioImages =
+                            state.portfolioMap[freelancer.freelancerId];
+                        final avgHourlyRate =
+                            state.avgHourlyRateMap[freelancer.freelancerId] ??
+                                0;
+
+                        return Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const FreelancerProfileView(),
+                                  ),
+                                );
+                              },
+                              child: SearchScreenContainer(
+                                freelancerProfileImgPath:
+                                    freelancer.profilePicture ??
+                                        "assets/images/default_profile_img.png",
+                                freelancerName:
+                                    '${freelancer.firstName} ${freelancer.lastName}',
+                                profession: freelancer.profession ?? "",
+                                address:
+                                    '${freelancer.address}, ${freelancer.city}',
+                                hourlyRate: avgHourlyRate,
+                                searchScreenImages: portfolioImages ?? [],
+                                skills: freelancer.skills
+                                        ?.split(',')
+                                        .map((e) => e.trim())
+                                        .toList() ??
+                                    [],
+                              ),
+                            ),
+                            if (index != state.freelancers.length - 1)
+                              const Divider(
+                                color: Colors.grey,
+                                thickness: 1,
+                                indent: 20,
+                                endIndent: 20,
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                }
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 100),
+                  child: Center(
+                      child: Column(children: [
+                    Image.asset(
+                      "assets/images/search_freelancer_initial.png",
+                      width: 300,
+                      height: 300,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Discover talent to help you grow🚀",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 18, fontFamily: "Inter SemiBold"),
+                    ),
+                  ])),
                 );
               },
-              child: const SearchScreenContainer(
-                freelancerProfileImgPath:
-                    "assets/images/istockphoto-1395071229-612x612.jpg",
-                freelancerName: "Krishna Basnet",
-                profession: "Photographer & Videographer",
-                address: "Kalimati, Kathmandu",
-                hourlyRate: 1500,
-                searchScreenImages: [
-                  "assets/images/gettyimages-480952865-612x612.jpg",
-                  "assets/images/panel-discussion-event-stockcake.jpg",
-                  "assets/images/istockphoto-1137781483-612x612.jpg"
-                ],
-                skills: [
-                  "Event Photography",
-                  "Commercial Photography",
-                  "Videography",
-                  "Adobe photoshop",
-                  "Davinci resolve",
-                  "Professional photoshoots"
-                ],
-              ),
             ),
-            const Divider(
-              color: Colors.grey,
-              thickness: 1,
-              indent: 20, 
-              endIndent: 20, 
-            ),
-            const SearchScreenContainer(
-              freelancerProfileImgPath:
-                  "assets/images/gettyimages-484274251-612x612.jpg",
-              freelancerName: "Amaira Yadav",
-              profession: "Photographer",
-              address: "Maharajgunj, Kathmandu",
-              hourlyRate: 5000,
-              searchScreenImages: [
-                "assets/images/Screenshot 2024-12-01 003357.png",
-                "assets/images/98f8b4e72c6023a2a15dfdab64a1a80c.jpg",
-                "assets/images/gettyimages-1386266678-612x612.jpg"
-              ],
-              skills: [
-                "Fashion Photography",
-                "Commercial Photography",
-                "Photo editing",
-                "Adobe photoshop",
-                "Professional photoshoots"
-              ],
-            ),
-            const Divider(
-              color: Colors.grey,
-              thickness: 1,
-              indent: 20, 
-              endIndent: 20, 
-            ),
-            const SearchScreenContainer(
-              freelancerProfileImgPath:
-                  "assets/images/indian_girl_stock_img.jpg",
-              freelancerName: "Rita Singh",
-              profession: "Photographer",
-              address: "Sanepa, Lalitpur",
-              hourlyRate: 3000,
-              searchScreenImages: [
-                "assets/images/food-photographer-ideas.jpg",
-                "assets/images/gettyimages-1829241109-612x612.jpg",
-                "assets/images/istockphoto-1394055240-612x612.jpg"
-              ],
-              skills: [
-                "Food Photography",
-                "Commercial Photography",
-                "Photo editing",
-                "Adobe photoshop"
-              ],
-            ),
-          ],
-        )),
-      ),
+          ),
+        ],
+      )),
     );
   }
 }

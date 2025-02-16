@@ -22,9 +22,11 @@ FreelancerApiModel _$FreelancerApiModelFromJson(Map<String, dynamic> json) =>
       skills: json['skills'] as String?,
       yearsOfExperience: (json['years_of_experience'] as num?)?.toInt(),
       bio: json['bio'] as String?,
-      available: json['available'] as bool?,
-      profilePicture: json['profile_picture'] as String?,
-      backgroundPicture: json['background_picture'] as String?,
+      available: json['available'] as bool? ?? true,
+      profilePicture: json['profile_picture'] as String? ??
+          "assets/images/default_profile_img.png",
+      backgroundPicture: json['background_picture'] as String? ??
+          "assets/images/default_bg_img.jpg",
       role: json['role'] as String? ?? "freelancer",
     );
 

@@ -10,7 +10,8 @@ import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view/freelancer/freelancer_dashboard.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/client_dashboard_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 
 part 'login_event.dart';
@@ -60,13 +61,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Widget destinationWidget;
 
       if (event.role == 'client') {
-        print("Navigating to client dashboard");
         destinationWidget = BlocProvider<ClientDashboardCubit>.value(
           value: _clientDashboardCubit,
           child: const ClientDashboard(),
         );
       } else {
-        print("Navigating to freelancer dashboard");
         destinationWidget = BlocProvider<FreelancerDashboardCubit>.value(
           value: _freelancerDashboardCubit,
           child: const FreelancerDashboard(),
@@ -80,22 +79,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     });
 
-    // 🔹 Handle Login Logic
+    //Login User Event
     on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true, isSuccess: false));
 
-      // ✅ Try client login first
+      //First try client login
       final clientResult = await _clientLoginUseCase(
         ClientLoginParams(email: event.email, password: event.password),
       );
       print("Client Login Result: $clientResult");
 
       if (clientResult.isRight()) {
-        final user = clientResult
+        clientResult
             .getOrElse(() => throw Exception("Unexpected null user"));
         print("Login success. User role: client");
 
         emit(state.copyWith(isLoading: false, isSuccess: true, role: 'client'));
+
+        final clientHomeBloc = getIt<ClientHomeBloc>();
+        clientHomeBloc.loadClient();
 
         add(NavigateHomeScreenEvent(
           context: event.context,
@@ -105,14 +107,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         return;
       }
 
-      // ✅ If client login fails, try freelancer login
+      //If client login fails, try freelancer login
       final freelancerResult = await _freelancerLoginUseCase(
         FreelancerLoginParams(email: event.email, password: event.password),
       );
       print("Freelancer Login Result: $freelancerResult");
 
       if (freelancerResult.isRight()) {
-        final user = freelancerResult.getOrElse(() => throw Exception("Unexpected null user"));
+        freelancerResult
+            .getOrElse(() => throw Exception("Unexpected null user"));
         print("Login success. User role: freelancer");
 
         emit(state.copyWith(

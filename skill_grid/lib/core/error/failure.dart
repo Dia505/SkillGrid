@@ -20,3 +20,15 @@ class ApiFailure extends Failure {
     required super.message,
   });
 }
+
+class SharedPrefsFailure extends Failure {
+  const SharedPrefsFailure({
+    required super.message
+  });
+}
+
+class RoleMismatchFailure extends Failure {
+  const RoleMismatchFailure({
+    required super.message
+  });
+}

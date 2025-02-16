@@ -29,7 +29,8 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
   }
 
   @override
-  Future<FreelancerEntity> getFreelancerById(String freelancerId) async {
+  Future<FreelancerEntity> getFreelancerById(
+      String freelancerId, String? token) async {
     try {
       final freelancerHiveModel =
           await _hiveService.getFreelancerById(freelancerId);
@@ -66,9 +67,19 @@ class FreelancerLocalDataSource implements IFreelancerDataSource {
       final freelancerHiveModel =
           FreelancerHiveModel.fromEntity(freelancerEntity);
       await _hiveService.updateFreelancer(freelancerHiveModel);
-    }
-    catch (e) {
+    } catch (e) {
       throw Exception("Error updating freelancer: $e");
+    }
+  }
+
+  @override
+  Future<List<FreelancerEntity>> searchFreelancers(String searchQuery) {
+    try {
+      return _hiveService.searchFreelancers(searchQuery).then((value) {
+        return value.map((e) => e.toEntity()).toList();
+      });
+    } catch (e) {
+      throw Exception('Error searching freelancers: $e');
     }
   }
 }

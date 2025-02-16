@@ -127,17 +127,24 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                       const SizedBox(height: 40),
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0),
-                        child: CommonButton(
-                          buttonText: "Log In",
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<LoginBloc>().add(LoginUserEvent(
-                                  context: context,
-                                  email: _emailController.text,
-                                  password: _passwordController.text));
-                            }
-                          },
-                        ),
+                        child: BlocBuilder<LoginBloc, LoginState>(
+                            builder: (context, state) {
+                          return state.isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : CommonButton(
+                                  buttonText: "Log In",
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context.read<LoginBloc>().add(
+                                          LoginUserEvent(
+                                              context: context,
+                                              email: _emailController.text,
+                                              password:
+                                                  _passwordController.text));
+                                    }
+                                  },
+                                );
+                        }),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -155,11 +162,10 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                             InkWell(
                               onTap: () {
                                 context.read<LoginBloc>().add(
-                                      NavigateJoinAsClientFreelancerEvent(
-                                        context: context, 
-                                        destination: const JoinClientFreelancerView()
-                                      )
-                                    );
+                                    NavigateJoinAsClientFreelancerEvent(
+                                        context: context,
+                                        destination:
+                                            const JoinClientFreelancerView()));
                               },
                               child: const Text("Sign Up",
                                   style: TextStyle(

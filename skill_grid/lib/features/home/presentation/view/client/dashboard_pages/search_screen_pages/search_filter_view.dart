@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 
 class SearchFilterView extends StatefulWidget {
   const SearchFilterView({super.key});
@@ -22,8 +24,6 @@ class _SearchFilterViewState extends State<SearchFilterView> {
     const DropdownMenuItem(value: "Butwal", child: Text("Butwal")),
   ];
 
-  String? city;
-
   final List<bool> _selectedHourlyRate = [
     false,
     false,
@@ -33,16 +33,18 @@ class _SearchFilterViewState extends State<SearchFilterView> {
     false
   ];
 
-  final hourlyRateRange = [
-    "< Rs. 1000",
-    "Rs. 1000 - Rs. 2000",
-    "Rs. 2000 - Rs. 3000",
-    "Rs. 3000 - Rs. 4000",
-    "Rs. 4000 - Rs. 5000",
-    "> Rs. 5000"
-  ];
+  final hourlyRateRanges = {
+    "< Rs. 1000": (0, 999),
+    "Rs. 1000 - Rs. 2000": (1000, 2000),
+    "Rs. 2000 - Rs. 3000": (2000, 3000),
+    "Rs. 3000 - Rs. 4000": (3000, 4000),
+    "Rs. 4000 - Rs. 5000": (4000, 5000),
+    "> Rs. 5000": (5001, 100000),
+  };
 
-  double _selectedRating = 0.0;
+  String? selectedCity;
+  final Set<String> selectedHourlyRates = {};
+  double selectedRating = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,9 @@ class _SearchFilterViewState extends State<SearchFilterView> {
             items: cityList,
             onChanged: (value) {
               if (value != null) {
-                city = value;
+                setState(() {
+                  selectedCity = value;
+                });
               }
             },
           ),
@@ -83,20 +87,20 @@ class _SearchFilterViewState extends State<SearchFilterView> {
           ),
           Wrap(
             spacing: 8,
-            children: hourlyRateRange.asMap().entries.map((entry) {
-              int index = entry.key;
-              String option = entry.value;
+            children: hourlyRateRanges.keys.map((option) {
               return FilterChip(
-                label: Text(
-                  option,
-                  style: const TextStyle(fontFamily: "Inter Medium"),
-                ),
-                selected: _selectedHourlyRate[index],
+                label: Text(option,
+                    style: const TextStyle(fontFamily: "Inter Medium")),
+                selected: selectedHourlyRates.contains(option),
                 selectedColor: const Color(0xFFCCCAFF),
                 backgroundColor: Colors.white,
                 onSelected: (bool selected) {
                   setState(() {
-                    _selectedHourlyRate[index] = selected;
+                    if (selected) {
+                      selectedHourlyRates.add(option);
+                    } else {
+                      selectedHourlyRates.remove(option);
+                    }
                   });
                 },
               );
@@ -118,7 +122,7 @@ class _SearchFilterViewState extends State<SearchFilterView> {
               return Icon(
                 Icons.star,
                 color:
-                    index < _selectedRating.ceil() ? Colors.amber : Colors.grey,
+                    index < selectedRating.ceil() ? Colors.amber : Colors.grey,
                 size: 36,
               );
             }),
@@ -126,16 +130,16 @@ class _SearchFilterViewState extends State<SearchFilterView> {
           const SizedBox(height: 16),
           // Slider
           Slider(
-            value: _selectedRating,
-            min: 0.0,
-            max: 5.0,
+            value: selectedRating,
+            min: 0,
+            max: 5,
             divisions: 5,
-            label: _selectedRating.toStringAsFixed(0),
+            label: selectedRating.toStringAsFixed(0),
             activeColor: Colors.amber,
             inactiveColor: Colors.grey.shade300,
             onChanged: (value) {
               setState(() {
-                _selectedRating = value;
+                selectedRating = value;
               });
             },
           ),
@@ -146,6 +150,8 @@ class _SearchFilterViewState extends State<SearchFilterView> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
+                  context.read<SearchBloc>().add(FilterByCriteria(
+                      selectedCity, selectedHourlyRates.toList(), selectedRating.toInt()));
                   Navigator.pop(context); // Close the filter page
                 },
                 child: const Text("Apply"),
