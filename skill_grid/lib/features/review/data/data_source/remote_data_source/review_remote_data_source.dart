@@ -29,6 +29,8 @@ class ReviewRemoteDataSource implements IReviewDataSource {
             .map((dto) => ReviewApiModel.fromGetReviewByFreelancerIdD(dto))
             .toList();
 
+        print("review api models: $reviewApiModels");
+
         return ReviewApiModel.toEntityList(reviewApiModels);
       } else {
         throw Exception(response.statusMessage);
@@ -43,16 +45,14 @@ class ReviewRemoteDataSource implements IReviewDataSource {
   @override
   Future<List<ReviewEntity>> getReviewByRating(int rating) async {
     try {
-      final String url =
-          "${ApiEndpoints.getReviewByRating}/$rating";
+      final String url = "${ApiEndpoints.getReviewByRating}/$rating";
       var response = await _dio.get(url);
 
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
 
-        List<GetReviewByRatingDto> reviewDto = data
-            .map((json) => GetReviewByRatingDto.fromJson(json))
-            .toList();
+        List<GetReviewByRatingDto> reviewDto =
+            data.map((json) => GetReviewByRatingDto.fromJson(json)).toList();
 
         List<ReviewApiModel> reviewApiModels = reviewDto
             .map((dto) => ReviewApiModel.fromGetReviewByRatingDto(dto))

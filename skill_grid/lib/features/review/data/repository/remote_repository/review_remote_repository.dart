@@ -6,16 +6,19 @@ import 'package:skill_grid/features/review/domain/repository/review_repository.d
 
 class ReviewRemoteRepository implements IReviewRepository {
   final ReviewRemoteDataSource _reviewRemoteDataSource;
-  ReviewRemoteRepository({required ReviewRemoteDataSource reviewRemoteDataSource})
-    : _reviewRemoteDataSource = reviewRemoteDataSource;
+  ReviewRemoteRepository(
+      {required ReviewRemoteDataSource reviewRemoteDataSource})
+      : _reviewRemoteDataSource = reviewRemoteDataSource;
 
   @override
-  Future<Either<Failure, List<ReviewEntity>>> getReviewByFreelancerId(String freelancerId) async {
+  Future<Either<Failure, List<ReviewEntity>>> getReviewByFreelancerId(
+      String freelancerId) async {
     try {
-      final reviewList = await _reviewRemoteDataSource.getReviewByFreelancerId(freelancerId);
+      final reviewList =
+          await _reviewRemoteDataSource.getReviewByFreelancerId(freelancerId);
+      print("review list: $reviewList");
       return Right(reviewList);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(
         ApiFailure(
           message: e.toString(),
@@ -25,12 +28,13 @@ class ReviewRemoteRepository implements IReviewRepository {
   }
 
   @override
-  Future<Either<Failure, List<ReviewEntity>>> getReviewByRating(int rating) async {
+  Future<Either<Failure, List<ReviewEntity>>> getReviewByRating(
+      int rating) async {
     try {
-      final reviewList = await _reviewRemoteDataSource.getReviewByRating(rating);
+      final reviewList =
+          await _reviewRemoteDataSource.getReviewByRating(rating);
       return Right(reviewList);
-    }
-    catch (e) {
+    } catch (e) {
       return Left(
         ApiFailure(
           message: e.toString(),

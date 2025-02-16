@@ -96,18 +96,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           // Fetch reviews concurrently
           final reviewsResult = await _getReviewByFreelancerIdUseCase(
               GetReviewByFreelancerIdParams(freelancerId: freelancerId));
+          print("reviewsResult: $reviewsResult");
 
           await reviewsResult.fold(
             (failure) async => null, // Log error if necessary
             (reviews) async {
+              print("Fetched reviews: ${reviews.length}");
               avgRatingMap[freelancerId] = _calculateAverageRating(reviews);
             },
           );
         }));
-
-        avgRatingMap.forEach((freelancerId, avgRating) {
-          print('Freelancer ID: $freelancerId, Average Rating: $avgRating');
-        });
 
         emit(SearchLoaded(
             freelancers, portfolioMap, avgHourlyRateMap, avgRatingMap));
@@ -129,10 +127,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   int _calculateAverageRating(List<ReviewEntity> reviews) {
     if (reviews.isEmpty) return 0;
 
-    final totalRatings = reviews.fold<int>(
-        0, (previousValue, review) => previousValue + review.rating);
+    final total = reviews.fold(0, (sum, review) => sum + (review.rating ?? 0));
+    final avg = total ~/ reviews.length;
 
-    return (totalRatings / reviews.length).round();
+    print(
+        "Calculated avg rating: $avg from ratings: ${reviews.map((r) => r.rating).toList()}");
+    return avg;
   }
 
   Future<void> _onFilterByCriteria(
@@ -159,19 +159,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         }).toList();
       }
 
+      print("Full avgRatingMap: ${currentState.avgRatingMap}");
+
       //Filter by rating if selected
       if (event.rating != null && event.rating! > 0) {
         filteredFreelancers = filteredFreelancers.where((freelancer) {
           final rating =
               currentState.avgRatingMap[freelancer.freelancerId] ?? 0;
-          print("Freelancer ${freelancer.freelancerId} - Rating: $rating");
-          return rating == event.rating!;
+          return rating >= event.rating!;
         }).toList();
       }
 
       print("Filtered: $filteredFreelancers");
       print("Filtered count: ${filteredFreelancers.length}");
-      print("Emitting SearchLoaded with ${filteredFreelancers.length} freelancers");
+      print(
+          "Emitting SearchLoaded with ${filteredFreelancers.length} freelancers");
 
       emit(SearchLoaded(filteredFreelancers, currentState.portfolioMap,
           currentState.avgHourlyRateMap, currentState.avgRatingMap,
