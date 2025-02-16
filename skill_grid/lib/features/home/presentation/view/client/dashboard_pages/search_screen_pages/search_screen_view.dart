@@ -182,7 +182,7 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                                 address:
                                     '${freelancer.address}, ${freelancer.city}',
                                 hourlyRate: avgHourlyRate,
-                                // searchScreenImages: portfolioImages ?? [],
+                                searchScreenImages: portfolioImages ?? [],
                                 skills: freelancer.skills
                                         ?.split(',')
                                         .map((e) => e.trim())

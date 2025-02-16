@@ -14,12 +14,8 @@ class PortfolioRemoteDataSource implements IPortfolioDataSource {
   Future<List<PortfolioEntity>> getPortfolioByFreelancerId(
       String freelancerId) async {
     try {
-      final String url =
-          "${ApiEndpoints.getPortfolioByFreelancerId}/$freelancerId";
+      final String url = "${ApiEndpoints.getPortfolioByFreelancerId}/$freelancerId";
       var response = await _dio.get(url);
-
-      print("Raw Response JSON: ${response.toString()}");
-      print("Response Type: ${response.data.runtimeType}");
 
       if (response.statusCode == 200) {
         if (response.data is! List) {
@@ -27,9 +23,6 @@ class PortfolioRemoteDataSource implements IPortfolioDataSource {
         }
 
         List<dynamic> data = response.data as List<dynamic>;
-
-        // Debugging file_path type
-        print("file_path Type: ${data.first["file_path"].runtimeType}");
 
         List<GetPortfolioByFreelancerIdDto> portfolioDto = data
             .map((json) => GetPortfolioByFreelancerIdDto.fromJson(
@@ -66,7 +59,7 @@ class PortfolioRemoteDataSource implements IPortfolioDataSource {
         PortfolioEntity portfolioEntity =
             PortfolioApiModel.getPortfolioByFreelancerServiceIdDtoToEntity(
                 getPortfolioByFreelancerServiceIdDto);
-              
+
         return portfolioEntity;
       } else {
         throw Exception(response.statusMessage);

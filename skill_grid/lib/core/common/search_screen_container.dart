@@ -1,4 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class SearchScreenContainer extends StatefulWidget {
   final String freelancerProfileImgPath;
@@ -6,7 +8,7 @@ class SearchScreenContainer extends StatefulWidget {
   final String profession;
   final String address;
   final int hourlyRate;
-  final List<String>? searchScreenImages;
+  final List<String> searchScreenImages;
   final List<String> skills;
 
   const SearchScreenContainer(
@@ -16,7 +18,7 @@ class SearchScreenContainer extends StatefulWidget {
       required this.profession,
       required this.address,
       required this.hourlyRate,
-      this.searchScreenImages,
+      required this.searchScreenImages,
       required this.skills});
 
   @override
@@ -28,9 +30,9 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
 
   @override
   Widget build(BuildContext context) {
-    // activeIndex = activeIndex >= widget.searchScreenImages.length
-    //   ? widget.searchScreenImages.length - 1
-    //   : activeIndex;
+    activeIndex = activeIndex >= widget.searchScreenImages.length
+        ? widget.searchScreenImages.length - 1
+        : activeIndex;
 
     return Container(
       height: 430,
@@ -47,14 +49,15 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundImage: widget.freelancerProfileImgPath.isNotEmpty
-                        ? NetworkImage(
-                            "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}") // Adjust base URL
-                        : const AssetImage(
-                                "assets/images/default_profile_img.png")
-                            as ImageProvider,
-                    radius: 40,
-                  ),
+                      backgroundImage: widget
+                              .freelancerProfileImgPath.isNotEmpty
+                          // ? Image.network()
+                          ? NetworkImage(
+                              "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}") // Adjust base URL
+                          : const AssetImage(
+                                  "assets/images/default_profile_img.png")
+                              as ImageProvider,
+                      radius: 40),
                   const SizedBox(
                     width: 15,
                   ),
@@ -88,24 +91,25 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
             ],
           ),
           const SizedBox(height: 16),
-          // CarouselSlider.builder(
-          //   options: CarouselOptions(
-          //     height: 166,
-          //     autoPlay: true,
-          //     viewportFraction: 1,
-          //     onPageChanged: (index, reason) =>
-          //         setState(() => activeIndex = index),
-          //   ),
-          //   itemCount: widget.searchScreenImages.length,
-          //   itemBuilder: (context, index, realIndex) {
-          //     final carouselData = widget.searchScreenImages[index];
-          //     return buildSearchImage(carouselData, index);
-          //   },
-          // ),
-          // buildIndicator(),
-          // const SizedBox(
-          //   height: 10,
-          // ),
+          CarouselSlider.builder(
+            options: CarouselOptions(
+              height: 166,
+              autoPlay: true,
+              viewportFraction: 1,
+              onPageChanged: (index, reason) =>
+                  setState(() => activeIndex = index),
+            ),
+            itemCount: widget.searchScreenImages.length,
+            itemBuilder: (context, index, realIndex) {
+              final carouselData = widget.searchScreenImages[index];
+              print("Image FilepATHHH: $carouselData");
+              return buildSearchImage(carouselData, index);
+            },
+          ),
+          buildIndicator(),
+          const SizedBox(
+            height: 10,
+          ),
           buildSkillsSection(widget.skills),
         ],
       ),
@@ -128,23 +132,23 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
     );
   }
 
-  // Indicator for the carousel
-  // Widget buildIndicator() {
-  //   if (widget.searchScreenImages.isEmpty) {
-  //     return Container(); // Return an empty container if no images are available
-  //   }
+  //Indicator for the carousel
+  Widget buildIndicator() {
+    if (widget.searchScreenImages.isEmpty) {
+      return Container(); // Return an empty container if no images are available
+    }
 
-  //   return AnimatedSmoothIndicator(
-  //     activeIndex: activeIndex,
-  //     count: widget.searchScreenImages.length,
-  //     effect: const JumpingDotEffect(
-  //       dotHeight: 8,
-  //       dotWidth: 8,
-  //       activeDotColor: Color(0xFF8984F2),
-  //       dotColor: Colors.grey,
-  //     ),
-  //   );
-  // }
+    return AnimatedSmoothIndicator(
+      activeIndex: activeIndex,
+      count: widget.searchScreenImages.length,
+      effect: const JumpingDotEffect(
+        dotHeight: 8,
+        dotWidth: 8,
+        activeDotColor: Color(0xFF8984F2),
+        dotColor: Colors.grey,
+      ),
+    );
+  }
 
   Widget buildSkillsSection(List<String> skills) {
     const int maxSkillsToShow = 4; // Show up to 6 skills before showing "+X"
