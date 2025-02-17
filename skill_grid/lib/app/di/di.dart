@@ -178,9 +178,8 @@ _initLoginDependencies() async {
 
   getIt.registerFactory<LoginBloc>(() => LoginBloc(
       clientLoginUseCase: getIt<ClientLoginUseCase>(),
-      freelancerLoginUseCase: getIt<FreelancerLoginUseCase>(),
       clientDashboardCubit: getIt<ClientDashboardCubit>(),
-      freelancerDashboardCubit: getIt<FreelancerDashboardCubit>()));
+      tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 }
 
 //Join as client/freelancer dependencies
@@ -194,17 +193,17 @@ _initJoinAsClientFreelancerDependencies() async {
 
 //Splash screen dependencies
 _initSplashScreenDependencies() async {
-  getIt.registerFactory<SplashScreenCubit>(
-      () => SplashScreenCubit(getIt<OnboardScreenCubit>()));
+  getIt.registerFactory<SplashScreenCubit>(() => SplashScreenCubit(
+    getIt<OnboardScreenCubit>(),
+    getIt<ClientDashboardCubit>()
+  ));
 }
 
 //Onboard screen dependencies
 _initOnboardScreenDependencies() async {
   getIt.registerFactory<OnboardScreenCubit>(() => OnboardScreenCubit(
       loginBloc: getIt<LoginBloc>(),
-      asClientFreelancerCubit: getIt<JoinAsClientFreelancerCubit>(),
-      clientBloc: getIt<ClientBloc>(),
-      freelancerBloc: getIt<FreelancerBloc>()));
+      clientBloc: getIt<ClientBloc>()));
 }
 
 //Client dashboard dependencies

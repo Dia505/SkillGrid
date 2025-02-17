@@ -19,3 +19,13 @@ class NavigateToClientProfile extends ClientSidebarEvent {
     required this.destination
   });
 }
+
+class LogOutEvent extends ClientSidebarEvent {
+  final BuildContext context;
+  final Widget destination;
+  
+  const LogOutEvent({
+    required this.context,
+    required this.destination
+  });
+}

@@ -33,3 +33,5 @@ class ClientSidebarError extends ClientSidebarState {
   @override
   List<Object> get props => [message];
 }
+
+class LoggedOut extends ClientSidebarState {}

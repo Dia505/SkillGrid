@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
-import 'package:skill_grid/features/auth/presentation/view/join_client_freelancer_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/client_registration_view.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 
 class LoginScreenView extends StatefulWidget {
@@ -162,10 +162,10 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                             InkWell(
                               onTap: () {
                                 context.read<LoginBloc>().add(
-                                    NavigateJoinAsClientFreelancerEvent(
+                                    NavigateToRegistrationEvent(
                                         context: context,
                                         destination:
-                                            const JoinClientFreelancerView()));
+                                            const ClientRegistrationView()));
                               },
                               child: const Text("Sign Up",
                                   style: TextStyle(
