@@ -2,9 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
+import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/calendar_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/home_screen_view.dart';
@@ -32,7 +34,9 @@ class ClientDashboardState extends Equatable {
             create: (context) => ClientSidebarBloc(
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
                 tokenHelper: getIt<TokenHelper>(),
-                clientProfileBloc: getIt<ClientProfileBloc>())),
+                clientProfileBloc: getIt<ClientProfileBloc>(),
+                tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+                loginBloc: getIt<LoginBloc>())),
         BlocProvider(
             create: (context) => ClientHomeBloc(
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
 
@@ -96,12 +97,9 @@ class _DashboardSidebarState extends State<DashboardSidebar> {
             children: [
               GestureDetector(
                 onTap: () {
-                  context
-                      .read<ClientSidebarBloc>()
-                      .add(NavigateToClientProfile(
-                        context: context,
-                        destination: const ClientProfileView()
-                      ));
+                  context.read<ClientSidebarBloc>().add(NavigateToClientProfile(
+                      context: context,
+                      destination: const ClientProfileView()));
                 },
                 child: const Row(
                   children: [
@@ -161,22 +159,29 @@ class _DashboardSidebarState extends State<DashboardSidebar> {
             ],
           ),
           const Spacer(),
-          const Padding(
-            padding: EdgeInsets.only(left: 80.0),
-            child: Row(
-              children: [
-                Icon(Icons.logout, size: 28, color: Color(0XFF322E86)),
-                SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  "Log out",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: "Inter SemiBold",
-                      color: Color(0XFF322E86)),
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.only(left: 80.0),
+            child: GestureDetector(
+              onTap: () {
+                  context.read<ClientSidebarBloc>().add(LogOutEvent(
+                      context: context,
+                      destination: const LoginScreenView()));
+                },
+              child: const Row(
+                children: [
+                  Icon(Icons.logout, size: 28, color: Color(0XFF322E86)),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    "Log out",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Inter SemiBold",
+                        color: Color(0XFF322E86)),
+                  ),
+                ],
+              ),
             ),
           )
         ],
