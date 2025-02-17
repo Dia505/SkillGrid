@@ -15,9 +15,9 @@ import 'package:skill_grid/features/home/presentation/view/client/dashboard_page
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
-import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/client/client_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
 import 'package:skill_grid/features/review/domain/use_case/get_review_by_freelancer_id_use_case.dart';
 
 class ClientDashboardState extends Equatable {
@@ -48,7 +48,8 @@ class ClientDashboardState extends Equatable {
               searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
               getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
               getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
-              getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>()),
+              getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
+              freelancerProfileBloc: getIt<FreelancerProfileBloc>()),
           child: const SearchScreenView()),
       const CalendarScreenView(),
       const NotificationScreenView()

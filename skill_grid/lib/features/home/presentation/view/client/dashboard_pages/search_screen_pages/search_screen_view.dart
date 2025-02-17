@@ -95,10 +95,6 @@ class _SearchScreenViewState extends State<SearchScreenView> {
           ),
           BlocListener<SearchBloc, SearchState>(
             listener: (context, state) {
-              if (state is SearchLoaded) {
-                print(
-                    "UI Updated with filtered results: ${state.freelancers.length}");
-              }
             },
             child: BlocBuilder<SearchBloc, SearchState>(
               builder: (context, state) {
@@ -164,12 +160,12 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const FreelancerProfileView(),
-                                  ),
+                                BlocProvider.of<SearchBloc>(context).add(
+                                  NavigateToFreelancerProfile(
+                                    freelancerId: freelancer.freelancerId!,
+                                    context: context,
+                                    destination: FreelancerProfileView(freelancerId: freelancer.freelancerId!)
+                                  )
                                 );
                               },
                               child: SearchScreenContainer(

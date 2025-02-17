@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_edit_view.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/client/client_profile_bloc.dart';
 
 class ClientProfileView extends StatefulWidget {
   const ClientProfileView({super.key});

@@ -59,6 +59,7 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
   @override
   Future<FreelancerEntity> getFreelancerById(
       String freelancerId, String? token) async {
+    print("Calling getFreelancerById with ID: $freelancerId");
     try {
       final String url = "${ApiEndpoints.findFreelancerById}/$freelancerId";
 
