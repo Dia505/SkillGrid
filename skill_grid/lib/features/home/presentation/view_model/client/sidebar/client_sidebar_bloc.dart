@@ -8,7 +8,7 @@ import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/client/client_profile_bloc.dart';
 
 part 'client_sidebar_event.dart';
 part 'client_sidebar_state.dart';

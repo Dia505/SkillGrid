@@ -13,7 +13,7 @@ import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_cli
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_profile_picture_usecase.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/client/client_profile_bloc.dart';
 
 part 'client_edit_profile_event.dart';
 part 'client_edit_profile_state.dart';

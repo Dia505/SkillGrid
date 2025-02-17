@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/freelancer_profile_education_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_employment_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
 import 'package:skill_grid/features/appointment/presentation/view/send_offer_view.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FreelancerProfileView extends StatefulWidget {
-  const FreelancerProfileView({super.key});
+  final String freelancerId;
+  const FreelancerProfileView({super.key, required this.freelancerId});
 
   @override
   _FreelancerProfileViewState createState() => _FreelancerProfileViewState();
@@ -124,489 +127,521 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
     }
   ];
 
-  final List<String> skills = [
-    "Wireframing",
-    "Web Design",
-    "Mobile UI Design",
-    "User Interface Design",
-    "Figma",
-    "App Design",
-    "User Experience Design",
-    "Graphic Design",
-    "Poster Design",
-    "Logo Design"
-  ];
-
   @override
   Widget build(BuildContext context) {
-    String fullText =
-        "Hi! I'm a versatile designer with a passion for combining user experience (UX) and graphic design to create beautiful, functional, and intuitive digital experiences. With 6 years of experience in both fields, I help businesses design products that not only look great but are also easy to use and meet users' needs.";
-    String truncatedText =
-        fullText.length > 200 ? '${fullText.substring(0, 200)}...' : fullText;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Trigger event to load freelancer details, portfolio, and reviews
+      BlocProvider.of<FreelancerProfileBloc>(context)
+          .add(FetchFreelancerDetails(freelancerId: widget.freelancerId));
+    });
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 30),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 90),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 120,
-                      child: Image.asset(
-                        "assets/images/swirls-8302543_640.jpg",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const Positioned(
-                      bottom: -80,
-                      left: 145,
-                      child: SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage(
-                              "assets/images/istockphoto-1354842602-612x612.jpg"),
-                        ),
-                      ),
-                    ),
-                    const Positioned(
-                      bottom: 10,
-                      left: 235,
-                      child: CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Color(0xFF71D358),
-                        child: Icon(
-                          Icons.check,
-                          size: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  const Text(
-                    "Anjali Karki",
-                    style: TextStyle(fontFamily: "Inter Bold", fontSize: 22),
-                  ),
-                  const Text(
-                    "UI/UX Designer, Graphic Designer",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const SizedBox(
-                    width: 120,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(
-                          Icons.phone,
-                          color: Color(0XFF707070),
-                          size: 20,
-                        ),
-                        Text(
-                          "9841223790",
-                          style:
-                              TextStyle(color: Color(0XFF707070), fontSize: 15),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const SizedBox(
-                    width: 160,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          color: Color(0XFF707070),
-                          size: 20,
-                        ),
-                        Text(
-                          "Kupondole, Lalitpur",
-                          style:
-                              TextStyle(color: Color(0XFF707070), fontSize: 15),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CommonButton(
-                      buttonText: "Book an Appointment",
-                      buttonColor: const Color(0xFF7975D8),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SendOfferView(),
-                          ),
-                        );
-                      }),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
-              ),
-              Container(
-                width: 305,
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.event_available_outlined,
-                          size: 45,
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "120",
-                              style: TextStyle(
-                                  fontSize: 24, fontFamily: "Inter SemiBold"),
-                            ),
-                            Text(
-                              "bookings",
-                              style: TextStyle(
-                                  fontSize: 16, color: Color(0XFF707070)),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.emoji_events_outlined,
-                          size: 50,
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "6 years",
-                              style: TextStyle(
-                                  fontSize: 22, fontFamily: "Inter SemiBold"),
-                            ),
-                            Text(
-                              "experience",
-                              style: TextStyle(
-                                  fontSize: 16, color: Color(0XFF707070)),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
-              ),
-              // Read more functionality added here
-              Container(
-                width: 340,
-                padding: const EdgeInsets.symmetric(vertical: 10),
+    return BlocBuilder<FreelancerProfileBloc, FreelancerProfileState>(
+      builder: (context, state) {
+        if (state is FreelancerProfileLoaded) {
+          final freelancer = state.freelancerEntity;
+          String profilePictureUrl = freelancer.profilePicture ?? '';
+          String bgPictureUrl = freelancer.backgroundPicture ?? '';
+          List<String> skillList = freelancer.skills!.split(',');
+
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 30),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      _isExpanded ? fullText : truncatedText,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isExpanded = !_isExpanded;
-                        });
-                      },
-                      child: Text(
-                        _isExpanded ? 'Show Less' : 'Read More',
-                        style: const TextStyle(
-                          color: Color(0XFF544FBD),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
-              ),
-
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Services",
-                      style: TextStyle(fontFamily: "Inter Bold", fontSize: 24),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 290,
-                      child: PageView.builder(
-                        controller: _servicePageController,
-                        itemCount: serviceCategory.length,
-                        itemBuilder: (context, index) {
-                          final service = serviceCategory[index];
-                          return FreelancerProfileServiceContainer(
-                            title: service['title'],
-                            rate: service['rate'],
-                            images: service['images'],
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Center(
-                      child: SmoothPageIndicator(
-                        controller: _servicePageController,
-                        count: serviceCategory.length,
-                        effect: const WormEffect(
-                          activeDotColor: Color(0xFF544FBD),
-                          dotColor: Color(0xFF707070),
-                          dotHeight: 8,
-                          dotWidth: 8,
-                          spacing: 8,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
-              ),
-
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Reviews",
-                      style: TextStyle(fontFamily: "Inter Bold", fontSize: 24),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 472, // Height for 4 reviews and spacing
-                      child: PageView.builder(
-                        controller: _reviewPageController,
-                        itemCount: (reviews.length / 4).ceil(),
-                        itemBuilder: (context, pageIndex) {
-                          final startIndex = pageIndex * 4;
-                          final endIndex = startIndex + 4;
-                          final currentPageReviews = reviews.sublist(
-                              startIndex,
-                              endIndex > reviews.length
-                                  ? reviews.length
-                                  : endIndex);
-
-                          return Column(
-                            children: currentPageReviews.map((review) {
-                              return Column(
-                                children: [
-                                  FreelancerProfileReviewContainer(
-                                    projectTitle: review['projectTitle'] ?? '',
-                                    rating: review['rating'] ?? '',
-                                    reviewDate: review['reviewDate'] ?? '',
-                                    review: review['review'],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  const Divider(
-                                    color: Colors.grey,
-                                    thickness: 1,
-                                    indent: 0,
-                                    endIndent: 0,
-                                  ),
-                                  const SizedBox(height: 5),
-                                ],
-                              );
-                            }).toList(),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Center(
-                      child: SmoothPageIndicator(
-                        controller: _reviewPageController,
-                        count: (reviews.length / 4).ceil(),
-                        effect: const WormEffect(
-                          activeDotColor: Color(0xFF544FBD),
-                          dotColor: Color(0xFF707070),
-                          dotHeight: 8,
-                          dotWidth: 8,
-                          spacing: 8,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Skills",
-                        style:
-                            TextStyle(fontFamily: "Inter Bold", fontSize: 24)),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: 333,
-                      height: 150,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 90),
+                      child: Stack(
+                        clipBehavior: Clip.none,
                         children: [
-                          Wrap(
-                            spacing: 8.0,
-                            runSpacing: 5.0,
+                          SizedBox(
+                            width: double.infinity,
+                            height: 120,
+                            child: bgPictureUrl.isNotEmpty
+                                ? Image.network(
+                                    bgPictureUrl.contains('http')
+                                        ? bgPictureUrl
+                                        : 'http://localhost:3000/freelancer_images/$bgPictureUrl'
+                                            .replaceFirst(
+                                                'localhost', '10.0.2.2'),
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    "assets/images/swirls-8302543_640.jpg",
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                          Positioned(
+                            bottom: -80,
+                            left: 145,
+                            child: SizedBox(
+                              height: 120,
+                              width: 120,
+                              child: CircleAvatar(
+                                backgroundImage: profilePictureUrl.isNotEmpty
+                                    ? NetworkImage(profilePictureUrl
+                                        .replaceFirst('localhost', '10.0.2.2'))
+                                    : const AssetImage(
+                                            "assets/images/default_profile_img.png")
+                                        as ImageProvider,
+                              ),
+                            ),
+                          ),
+                          const Positioned(
+                            bottom: 10,
+                            left: 235,
+                            child: CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Color(0xFF71D358),
+                              child: Icon(
+                                Icons.check,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "${freelancer.firstName} ${freelancer.lastName}",
+                          style: const TextStyle(
+                              fontFamily: "Inter Bold", fontSize: 22),
+                        ),
+                        Text(
+                          "${freelancer.profession}",
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SizedBox(
+                          width: 120,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              for (var skill in skills)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFCCCAFF),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Text(
-                                    skill,
-                                    style: const TextStyle(
-                                        color: Color(0xFF625D5D), fontSize: 12),
-                                  ),
+                              const Icon(
+                                Icons.phone,
+                                color: Color(0XFF707070),
+                                size: 20,
+                              ),
+                              Text(
+                                freelancer.mobileNo,
+                                style: const TextStyle(
+                                    color: Color(0XFF707070), fontSize: 15),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SizedBox(
+                          width: 160,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: Color(0XFF707070),
+                                size: 20,
+                              ),
+                              Text(
+                                "${freelancer.address} ${freelancer.city}",
+                                style: const TextStyle(
+                                    color: Color(0XFF707070), fontSize: 15),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        CommonButton(
+                            buttonText: "Book an Appointment",
+                            buttonColor: const Color(0xFF7975D8),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SendOfferView(),
                                 ),
+                              );
+                            }),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    Container(
+                      width: 305,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.event_available_outlined,
+                                size: 45,
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    "120",
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: "Inter SemiBold"),
+                                  ),
+                                  Text(
+                                    "bookings",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Color(0XFF707070)),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.emoji_events_outlined,
+                                size: 50,
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    "${freelancer.yearsOfExperience!.toString()} years",
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontFamily: "Inter SemiBold"),
+                                  ),
+                                  const Text(
+                                    "experience",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Color(0XFF707070)),
+                                  )
+                                ],
+                              )
                             ],
                           )
                         ],
                       ),
-                    )
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    // Read more functionality added here
+                    Container(
+                      width: 340,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _isExpanded
+                                ? freelancer.bio!
+                                : freelancer.bio!.length > 200
+                                    ? '${freelancer.bio!.substring(0, 200)}...'
+                                    : freelancer.bio!,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isExpanded = !_isExpanded;
+                              });
+                            },
+                            child: Text(
+                              _isExpanded ? 'Show Less' : 'Read More',
+                              style: const TextStyle(
+                                color: Color(0XFF544FBD),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Services",
+                            style: TextStyle(
+                                fontFamily: "Inter Bold", fontSize: 24),
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: 290,
+                            child: PageView.builder(
+                              controller: _servicePageController,
+                              itemCount: serviceCategory.length,
+                              itemBuilder: (context, index) {
+                                final service = serviceCategory[index];
+                                return FreelancerProfileServiceContainer(
+                                  title: service['title'],
+                                  rate: service['rate'],
+                                  images: service['images'],
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: SmoothPageIndicator(
+                              controller: _servicePageController,
+                              count: serviceCategory.length,
+                              effect: const WormEffect(
+                                activeDotColor: Color(0xFF544FBD),
+                                dotColor: Color(0xFF707070),
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                spacing: 8,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Reviews",
+                            style: TextStyle(
+                                fontFamily: "Inter Bold", fontSize: 24),
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: 472, // Height for 4 reviews and spacing
+                            child: PageView.builder(
+                              controller: _reviewPageController,
+                              itemCount: (reviews.length / 4).ceil(),
+                              itemBuilder: (context, pageIndex) {
+                                final startIndex = pageIndex * 4;
+                                final endIndex = startIndex + 4;
+                                final currentPageReviews = reviews.sublist(
+                                    startIndex,
+                                    endIndex > reviews.length
+                                        ? reviews.length
+                                        : endIndex);
+
+                                return Column(
+                                  children: currentPageReviews.map((review) {
+                                    return Column(
+                                      children: [
+                                        FreelancerProfileReviewContainer(
+                                          projectTitle:
+                                              review['projectTitle'] ?? '',
+                                          rating: review['rating'] ?? '',
+                                          reviewDate:
+                                              review['reviewDate'] ?? '',
+                                          review: review['review'],
+                                        ),
+                                        const SizedBox(height: 5),
+                                        const Divider(
+                                          color: Colors.grey,
+                                          thickness: 1,
+                                          indent: 0,
+                                          endIndent: 0,
+                                        ),
+                                        const SizedBox(height: 5),
+                                      ],
+                                    );
+                                  }).toList(),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: SmoothPageIndicator(
+                              controller: _reviewPageController,
+                              count: (reviews.length / 4).ceil(),
+                              effect: const WormEffect(
+                                activeDotColor: Color(0xFF544FBD),
+                                dotColor: Color(0xFF707070),
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                spacing: 8,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Skills",
+                              style: TextStyle(
+                                  fontFamily: "Inter Bold", fontSize: 24)),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: 333,
+                            height: 150,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Wrap(
+                                  spacing: 8.0,
+                                  runSpacing: 5.0,
+                                  children: [
+                                    for (var skill in skillList)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFCCCAFF),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Text(
+                                          skill,
+                                          style: const TextStyle(
+                                              color: Color(0xFF625D5D),
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Education",
+                              style: TextStyle(
+                                  fontFamily: "Inter Bold", fontSize: 24)),
+                          SizedBox(height: 10),
+                          FreelancerProfileEducationContainer(
+                            degreeTitle: "Bachelors in Computing",
+                            institutionName: "Islington College",
+                            startDate: "May 2017",
+                            endDate: "June 2020",
+                          ),
+                          SizedBox(height: 10),
+                          FreelancerProfileEducationContainer(
+                            degreeTitle: "A levels",
+                            institutionName: "St. Xavier's College",
+                            startDate: "April 2015",
+                            endDate: "March 2017",
+                          )
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Employment",
+                              style: TextStyle(
+                                  fontFamily: "Inter Bold", fontSize: 24)),
+                          SizedBox(height: 10),
+                          FreelancerProfileEmploymentContainer(
+                            jobTitle: "UI/UX Designer",
+                            companyName: "InnoSphere Technologies",
+                            startDate: "July 2024",
+                            endDate: "Present",
+                            description:
+                                "Crafted intuitive and visually appealing user interfaces for web and mobile applications. Conducted user research, wireframing, and prototyping to enhance user experiences.",
+                          ),
+                          SizedBox(height: 10),
+                          FreelancerProfileEmploymentContainer(
+                            jobTitle: "UI/UX Designer",
+                            companyName: "TechHive",
+                            startDate: "March 2022",
+                            endDate: "January 2024",
+                            description:
+                                "Worked on web and mobile apps (figma)",
+                          ),
+                          SizedBox(height: 10),
+                          FreelancerProfileEmploymentContainer(
+                            jobTitle: "UI/UX intern",
+                            companyName: "NextGen IT",
+                            startDate: "December 2020",
+                            endDate: "July 2021",
+                            description:
+                                "Assisted in designing user-friendly interfaces for web and mobile platforms. Supported user research, wireframing, and prototyping tasks to improve usability.",
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Education",
-                        style:
-                            TextStyle(fontFamily: "Inter Bold", fontSize: 24)),
-                    SizedBox(height: 10),
-                    FreelancerProfileEducationContainer(
-                      degreeTitle: "Bachelors in Computing",
-                      institutionName: "Islington College",
-                      startDate: "May 2017",
-                      endDate: "June 2020",
-                    ),
-                    SizedBox(height: 10),
-                    FreelancerProfileEducationContainer(
-                      degreeTitle: "A levels",
-                      institutionName: "St. Xavier's College",
-                      startDate: "April 2015",
-                      endDate: "March 2017",
-                    )
-                  ],
-                ),
-              ),
-              const Divider(
-                color: Colors.grey,
-                thickness: 1,
-                indent: 20,
-                endIndent: 20,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Employment",
-                        style:
-                            TextStyle(fontFamily: "Inter Bold", fontSize: 24)),
-                    SizedBox(height: 10),
-                    FreelancerProfileEmploymentContainer(
-                      jobTitle: "UI/UX Designer",
-                      companyName: "InnoSphere Technologies",
-                      startDate: "July 2024",
-                      endDate: "Present",
-                      description:
-                          "Crafted intuitive and visually appealing user interfaces for web and mobile applications. Conducted user research, wireframing, and prototyping to enhance user experiences.",
-                    ),
-                    SizedBox(height: 10),
-                    FreelancerProfileEmploymentContainer(
-                      jobTitle: "UI/UX Designer",
-                      companyName: "TechHive",
-                      startDate: "March 2022",
-                      endDate: "January 2024",
-                      description: "Worked on web and mobile apps (figma)",
-                    ),
-                    SizedBox(height: 10),
-                    FreelancerProfileEmploymentContainer(
-                      jobTitle: "UI/UX intern",
-                      companyName: "NextGen IT",
-                      startDate: "December 2020",
-                      endDate: "July 2021",
-                      description:
-                          "Assisted in designing user-friendly interfaces for web and mobile platforms. Supported user research, wireframing, and prototyping tasks to improve usability.",
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: Text("Hello"),
+          );
+        }
+      },
     );
   }
 }

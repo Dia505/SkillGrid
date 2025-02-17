@@ -44,8 +44,9 @@ import 'package:skill_grid/features/portfolio/data/repository/local_repository/p
 import 'package:skill_grid/features/portfolio/data/repository/remote_repository/portfolio_remote_repository.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/edit_profile/client_edit_profile_bloc.dart';
-import 'package:skill_grid/features/profile/presentation/view_model/client/profile/client_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/edit_profile/client_edit_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/client/client_profile_bloc.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
 import 'package:skill_grid/features/review/data/data_source/local_data_source/review_local_data_source.dart';
 import 'package:skill_grid/features/review/data/data_source/remote_data_source/review_remote_data_source.dart';
 import 'package:skill_grid/features/review/data/repository/local_repository/review_local_repository.dart';
@@ -78,6 +79,7 @@ Future<void> initDependencies() async {
   await _initPortfolioDependencies();
   await _initSearchFreelancersDependencies();
   await _initReviewDependencies();
+  await _initFreelancerProfileDependencies();
 }
 
 _initHiveService() {
@@ -333,6 +335,14 @@ _initSearchFreelancersDependencies() async {
       getPortfolioByFreelancerServiceIdUseCase:
           getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
       getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
-      getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>()));
+      getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
+      freelancerProfileBloc: getIt<FreelancerProfileBloc>()));
+}
+
+//Freelancer profile screen dependencies
+_initFreelancerProfileDependencies() async {
+  getIt.registerFactory<FreelancerProfileBloc>(() => FreelancerProfileBloc(
+    getFreelancerByIdUseCase: getIt<GetFreelancerByIdUseCase>()
+  ));
 }
 

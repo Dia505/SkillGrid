@@ -6,6 +6,7 @@ import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/sea
 import 'package:skill_grid/features/freelancer_service/domain/entity/freelancer_service_entity.dart';
 import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
+import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
 import 'package:skill_grid/features/review/domain/entity/review_entity.dart';
 import 'package:skill_grid/features/review/domain/use_case/get_review_by_freelancer_id_use_case.dart';
 
@@ -19,6 +20,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final GetFreelancerServiceByFreelancerIdUseCase
       _getFreelancerSerivceByFreelancerIdUseCase;
   final GetReviewByFreelancerIdUseCase _getReviewByFreelancerIdUseCase;
+  final FreelancerProfileBloc _freelancerProfileBloc;
 
   SearchBloc(
       {required SearchFreelancersUseCase searchFreelancersUseCase,
@@ -26,16 +28,29 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           getPortfolioByFreelancerServiceIdUseCase,
       required GetFreelancerServiceByFreelancerIdUseCase
           getFreelancerSerivceByFreelancerIdUseCase,
-      required GetReviewByFreelancerIdUseCase getReviewByFreelancerIdUseCase})
+      required GetReviewByFreelancerIdUseCase getReviewByFreelancerIdUseCase,
+      required FreelancerProfileBloc freelancerProfileBloc})
       : _searchFreelancersUseCase = searchFreelancersUseCase,
         _getPortfolioByFreelancerServiceIdUseCase =
             getPortfolioByFreelancerServiceIdUseCase,
         _getFreelancerSerivceByFreelancerIdUseCase =
             getFreelancerSerivceByFreelancerIdUseCase,
         _getReviewByFreelancerIdUseCase = getReviewByFreelancerIdUseCase,
+        _freelancerProfileBloc = freelancerProfileBloc,
         super(SearchInitial()) {
     on<SearchFreelancers>(_onSearchFreelancers);
+
     on<FilterByCriteria>(_onFilterByCriteria);
+
+    on<NavigateToFreelancerProfile>((event, emit) {
+      Navigator.push(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+              value: _freelancerProfileBloc, child: event.destination),
+        ),
+      );
+    });
   }
 
   Future<void> _onSearchFreelancers(
@@ -159,8 +174,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         }).toList();
       }
 
-      print("Full avgRatingMap: ${currentState.avgRatingMap}");
-
       //Filter by rating if selected
       if (event.rating != null && event.rating! > 0) {
         filteredFreelancers = filteredFreelancers.where((freelancer) {
@@ -172,8 +185,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       print("Filtered: $filteredFreelancers");
       print("Filtered count: ${filteredFreelancers.length}");
-      print(
-          "Emitting SearchLoaded with ${filteredFreelancers.length} freelancers");
 
       emit(SearchLoaded(filteredFreelancers, currentState.portfolioMap,
           currentState.avgHourlyRateMap, currentState.avgRatingMap,
