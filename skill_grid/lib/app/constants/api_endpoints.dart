@@ -32,4 +32,7 @@ class ApiEndpoints {
   //Review routes
   static const String getReviewByFreelancerId = "review/freelancer";
   static const String getReviewByRating = "review/rating";
+
+  //Education routes
+  static const String getEducationByFreelancerId = "education/freelancer";
 }

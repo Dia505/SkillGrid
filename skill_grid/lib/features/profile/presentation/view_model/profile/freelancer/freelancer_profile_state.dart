@@ -13,7 +13,12 @@ class FreelancerProfileLoading extends FreelancerProfileState {}
 
 class FreelancerProfileLoaded extends FreelancerProfileState {
   final FreelancerEntity freelancerEntity;
-  const FreelancerProfileLoaded(this.freelancerEntity);
+  final List<FreelancerServiceEntity> services;
+  final List<PortfolioEntity> portfolios;
+  final List<ReviewEntity> reviews;
+  final List<EducationEntity> education;
+
+  const FreelancerProfileLoaded(this.freelancerEntity, this.services, this.portfolios, this.reviews, this.education);
 
   @override
   List<Object?> get props => [freelancerEntity];

@@ -102,7 +102,6 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
             itemCount: widget.searchScreenImages.length,
             itemBuilder: (context, index, realIndex) {
               final carouselData = widget.searchScreenImages[index];
-              print("Image FilepATHHH: $carouselData");
               return buildSearchImage(carouselData, index);
             },
           ),
@@ -124,7 +123,8 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Image.network(
-          carouselData, // Dynamically get image from carouselData
+          carouselData.replaceFirst('localhost',
+              '10.0.2.2'), // Dynamically get image from carouselData
           fit: BoxFit.cover,
           alignment: Alignment.topCenter,
         ),

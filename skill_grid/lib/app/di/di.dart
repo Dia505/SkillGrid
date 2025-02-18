@@ -29,6 +29,11 @@ import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
+import 'package:skill_grid/features/education/data/data_source/local_data_source/education_local_data_source.dart';
+import 'package:skill_grid/features/education/data/data_source/remote_data_source/education_remote_data_source.dart';
+import 'package:skill_grid/features/education/data/repository/local_repository/education_local_repository.dart';
+import 'package:skill_grid/features/education/data/repository/remote_repository/education_remote_repository.dart';
+import 'package:skill_grid/features/education/domain/use_case/get_education_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/freelancer_service/data/data_source/local_data_source/freelancer_service_local_data_source.dart';
 import 'package:skill_grid/features/freelancer_service/data/data_source/remote_data_source/freelancer_service_remote_data_source.dart';
 import 'package:skill_grid/features/freelancer_service/data/repository/local_repository/freelancer_service_local_repository.dart';
@@ -80,6 +85,7 @@ Future<void> initDependencies() async {
   await _initSearchFreelancersDependencies();
   await _initReviewDependencies();
   await _initFreelancerProfileDependencies();
+  await _initEducationDependencies();
 }
 
 _initHiveService() {
@@ -196,16 +202,13 @@ _initJoinAsClientFreelancerDependencies() async {
 //Splash screen dependencies
 _initSplashScreenDependencies() async {
   getIt.registerFactory<SplashScreenCubit>(() => SplashScreenCubit(
-    getIt<OnboardScreenCubit>(),
-    getIt<ClientDashboardCubit>()
-  ));
+      getIt<OnboardScreenCubit>(), getIt<ClientDashboardCubit>()));
 }
 
 //Onboard screen dependencies
 _initOnboardScreenDependencies() async {
   getIt.registerFactory<OnboardScreenCubit>(() => OnboardScreenCubit(
-      loginBloc: getIt<LoginBloc>(),
-      clientBloc: getIt<ClientBloc>()));
+      loginBloc: getIt<LoginBloc>(), clientBloc: getIt<ClientBloc>()));
 }
 
 //Client dashboard dependencies
@@ -263,65 +266,64 @@ _initFreelancerServiceDependencies() async {
   getIt.registerLazySingleton<FreelancerServiceRemoteDataSource>(
       () => FreelancerServiceRemoteDataSource(dio: getIt<Dio>()));
 
-  getIt.registerLazySingleton<FreelancerServiceLocalRepository>(
-    () => FreelancerServiceLocalRepository(freelancerServiceLocalDataSource: getIt<FreelancerServiceLocalDataSource>())
-  );
-  getIt.registerLazySingleton<FreelancerServiceRemoteRepository>(
-    () => FreelancerServiceRemoteRepository(freelancerServiceRemoteDataSource: getIt<FreelancerServiceRemoteDataSource>())
-  );
+  getIt.registerLazySingleton<FreelancerServiceLocalRepository>(() =>
+      FreelancerServiceLocalRepository(
+          freelancerServiceLocalDataSource:
+              getIt<FreelancerServiceLocalDataSource>()));
+  getIt.registerLazySingleton<FreelancerServiceRemoteRepository>(() =>
+      FreelancerServiceRemoteRepository(
+          freelancerServiceRemoteDataSource:
+              getIt<FreelancerServiceRemoteDataSource>()));
 
-  getIt.registerLazySingleton<GetFreelancerServiceByFreelancerIdUseCase>(
-    () => GetFreelancerServiceByFreelancerIdUseCase(freelancerServiceRepository: getIt<FreelancerServiceRemoteRepository>())
-  );
+  getIt.registerLazySingleton<GetFreelancerServiceByFreelancerIdUseCase>(() =>
+      GetFreelancerServiceByFreelancerIdUseCase(
+          freelancerServiceRepository:
+              getIt<FreelancerServiceRemoteRepository>()));
 }
 
 //Portfolio dependencies
 _initPortfolioDependencies() async {
   getIt.registerLazySingleton<PortfolioLocalDataSource>(
-    () => PortfolioLocalDataSource(hiveService: getIt())
-  );
+      () => PortfolioLocalDataSource(hiveService: getIt()));
   getIt.registerLazySingleton<PortfolioRemoteDataSource>(
-    () => PortfolioRemoteDataSource(dio: getIt<Dio>())
-  );
+      () => PortfolioRemoteDataSource(dio: getIt<Dio>()));
 
-  getIt.registerLazySingleton<PortfolioLocalRepository>(
-    () => PortfolioLocalRepository(portfolioLocalDataSource: getIt<PortfolioLocalDataSource>())
-  );
-  getIt.registerLazySingleton<PortfolioRemoteRepository>(
-    () => PortfolioRemoteRepository(portfolioRemoteDataSource: getIt<PortfolioRemoteDataSource>())
-  );
+  getIt.registerLazySingleton<PortfolioLocalRepository>(() =>
+      PortfolioLocalRepository(
+          portfolioLocalDataSource: getIt<PortfolioLocalDataSource>()));
+  getIt.registerLazySingleton<PortfolioRemoteRepository>(() =>
+      PortfolioRemoteRepository(
+          portfolioRemoteDataSource: getIt<PortfolioRemoteDataSource>()));
 
   getIt.registerLazySingleton<GetPortfolioByFreelancerIdUseCase>(() =>
       GetPortfolioByFreelancerIdUseCase(
           portfolioRepository: getIt<PortfolioRemoteRepository>()));
 
-  getIt.registerLazySingleton<GetPortfolioByFreelancerServiceIdUseCase>(
-    () => GetPortfolioByFreelancerServiceIdUseCase(portfolioRepository: getIt<PortfolioRemoteRepository>())
-  );
+  getIt.registerLazySingleton<GetPortfolioByFreelancerServiceIdUseCase>(() =>
+      GetPortfolioByFreelancerServiceIdUseCase(
+          portfolioRepository: getIt<PortfolioRemoteRepository>()));
 }
 
 //Review dependencies
 _initReviewDependencies() async {
   getIt.registerLazySingleton<ReviewLocalDataSource>(
-    () => ReviewLocalDataSource(hiveService: getIt())
-  );
+      () => ReviewLocalDataSource(hiveService: getIt()));
   getIt.registerLazySingleton<ReviewRemoteDataSource>(
-    () => ReviewRemoteDataSource(dio: getIt<Dio>())
-  );
-  
-  getIt.registerLazySingleton<ReviewLocalRepository>(
-    () => ReviewLocalRepository(reviewLocalDataSource: getIt<ReviewLocalDataSource>())
-  );
-  getIt.registerLazySingleton<ReviewRemoteRepository>(
-    () => ReviewRemoteRepository(reviewRemoteDataSource: getIt<ReviewRemoteDataSource>())
-  );
+      () => ReviewRemoteDataSource(dio: getIt<Dio>()));
 
-  getIt.registerLazySingleton<GetReviewByFreelancerIdUseCase>(
-    () => GetReviewByFreelancerIdUseCase(reviewRepository: getIt<ReviewRemoteRepository>())
-  );
-  getIt.registerLazySingleton<GetReviewByRatingUseCase>(
-    () => GetReviewByRatingUseCase(reviewRepository: getIt<ReviewRemoteRepository>())
-  );
+  getIt.registerLazySingleton<ReviewLocalRepository>(() =>
+      ReviewLocalRepository(
+          reviewLocalDataSource: getIt<ReviewLocalDataSource>()));
+  getIt.registerLazySingleton<ReviewRemoteRepository>(() =>
+      ReviewRemoteRepository(
+          reviewRemoteDataSource: getIt<ReviewRemoteDataSource>()));
+
+  getIt.registerLazySingleton<GetReviewByFreelancerIdUseCase>(() =>
+      GetReviewByFreelancerIdUseCase(
+          reviewRepository: getIt<ReviewRemoteRepository>()));
+  getIt.registerLazySingleton<GetReviewByRatingUseCase>(() =>
+      GetReviewByRatingUseCase(
+          reviewRepository: getIt<ReviewRemoteRepository>()));
 }
 
 //Search screen dependencies
@@ -334,15 +336,41 @@ _initSearchFreelancersDependencies() async {
       searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
       getPortfolioByFreelancerServiceIdUseCase:
           getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
-      getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
+      getFreelancerSerivceByFreelancerIdUseCase:
+          getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
       getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
       freelancerProfileBloc: getIt<FreelancerProfileBloc>()));
+}
+
+//Education dependencies
+_initEducationDependencies() async {
+  getIt.registerLazySingleton<EducationLocalDataSource>(
+      () => EducationLocalDataSource(hiveService: getIt()));
+  getIt.registerLazySingleton<EducationRemoteDataSource>(
+      () => EducationRemoteDataSource(dio: getIt<Dio>()));
+
+  getIt.registerLazySingleton<EducationLocalRepository>(() =>
+      EducationLocalRepository(
+          educationLocalDataSource: getIt<EducationLocalDataSource>()));
+  getIt.registerLazySingleton<EducationRemoteRepository>(() =>
+      EducationRemoteRepository(
+          educationRemoteDataSource: getIt<EducationRemoteDataSource>()));
+
+  getIt.registerLazySingleton<GetEducationByFreelancerIdUseCase>(() =>
+    GetEducationByFreelancerIdUseCase(
+      educationRepository: getIt<EducationRemoteRepository>(), 
+      tokenSharedPrefs: getIt<TokenSharedPrefs>()
+    )
+  );
 }
 
 //Freelancer profile screen dependencies
 _initFreelancerProfileDependencies() async {
   getIt.registerFactory<FreelancerProfileBloc>(() => FreelancerProfileBloc(
-    getFreelancerByIdUseCase: getIt<GetFreelancerByIdUseCase>()
-  ));
+      getFreelancerByIdUseCase: getIt<GetFreelancerByIdUseCase>(),
+      getFreelancerServiceByFreelancerIdUseCase:
+          getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
+      getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
+      getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
+      getEducationByFreelancerIdUseCase: getIt<GetEducationByFreelancerIdUseCase>()));
 }
-

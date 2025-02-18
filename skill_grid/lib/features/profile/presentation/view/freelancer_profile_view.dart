@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/freelancer_profile_education_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_employment_container.dart';
-import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
 import 'package:skill_grid/features/appointment/presentation/view/send_offer_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
@@ -20,112 +20,28 @@ class FreelancerProfileView extends StatefulWidget {
 class _FreelancerProfileViewState extends State<FreelancerProfileView> {
   bool _isExpanded = false;
 
-  final List<Map<String, dynamic>> serviceCategory = [
-    {
-      "title": "Website design",
-      "rate": 4500,
-      "images": [
-        "assets/images/b5ccf2b2-3e9a-490b-ac55-a94a768f767a-cover.png",
-        "assets/images/best-web-design-3.webp",
-        "assets/images/original-9fdc82cb2eeb827abf10f933e53d11ff.jpg",
-      ],
-    },
-    {
-      "title": "Mobile app design",
-      "rate": 6000,
-      "images": [
-        "assets/images/0b71f547f247696096e861b71e57b7ea.jpg",
-        "assets/images/bf14f681b97237c4b6d48c795b2d525c75ab9dae-1440x835.png",
-        "assets/images/image_processing20210430-26016-12xyd9w.jpg",
-      ],
-    },
-    {
-      "title": "Graphic design",
-      "rate": 3500,
-      "images": [
-        "assets/images/10472-original.jpg",
-        "assets/images/attachment_59153347.png"
-      ],
-    },
-  ];
-
   final PageController _servicePageController = PageController();
   int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _servicePageController.addListener(() {
-      setState(() {
-        _currentPage = _servicePageController.page!.toInt();
-      });
+
+    // Ensure the controller is only used when the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _servicePageController.addListener(() {
+          if (mounted) {
+            setState(() {
+              _currentPage = _servicePageController.page?.toInt() ?? 0;
+            });
+          }
+        });
+      }
     });
   }
 
   final PageController _reviewPageController = PageController();
-
-  final List<Map<String, String?>> reviews = [
-    {
-      "projectTitle": "Figma designs for our management system",
-      "rating": "⭐⭐⭐⭐ 4.0",
-      "reviewDate": "20 Jan, 2022",
-      "review": "“It was great to work with Anjali!”"
-    },
-    {
-      "projectTitle": "Create web mockups for Somerset Interior Studio",
-      "rating": "⭐⭐⭐⭐⭐ 5.0",
-      "reviewDate": "26 May, 2022",
-      "review": "“Anjali does amazing work! Delivered a great product”"
-    },
-    {
-      "projectTitle": "Meal Rush” mobile app design",
-      "rating": "⭐⭐⭐⭐ 4.0",
-      "reviewDate": "5 Mar, 2023",
-      "review": null
-    },
-    {
-      "projectTitle": "Poster for “Study in Europe” seminar",
-      "rating": "⭐⭐⭐⭐ 4.0",
-      "reviewDate": "6 June, 2023",
-      "review": "“It was great to work with Anjali!”"
-    },
-    {
-      "projectTitle": "Logo Design for TechFest 2023",
-      "rating": "⭐⭐⭐⭐⭐ 5.0",
-      "reviewDate": "15 July, 2023",
-      "review": "“Fantastic work and great communication!”"
-    },
-    {
-      "projectTitle": "UI redesign for “QuickMed” app",
-      "rating": "⭐⭐⭐⭐ 4.0",
-      "reviewDate": "10 Sep, 2023",
-      "review": "“Anjali was professional and delivered on time.”"
-    },
-    {
-      "projectTitle": "Brand Identity for CoffeeHouse Co.",
-      "rating": "⭐⭐⭐⭐⭐ 5.0",
-      "reviewDate": "1 Oct, 2023",
-      "review": "“Very creative and easy to work with.”"
-    },
-    {
-      "projectTitle": "Social Media Campaign Designs",
-      "rating": "⭐⭐⭐⭐ 4.0",
-      "reviewDate": "20 Dec, 2023",
-      "review": "“Great designs and quick turnaround.”"
-    },
-    {
-      "projectTitle": "E-commerce App Wireframes",
-      "rating": "⭐⭐⭐⭐ 4.0",
-      "reviewDate": "1 Jan, 2024",
-      "review": null
-    },
-    {
-      "projectTitle": "Packaging Design for EcoFriendly",
-      "rating": "⭐⭐⭐⭐⭐ 5.0",
-      "reviewDate": "10 Jan, 2024",
-      "review": "“Exceeded our expectations!”"
-    }
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -133,12 +49,18 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
       // Trigger event to load freelancer details, portfolio, and reviews
       BlocProvider.of<FreelancerProfileBloc>(context)
           .add(FetchFreelancerDetails(freelancerId: widget.freelancerId));
+      //
     });
 
     return BlocBuilder<FreelancerProfileBloc, FreelancerProfileState>(
       builder: (context, state) {
         if (state is FreelancerProfileLoaded) {
           final freelancer = state.freelancerEntity;
+          final services = state.services;
+          final portfolios = state.portfolios;
+          final reviews = state.reviews;
+          print("Reviews: $reviews");
+          final education = state.education;
           String profilePictureUrl = freelancer.profilePicture ?? '';
           String bgPictureUrl = freelancer.backgroundPicture ?? '';
           List<String> skillList = freelancer.skills!.split(',');
@@ -397,13 +319,24 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                             height: 290,
                             child: PageView.builder(
                               controller: _servicePageController,
-                              itemCount: serviceCategory.length,
+                              itemCount: services.length,
+                              physics: const PageScrollPhysics(),
                               itemBuilder: (context, index) {
-                                final service = serviceCategory[index];
+                                final service = services[index];
+
+                                final servicePortfolios = portfolios
+                                    .where((portfolio) =>
+                                        portfolio.freelancerService
+                                            .freelancerServiceId ==
+                                        service.freelancerServiceId)
+                                    .map((portfolio) => portfolio.filePath)
+                                    .expand((filePaths) => filePaths)
+                                    .toList();
+
                                 return FreelancerProfileServiceContainer(
-                                  title: service['title'],
-                                  rate: service['rate'],
-                                  images: service['images'],
+                                  title: service.service.serviceName,
+                                  rate: service.hourlyRate,
+                                  images: servicePortfolios,
                                 );
                               },
                             ),
@@ -412,7 +345,7 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                           Center(
                             child: SmoothPageIndicator(
                               controller: _servicePageController,
-                              count: serviceCategory.length,
+                              count: services.length,
                               effect: const WormEffect(
                                 activeDotColor: Color(0xFF544FBD),
                                 dotColor: Color(0xFF707070),
@@ -433,76 +366,77 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                       endIndent: 20,
                     ),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 10),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             "Reviews",
                             style: TextStyle(
                                 fontFamily: "Inter Bold", fontSize: 24),
                           ),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                            height: 472, // Height for 4 reviews and spacing
-                            child: PageView.builder(
-                              controller: _reviewPageController,
-                              itemCount: (reviews.length / 4).ceil(),
-                              itemBuilder: (context, pageIndex) {
-                                final startIndex = pageIndex * 4;
-                                final endIndex = startIndex + 4;
-                                final currentPageReviews = reviews.sublist(
-                                    startIndex,
-                                    endIndex > reviews.length
-                                        ? reviews.length
-                                        : endIndex);
+                          SizedBox(height: 10),
+                          // SizedBox(
+                          //   height: 472, // Height for 4 reviews and spacing
+                          //   child: PageView.builder(
+                          //     controller: _reviewPageController,
+                          //     itemCount: (reviews.length / 4).ceil(),
+                          //     itemBuilder: (context, pageIndex) {
+                          //       final startIndex = pageIndex * 4;
+                          //       final endIndex = startIndex + 4;
+                          //       final currentPageReviews = reviews.sublist(
+                          //           startIndex,
+                          //           endIndex > reviews.length
+                          //               ? reviews.length
+                          //               : endIndex);
 
-                                return Column(
-                                  children: currentPageReviews.map((review) {
-                                    return Column(
-                                      children: [
-                                        FreelancerProfileReviewContainer(
-                                          projectTitle:
-                                              review['projectTitle'] ?? '',
-                                          rating: review['rating'] ?? '',
-                                          reviewDate:
-                                              review['reviewDate'] ?? '',
-                                          review: review['review'],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        const Divider(
-                                          color: Colors.grey,
-                                          thickness: 1,
-                                          indent: 0,
-                                          endIndent: 0,
-                                        ),
-                                        const SizedBox(height: 5),
-                                      ],
-                                    );
-                                  }).toList(),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Center(
-                            child: SmoothPageIndicator(
-                              controller: _reviewPageController,
-                              count: (reviews.length / 4).ceil(),
-                              effect: const WormEffect(
-                                activeDotColor: Color(0xFF544FBD),
-                                dotColor: Color(0xFF707070),
-                                dotHeight: 8,
-                                dotWidth: 8,
-                                spacing: 8,
-                              ),
-                            ),
-                          )
+                          //       return Column(
+                          //         children: currentPageReviews.map((review) {
+                          //           return Column(
+                          //             children: [
+                          //               FreelancerProfileReviewContainer(
+                          //                 projectTitle: review
+                          //                     .appointment.appointmentPurpose,
+                          //                 rating: review.rating.toString(),
+                          //                 reviewDate: review.reviewDate
+                          //                     .toIso8601String(),
+                          //                 review: review.review,
+                          //               ),
+                          //               const SizedBox(height: 5),
+                          //               const Divider(
+                          //                 color: Colors.grey,
+                          //                 thickness: 1,
+                          //                 indent: 0,
+                          //                 endIndent: 0,
+                          //               ),
+                          //               const SizedBox(height: 5),
+                          //             ],
+                          //           );
+                          //         }).toList(),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+                          SizedBox(height: 10),
+                          // Center(
+                          //   child: SmoothPageIndicator(
+                          //     controller: _reviewPageController,
+                          //     count: (reviews.length / 4).ceil(),
+                          //     effect: const WormEffect(
+                          //       activeDotColor: Color(0xFF544FBD),
+                          //       dotColor: Color(0xFF707070),
+                          //       dotHeight: 8,
+                          //       dotWidth: 8,
+                          //       spacing: 8,
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                     ),
+
                     const SizedBox(height: 10),
                     const Divider(
                       color: Colors.grey,
@@ -560,32 +494,41 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                       indent: 20,
                       endIndent: 20,
                     ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Education",
-                              style: TextStyle(
-                                  fontFamily: "Inter Bold", fontSize: 24)),
-                          SizedBox(height: 10),
-                          FreelancerProfileEducationContainer(
-                            degreeTitle: "Bachelors in Computing",
-                            institutionName: "Islington College",
-                            startDate: "May 2017",
-                            endDate: "June 2020",
+                          const Text(
+                            "Education",
+                            style: TextStyle(
+                                fontFamily: "Inter Bold", fontSize: 24),
                           ),
-                          SizedBox(height: 10),
-                          FreelancerProfileEducationContainer(
-                            degreeTitle: "A levels",
-                            institutionName: "St. Xavier's College",
-                            startDate: "April 2015",
-                            endDate: "March 2017",
-                          )
+                          const SizedBox(height: 10),
+                          // Wrap the mapped education list in a Column
+                          Column(
+                            children: education.map((edu) {
+                              String formattedStartDate =
+                                  DateFormat('yyyy-MM-dd')
+                                      .format(edu.startDate);
+                              String formattedEndDate =
+                                  DateFormat('yyyy-MM-dd').format(edu.endDate);
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: FreelancerProfileEducationContainer(
+                                  degreeTitle: edu.degreeTitle,
+                                  institutionName: edu.institutionName,
+                                  startDate: formattedStartDate,
+                                  endDate: formattedEndDate,
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ],
                       ),
                     ),
+
                     const Divider(
                       color: Colors.grey,
                       thickness: 1,

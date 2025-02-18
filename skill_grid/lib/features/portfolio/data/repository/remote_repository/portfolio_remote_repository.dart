@@ -32,7 +32,6 @@ class PortfolioRemoteRepository implements IPortfolioRepository {
     try {
       final portfolio = await _portfolioRemoteDataSource
           .getPortfolioByFreelancerServiceId(freelancerServiceId);
-      print("repo, $portfolio");
       return Right(portfolio);
     } catch (e) {
       return Left(

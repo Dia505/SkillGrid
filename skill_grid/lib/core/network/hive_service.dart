@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:skill_grid/app/constants/hive_table_constant.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
+import 'package:skill_grid/features/education/data/model/education_hive_model.dart';
 import 'package:skill_grid/features/freelancer_service/data/model/freelancer_service_hive_model.dart';
 import 'package:skill_grid/features/portfolio/data/model/portfolio_hive_model.dart';
 import 'package:skill_grid/features/review/data/model/review_hive_model.dart';
@@ -249,5 +250,13 @@ class HiveService {
     await Hive.close();
   }
 
-  //
+  //--------------------Education Queries--------------------
+  Future<List<EducationHiveModel>> getEducationByFreelancerId(String freelancerId) async {
+    var box = await Hive.openBox<EducationHiveModel>(HiveTableConstant.educationBox);
+
+    return box.values
+      .where((education) =>
+        education.freelancer.freelancerId == freelancerId
+      ).toList();
+  }
 }
