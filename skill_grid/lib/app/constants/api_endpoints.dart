@@ -35,4 +35,7 @@ class ApiEndpoints {
 
   //Education routes
   static const String getEducationByFreelancerId = "education/freelancer";
+
+  //Employment routes
+  static const String getEmploymentByFreelancerId = "employment/freelancer";
 }

@@ -17,8 +17,9 @@ class FreelancerProfileLoaded extends FreelancerProfileState {
   final List<PortfolioEntity> portfolios;
   final List<ReviewEntity> reviews;
   final List<EducationEntity> education;
+  final List<EmploymentEntity> employment;
 
-  const FreelancerProfileLoaded(this.freelancerEntity, this.services, this.portfolios, this.reviews, this.education);
+  const FreelancerProfileLoaded(this.freelancerEntity, this.services, this.portfolios, this.reviews, this.education, this.employment);
 
   @override
   List<Object?> get props => [freelancerEntity];
