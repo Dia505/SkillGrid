@@ -34,6 +34,11 @@ import 'package:skill_grid/features/education/data/data_source/remote_data_sourc
 import 'package:skill_grid/features/education/data/repository/local_repository/education_local_repository.dart';
 import 'package:skill_grid/features/education/data/repository/remote_repository/education_remote_repository.dart';
 import 'package:skill_grid/features/education/domain/use_case/get_education_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/employment/data/data_source/local_data_source/employment_local_data_source.dart';
+import 'package:skill_grid/features/employment/data/data_source/remote_data_source/employment_remote_data_source.dart';
+import 'package:skill_grid/features/employment/data/repository/local_repository/employment_local_repository.dart';
+import 'package:skill_grid/features/employment/data/repository/remote_repository/employment_remote_repository.dart';
+import 'package:skill_grid/features/employment/domain/use_case/get_employment_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/freelancer_service/data/data_source/local_data_source/freelancer_service_local_data_source.dart';
 import 'package:skill_grid/features/freelancer_service/data/data_source/remote_data_source/freelancer_service_remote_data_source.dart';
 import 'package:skill_grid/features/freelancer_service/data/repository/local_repository/freelancer_service_local_repository.dart';
@@ -86,6 +91,7 @@ Future<void> initDependencies() async {
   await _initReviewDependencies();
   await _initFreelancerProfileDependencies();
   await _initEducationDependencies();
+  await _initEmploymentDependencies();
 }
 
 _initHiveService() {
@@ -364,6 +370,27 @@ _initEducationDependencies() async {
   );
 }
 
+_initEmploymentDependencies() async {
+  getIt.registerLazySingleton<EmploymentLocalDataSource>(
+      () => EmploymentLocalDataSource(hiveService: getIt()));
+  getIt.registerLazySingleton<EmploymentRemoteDataSource>(
+      () => EmploymentRemoteDataSource(dio: getIt<Dio>()));
+
+  getIt.registerLazySingleton<EmploymentLocalRepository>(() =>
+      EmploymentLocalRepository(
+          employmentLocalDataSource: getIt<EmploymentLocalDataSource>()));
+  getIt.registerLazySingleton<EmploymentRemoteRepository>(() =>
+      EmploymentRemoteRepository(
+          employmentRemoteDataSource: getIt<EmploymentRemoteDataSource>()));
+
+  getIt.registerLazySingleton<GetEmploymentByFreelancerIdUseCase>(() =>
+    GetEmploymentByFreelancerIdUseCase(
+      employmentRepository: getIt<EmploymentRemoteRepository>(), 
+      tokenSharedPrefs: getIt<TokenSharedPrefs>()
+    )
+  );
+}
+
 //Freelancer profile screen dependencies
 _initFreelancerProfileDependencies() async {
   getIt.registerFactory<FreelancerProfileBloc>(() => FreelancerProfileBloc(
@@ -372,5 +399,6 @@ _initFreelancerProfileDependencies() async {
           getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
       getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
       getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
-      getEducationByFreelancerIdUseCase: getIt<GetEducationByFreelancerIdUseCase>()));
+      getEducationByFreelancerIdUseCase: getIt<GetEducationByFreelancerIdUseCase>(),
+      getEmploymentByFreelancerIdUseCase: getIt<GetEmploymentByFreelancerIdUseCase>()));
 }

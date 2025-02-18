@@ -5,6 +5,8 @@ import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 import 'package:skill_grid/features/education/domain/entity/education_entity.dart';
 import 'package:skill_grid/features/education/domain/use_case/get_education_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/employment/domain/entity/employment_entity.dart';
+import 'package:skill_grid/features/employment/domain/use_case/get_employment_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/freelancer_service/domain/entity/freelancer_service_entity.dart';
 import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/entity/portfolio_entity.dart';
@@ -24,6 +26,7 @@ class FreelancerProfileBloc
       _getPortfolioByFreelancerServiceIdUseCase;
   final GetReviewByFreelancerIdUseCase _getReviewByFreelancerIdUseCase;
   final GetEducationByFreelancerIdUseCase _getEducationByFreelancerIdUseCase;
+  final GetEmploymentByFreelancerIdUseCase _getEmploymentByFreelancerIdUseCase;
 
   FreelancerProfileBloc(
       {required GetFreelancerByIdUseCase getFreelancerByIdUseCase,
@@ -33,7 +36,8 @@ class FreelancerProfileBloc
       required GetPortfolioByFreelancerServiceIdUseCase
           getPortfolioByFreelancerServiceIdUseCase,
       required GetEducationByFreelancerIdUseCase
-          getEducationByFreelancerIdUseCase})
+          getEducationByFreelancerIdUseCase,
+      required GetEmploymentByFreelancerIdUseCase getEmploymentByFreelancerIdUseCase})
       : _getFreelancerByIdUseCase = getFreelancerByIdUseCase,
         _getFreelancerServiceByFreelancerIdUseCase =
             getFreelancerServiceByFreelancerIdUseCase,
@@ -41,6 +45,7 @@ class FreelancerProfileBloc
         _getPortfolioByFreelancerServiceIdUseCase =
             getPortfolioByFreelancerServiceIdUseCase,
         _getEducationByFreelancerIdUseCase = getEducationByFreelancerIdUseCase,
+        _getEmploymentByFreelancerIdUseCase = getEmploymentByFreelancerIdUseCase,
         super(FreelancerProfileInitial()) {
     on<FetchFreelancerDetails>(_onFetchFreelancerDetails);
   }
@@ -124,6 +129,19 @@ class FreelancerProfileBloc
       (education) => education,
     );
 
-    emit(FreelancerProfileLoaded(freelancer, services, portfolios, reviews, education));
+    // Fetch employment details
+    final employmentResult = await _getEmploymentByFreelancerIdUseCase(
+      GetEmploymentByFreelancerIdParams(freelancerId: event.freelancerId),
+    );
+
+    final employment = employmentResult.fold(
+      (failure) {
+        emit(FreelancerProfileError(failure.message));
+        return <EmploymentEntity>[]; 
+      },
+      (employment) => employment,
+    );
+
+    emit(FreelancerProfileLoaded(freelancer, services, portfolios, reviews, education, employment));
   }
 }

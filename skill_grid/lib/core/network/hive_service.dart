@@ -4,6 +4,7 @@ import 'package:skill_grid/app/constants/hive_table_constant.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
 import 'package:skill_grid/features/education/data/model/education_hive_model.dart';
+import 'package:skill_grid/features/employment/data/model/employment_hive_model.dart';
 import 'package:skill_grid/features/freelancer_service/data/model/freelancer_service_hive_model.dart';
 import 'package:skill_grid/features/portfolio/data/model/portfolio_hive_model.dart';
 import 'package:skill_grid/features/review/data/model/review_hive_model.dart';
@@ -20,6 +21,8 @@ class HiveService {
     Hive.registerAdapter(FreelancerServiceHiveModelAdapter());
     Hive.registerAdapter(PortfolioHiveModelAdapter());
     Hive.registerAdapter(ReviewHiveModelAdapter());
+    Hive.registerAdapter(EducationHiveModelAdapter());
+    Hive.registerAdapter(EmploymentHiveModelAdapter());
   }
 
   //-------------------------Client Queries--------------------------------------
@@ -204,11 +207,8 @@ class HiveService {
     var box =
         await Hive.openBox<PortfolioHiveModel>(HiveTableConstant.portfolioBox);
 
-    return box.values.firstWhere(
-      (portfolio) =>
-          portfolio.freelancerService.freelancerServiceId ==
-          freelancerServiceId
-    );
+    return box.values.firstWhere((portfolio) =>
+        portfolio.freelancerService.freelancerServiceId == freelancerServiceId);
   }
 
   Future<List<PortfolioHiveModel>> getPortfolioByFreelancerId(
@@ -223,22 +223,19 @@ class HiveService {
   }
 
   //----------------------Review Queries------------------------
-  Future<List<ReviewHiveModel>> getReviewByFreelancerId(String freelancerId) async {
+  Future<List<ReviewHiveModel>> getReviewByFreelancerId(
+      String freelancerId) async {
     var box = await Hive.openBox<ReviewHiveModel>(HiveTableConstant.reviewBox);
 
     return box.values
-      .where((review) =>
-        review.freelancer.freelancerId == freelancerId
-      ).toList();
+        .where((review) => review.freelancer.freelancerId == freelancerId)
+        .toList();
   }
 
   Future<List<ReviewHiveModel>> getReviewByRating(int rating) async {
     var box = await Hive.openBox<ReviewHiveModel>(HiveTableConstant.reviewBox);
 
-    return box.values
-      .where((review) =>
-        review.rating == rating
-      ).toList();
+    return box.values.where((review) => review.rating == rating).toList();
   }
 
   Future<void> clearAll() async {
@@ -251,12 +248,25 @@ class HiveService {
   }
 
   //--------------------Education Queries--------------------
-  Future<List<EducationHiveModel>> getEducationByFreelancerId(String freelancerId) async {
-    var box = await Hive.openBox<EducationHiveModel>(HiveTableConstant.educationBox);
+  Future<List<EducationHiveModel>> getEducationByFreelancerId(
+      String freelancerId) async {
+    var box =
+        await Hive.openBox<EducationHiveModel>(HiveTableConstant.educationBox);
 
     return box.values
-      .where((education) =>
-        education.freelancer.freelancerId == freelancerId
-      ).toList();
+        .where((education) => education.freelancer.freelancerId == freelancerId)
+        .toList();
+  }
+
+  //--------------------Employment Queries--------------------
+  Future<List<EmploymentHiveModel>> getEmploymentByFreelancerId(
+      String freelancerId) async {
+    var box = await Hive.openBox<EmploymentHiveModel>(
+        HiveTableConstant.employmentBox);
+
+    return box.values
+        .where(
+            (employment) => employment.freelancer.freelancerId == freelancerId)
+        .toList();
   }
 }

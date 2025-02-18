@@ -59,8 +59,8 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
           final services = state.services;
           final portfolios = state.portfolios;
           final reviews = state.reviews;
-          print("Reviews: $reviews");
           final education = state.education;
+          final employment = state.employment;
           String profilePictureUrl = freelancer.profilePicture ?? '';
           String bgPictureUrl = freelancer.backgroundPicture ?? '';
           List<String> skillList = freelancer.skills!.split(',');
@@ -510,10 +510,10 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                           Column(
                             children: education.map((edu) {
                               String formattedStartDate =
-                                  DateFormat('yyyy-MM-dd')
+                                  DateFormat('MMMM, yyyy')
                                       .format(edu.startDate);
                               String formattedEndDate =
-                                  DateFormat('yyyy-MM-dd').format(edu.endDate);
+                                  DateFormat('MMMM, yyyy').format(edu.endDate);
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: FreelancerProfileEducationContainer(
@@ -535,42 +535,37 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                       indent: 20,
                       endIndent: 20,
                     ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Employment",
+                          const Text("Employment",
                               style: TextStyle(
                                   fontFamily: "Inter Bold", fontSize: 24)),
-                          SizedBox(height: 10),
-                          FreelancerProfileEmploymentContainer(
-                            jobTitle: "UI/UX Designer",
-                            companyName: "InnoSphere Technologies",
-                            startDate: "July 2024",
-                            endDate: "Present",
-                            description:
-                                "Crafted intuitive and visually appealing user interfaces for web and mobile applications. Conducted user research, wireframing, and prototyping to enhance user experiences.",
+                          const SizedBox(height: 10),
+                          Column(
+                            children: employment.map((emp) {
+                              String formattedStartDate =
+                                  DateFormat('MMMM, yyyy')
+                                      .format(emp.startDate);
+                              String formattedEndDate = emp.endDate != null
+                                  ? DateFormat('MMMM, yyyy')
+                                      .format(emp.endDate!)
+                                  : 'Present';
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: FreelancerProfileEmploymentContainer(
+                                  companyName: emp.companyName,
+                                  jobTitle: emp.jobTitle,
+                                  startDate: formattedStartDate,
+                                  endDate: formattedEndDate,
+                                  description: emp.description,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          SizedBox(height: 10),
-                          FreelancerProfileEmploymentContainer(
-                            jobTitle: "UI/UX Designer",
-                            companyName: "TechHive",
-                            startDate: "March 2022",
-                            endDate: "January 2024",
-                            description:
-                                "Worked on web and mobile apps (figma)",
-                          ),
-                          SizedBox(height: 10),
-                          FreelancerProfileEmploymentContainer(
-                            jobTitle: "UI/UX intern",
-                            companyName: "NextGen IT",
-                            startDate: "December 2020",
-                            endDate: "July 2021",
-                            description:
-                                "Assisted in designing user-friendly interfaces for web and mobile platforms. Supported user research, wireframing, and prototyping tasks to improve usability.",
-                          )
                         ],
                       ),
                     ),
