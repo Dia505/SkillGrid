@@ -68,11 +68,9 @@ class ClientEditProfileBloc
       result.fold(
         (failure) {
           emit(ClientEditProfileError(failure.message));
-          print("Error in cubit: ${failure.message}");
         },
         (clientEntity) {
           emit(ClientEditProfileLoaded(clientEntity));
-          print("Client loaded: ${clientEntity.toString()}");
         },
       );
     } catch (e) {
@@ -110,7 +108,6 @@ class ClientEditProfileBloc
       );
     } catch (e) {
       emit(ClientEditProfileError("Error occurred: $e"));
-      print("Exception occurred: $e");
     }
   }
 
@@ -143,9 +140,8 @@ class ClientEditProfileBloc
           );
         },
       );
-    } catch (e, stacktrace) {
+    } catch (e) {
       emit(ClientEditProfileError("Error occurred: $e"));
-      print("Exception: $e\nStackTrace: $stacktrace");
     }
   }
 }

@@ -65,16 +65,13 @@ class ClientProfileBloc extends Bloc<ClientProfileEvent, ClientProfileState> {
       result.fold(
         (failure) {
           emit(ClientProfileError(failure.message));
-          print("Error in cubit: ${failure.message}");
         },
         (clientEntity) {
           emit(ClientProfileLoaded(clientEntity));
-          print("Client loaded: ${clientEntity.toString()}");
         },
       );
     } catch (e) {
       emit(ClientProfileError("Error occurred: $e"));
-      print("Exception occurred: $e");
     }
   }
 }

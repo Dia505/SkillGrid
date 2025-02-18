@@ -19,17 +19,21 @@ class ReviewRemoteDataSource implements IReviewDataSource {
       var response = await _dio.get(url);
 
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data;
+        List<dynamic> data = response.data as List<dynamic>;
+        print("Response data: ${response.data}");
 
         List<GetReviewByFreelancerIdDto> reviewDto = data
-            .map((json) => GetReviewByFreelancerIdDto.fromJson(json))
+            .map((json) => GetReviewByFreelancerIdDto.fromJson(
+                json as Map<String, dynamic>))
             .toList();
+
+        print("ReviewDto: $reviewDto");
 
         List<ReviewApiModel> reviewApiModels = reviewDto
-            .map((dto) => ReviewApiModel.fromGetReviewByFreelancerIdD(dto))
+            .map((dto) => ReviewApiModel.fromGetReviewByFreelancerIdDto(dto))
             .toList();
 
-        print("review api models: $reviewApiModels");
+        print("ReviewApiModels: $reviewApiModels");
 
         return ReviewApiModel.toEntityList(reviewApiModels);
       } else {

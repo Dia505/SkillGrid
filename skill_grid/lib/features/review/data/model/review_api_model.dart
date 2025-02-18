@@ -24,15 +24,14 @@ class ReviewApiModel extends Equatable {
   @JsonKey(name: 'appointment_id')
   final AppointmentApiModel appointment;
 
-  const ReviewApiModel({
-    this.reviewId,
-    required this.review,
-    required this.rating,
-    required this.reviewDate,
-    required this.client,
-    required this.freelancer,
-    required this.appointment
-  });
+  const ReviewApiModel(
+      {this.reviewId,
+      required this.review,
+      required this.rating,
+      required this.reviewDate,
+      required this.client,
+      required this.freelancer,
+      required this.appointment});
 
   factory ReviewApiModel.fromJson(Map<String, dynamic> json) =>
       _$ReviewApiModelFromJson(json);
@@ -41,58 +40,53 @@ class ReviewApiModel extends Equatable {
 
   factory ReviewApiModel.fromEntity(ReviewEntity entity) {
     return ReviewApiModel(
-      reviewId: entity.reviewId,
-      review: entity.review, 
-      rating: entity.rating, 
-      reviewDate: entity.reviewDate, 
-      client: ClientApiModel.fromEntity(entity.client), 
-      freelancer: FreelancerApiModel.fromEntity(entity.freelancer), 
-      appointment: AppointmentApiModel.fromEntity(entity.appointment)
-    );
+        reviewId: entity.reviewId,
+        review: entity.review,
+        rating: entity.rating,
+        reviewDate: entity.reviewDate,
+        client: ClientApiModel.fromEntity(entity.client),
+        freelancer: FreelancerApiModel.fromEntity(entity.freelancer),
+        appointment: AppointmentApiModel.fromEntity(entity.appointment));
   }
 
   ReviewEntity toEntity() {
     return ReviewEntity(
-      reviewId: reviewId,
-      review: review, 
-      rating: rating, 
-      reviewDate: reviewDate, 
-      client: client.toEntity(), 
-      freelancer: freelancer.toEntity(), 
-      appointment: appointment.toEntity()
-    );
+        reviewId: reviewId,
+        review: review,
+        rating: rating,
+        reviewDate: reviewDate,
+        client: client.toEntity(),
+        freelancer: freelancer.toEntity(),
+        appointment: appointment.toEntity());
   }
 
-  static List<ReviewEntity> toEntityList(
-          List<ReviewApiModel> models) =>
+  static List<ReviewEntity> toEntityList(List<ReviewApiModel> models) =>
       models.map((model) => model.toEntity()).toList();
 
-  static ReviewApiModel fromGetReviewByFreelancerIdD(
+  static ReviewApiModel fromGetReviewByFreelancerIdDto(
       GetReviewByFreelancerIdDto dto) {
     return ReviewApiModel(
-      reviewId: dto.reviewId,
-      review: dto.review, 
-      rating: dto.rating, 
-      reviewDate: dto.reviewDate, 
-      client: dto.client, 
-      freelancer: dto.freelancer, 
-      appointment: dto.appointment
-    );
+        reviewId: dto.reviewId,
+        review: dto.review,
+        rating: dto.rating,
+        reviewDate: dto.reviewDate,
+        client: dto.client,
+        freelancer: dto.freelancer,
+        appointment: dto.appointment);
   }
 
-  static ReviewApiModel fromGetReviewByRatingDto(
-      GetReviewByRatingDto dto) {
+  static ReviewApiModel fromGetReviewByRatingDto(GetReviewByRatingDto dto) {
     return ReviewApiModel(
-      reviewId: dto.reviewId,
-      review: dto.review, 
-      rating: dto.rating, 
-      reviewDate: dto.reviewDate, 
-      client: dto.client, 
-      freelancer: dto.freelancer, 
-      appointment: dto.appointment
-    );
+        reviewId: dto.reviewId,
+        review: dto.review,
+        rating: dto.rating,
+        reviewDate: dto.reviewDate,
+        client: dto.client,
+        freelancer: dto.freelancer,
+        appointment: dto.appointment);
   }
 
   @override
-  List<Object?> get props => [reviewId, review, rating, reviewDate, client, freelancer, appointment];
+  List<Object?> get props =>
+      [reviewId, review, rating, reviewDate, client, freelancer, appointment];
 }

@@ -99,8 +99,9 @@ class _FreelancerProfileServiceContainerState
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Image.asset(
-                    widget.images[imageIndex],
+                  child: Image.network(
+                    widget.images[imageIndex]
+                        .replaceFirst('localhost', '10.0.2.2'),
                     fit: BoxFit.contain,
                   ),
                 );

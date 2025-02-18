@@ -210,17 +210,15 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
                               ),
                               const SizedBox(height: 7),
                               CommonDropdown(
-                                width: 325,
-                                items: cityList,
-                                value: selectedCity,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedCity = value;
-                                  });
-                                  print(
-                                      'Selected city updated to: $selectedCity');
-                                },
-                              ),
+                               width: 325,
+                               items: cityList,
+                               value: selectedCity,
+                               onChanged: (value) {
+                                 if (value != null) {
+                                   selectedCity = value;
+                                 }
+                               },
+                             ),
                               const SizedBox(height: 7),
                               CommonTextfield(
                                   textFieldTitle: "Email address",
