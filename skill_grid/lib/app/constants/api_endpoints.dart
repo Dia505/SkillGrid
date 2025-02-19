@@ -46,4 +46,11 @@ class ApiEndpoints {
   static const String updateAppointment = "appointment";
   static const String getAppointmentByClientId = "appointment/client";
   static const String getAppointmentByFreelancerId = "appointment/freelancer";
+
+  //Billing address routes
+  static const String saveBillingAddress = "billing-address";
+
+  //Payment address routes
+  static const String savePayment = "payment";
+  static const String getPaymentByAppointmentId = "payment/appointment";
 }

@@ -15,6 +15,12 @@ class FreelancerServiceEntity extends Equatable {
     required this.freelancer
   });
 
+  FreelancerServiceEntity.empty()
+    : freelancerServiceId = "_empty.freelancerServiceId",
+      hourlyRate = 0,
+      service = ServiceEntity.empty(),
+      freelancer = FreelancerEntity.empty();
+
   @override
   List<Object?> get props => [freelancerServiceId, hourlyRate, service, freelancer];
 }

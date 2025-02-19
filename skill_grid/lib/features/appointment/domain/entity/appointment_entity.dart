@@ -25,6 +25,17 @@ class AppointmentEntity extends Equatable {
     required this.client,
   });
 
+  AppointmentEntity.empty()
+      : appointmentId = "_empty.appointmentId",
+        appointmentPurpose = "_empty.appointmentPurpose",
+        appointmentDate = DateTime(1970),
+        projectDuration = const ProjectDuration(value: 0, unit: "days"),
+        projectEndDate = null,
+        appointmentTime = null,
+        status = false,
+        freelancerService = FreelancerServiceEntity.empty(),
+        client = const ClientEntity.empty();
+
   @override
   List<Object?> get props => [
         appointmentId,
