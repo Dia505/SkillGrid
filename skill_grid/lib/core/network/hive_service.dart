@@ -7,6 +7,7 @@ import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_
 import 'package:skill_grid/features/education/data/model/education_hive_model.dart';
 import 'package:skill_grid/features/employment/data/model/employment_hive_model.dart';
 import 'package:skill_grid/features/freelancer_service/data/model/freelancer_service_hive_model.dart';
+import 'package:skill_grid/features/payment/data/model/payment_hive_model.dart';
 import 'package:skill_grid/features/portfolio/data/model/portfolio_hive_model.dart';
 import 'package:skill_grid/features/review/data/model/review_hive_model.dart';
 
@@ -25,6 +26,7 @@ class HiveService {
     Hive.registerAdapter(EducationHiveModelAdapter());
     Hive.registerAdapter(EmploymentHiveModelAdapter());
     Hive.registerAdapter(AppointmentHiveModelAdapter());
+    Hive.registerAdapter(PaymentHiveModelAdapter());
   }
 
   //-------------------------Client Queries--------------------------------------
@@ -325,4 +327,13 @@ class HiveService {
 
     await box.put(appointmentId, updatedAppointment);
   }
+
+  //--------------------------Payment Queries-----------------------------
+  Future<PaymentHiveModel> getPaymentByAppointmentId(String appointmentId) async {
+    var box = await Hive.openBox<PaymentHiveModel>(HiveTableConstant.paymentBox);
+
+    return box.values.firstWhere((payment) =>
+        payment.appointment.appointmentId == appointmentId);
+  }
 }
+

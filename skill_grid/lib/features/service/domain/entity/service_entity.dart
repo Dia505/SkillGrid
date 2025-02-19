@@ -9,6 +9,10 @@ class ServiceEntity extends Equatable {
     required this.serviceName
   });
 
+  const ServiceEntity.empty()
+    : serviceId = "_empty.serviceId",
+      serviceName = "_empty.serviceName";
+
   @override
   List<Object?> get props => [serviceId, serviceName];
 }

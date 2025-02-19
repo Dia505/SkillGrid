@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 import 'package:skill_grid/features/education/domain/entity/education_entity.dart';
@@ -31,6 +32,7 @@ class FreelancerProfileBloc
   final GetEmploymentByFreelancerIdUseCase _getEmploymentByFreelancerIdUseCase;
   final GetAppointmentByFreelancerIdUseCase
       _getAppointmentByFreelancerIdUseCase;
+  final SendAnOfferBloc _sendAnOfferBloc;
 
   FreelancerProfileBloc(
       {required GetFreelancerByIdUseCase getFreelancerByIdUseCase,
@@ -44,7 +46,8 @@ class FreelancerProfileBloc
       required GetEmploymentByFreelancerIdUseCase
           getEmploymentByFreelancerIdUseCase,
       required GetAppointmentByFreelancerIdUseCase
-          getAppointmentByFreelancerIdUseCase})
+          getAppointmentByFreelancerIdUseCase,
+      required SendAnOfferBloc sendAnOfferBloc})
       : _getFreelancerByIdUseCase = getFreelancerByIdUseCase,
         _getFreelancerServiceByFreelancerIdUseCase =
             getFreelancerServiceByFreelancerIdUseCase,
@@ -56,18 +59,29 @@ class FreelancerProfileBloc
             getEmploymentByFreelancerIdUseCase,
         _getAppointmentByFreelancerIdUseCase =
             getAppointmentByFreelancerIdUseCase,
+        _sendAnOfferBloc = sendAnOfferBloc,
         super(FreelancerProfileInitial()) {
     on<FetchFreelancerDetails>(_onFetchFreelancerDetails);
+
+    on<NavigateToSendAnOffer>(
+      (event, emit) {
+        Navigator.push(
+            event.context,
+            MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                      value: _sendAnOfferBloc,
+                      child: event.destination,
+                    )));
+      },
+    );
   }
 
   Future<void> _onFetchFreelancerDetails(FetchFreelancerDetails event,
       Emitter<FreelancerProfileState> emit) async {
     emit(FreelancerProfileLoading());
-
     final freelancerResult = await _getFreelancerByIdUseCase(
       GetFreelancerByIdParams(freelancerId: event.freelancerId),
     );
-
     final freelancer = freelancerResult.fold(
       (failure) {
         emit(FreelancerProfileError(failure.message));
@@ -75,15 +89,12 @@ class FreelancerProfileBloc
       },
       (freelancer) => freelancer,
     );
-
     if (freelancer == null) return;
-
     // Fetch services
     final servicesResult = await _getFreelancerServiceByFreelancerIdUseCase(
       GetFreelancerServiceByFreelancerIdParams(
           freelancerId: event.freelancerId),
     );
-
     final services = servicesResult.fold(
       (failure) {
         emit(FreelancerProfileError(failure.message));
@@ -91,16 +102,13 @@ class FreelancerProfileBloc
       },
       (services) => services,
     );
-
     if (services == null) return;
-
     final portfoliosResults = await Future.wait(
       services.map((service) async {
         final portfolioResult = await _getPortfolioByFreelancerServiceIdUseCase(
           GetPortfolioByFreelancerServiceIdParams(
               freelancerServiceId: service.freelancerServiceId!),
         );
-
         return portfolioResult.fold(
           (failure) {
             emit(FreelancerProfileError(failure.message));
@@ -110,14 +118,11 @@ class FreelancerProfileBloc
         );
       }),
     );
-
     final portfolios = portfoliosResults.whereType<PortfolioEntity>().toList();
-
     // Fetch reviews
     final reviewsResult = await _getReviewByFreelancerIdUseCase(
       GetReviewByFreelancerIdParams(freelancerId: event.freelancerId),
     );
-
     final reviews = reviewsResult.fold(
       (failure) {
         emit(FreelancerProfileError(failure.message));
@@ -125,12 +130,10 @@ class FreelancerProfileBloc
       },
       (reviews) => reviews,
     );
-
     // Fetch education details
     final educationResult = await _getEducationByFreelancerIdUseCase(
       GetEducationByFreelancerIdParams(freelancerId: event.freelancerId),
     );
-
     final education = educationResult.fold(
       (failure) {
         emit(FreelancerProfileError(failure.message));
@@ -138,12 +141,10 @@ class FreelancerProfileBloc
       },
       (education) => education,
     );
-
     // Fetch employment details
     final employmentResult = await _getEmploymentByFreelancerIdUseCase(
       GetEmploymentByFreelancerIdParams(freelancerId: event.freelancerId),
     );
-
     final employment = employmentResult.fold(
       (failure) {
         emit(FreelancerProfileError(failure.message));
@@ -151,12 +152,10 @@ class FreelancerProfileBloc
       },
       (employment) => employment,
     );
-
     // Fetch appointment details
     final appointmentResult = await _getAppointmentByFreelancerIdUseCase(
       GetAppointmentByFreelancerIdParams(freelancerId: event.freelancerId),
     );
-
     final appointments = appointmentResult.fold(
       (failure) {
         emit(FreelancerProfileError(failure.message));
@@ -164,7 +163,6 @@ class FreelancerProfileBloc
       },
       (appointment) => appointment,
     );
-
     emit(FreelancerProfileLoaded(freelancer, services, portfolios, reviews,
         education, employment, appointments));
   }

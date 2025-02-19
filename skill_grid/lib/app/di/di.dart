@@ -10,6 +10,7 @@ import 'package:skill_grid/features/appointment/data/data_source/remote_data_sou
 import 'package:skill_grid/features/appointment/data/repository/local_repository/appointment_local_repository.dart';
 import 'package:skill_grid/features/appointment/data/repository/remote_repository/appointment_remote_repository.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/freelancer_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/remote_data_source/client_remote_data_source.dart';
@@ -98,6 +99,7 @@ Future<void> initDependencies() async {
   await _initEducationDependencies();
   await _initEmploymentDependencies();
   await _initAppointmentDependencies();
+  await _initSendAnOfferDependencies();
 }
 
 _initHiveService() {
@@ -369,11 +371,9 @@ _initEducationDependencies() async {
           educationRemoteDataSource: getIt<EducationRemoteDataSource>()));
 
   getIt.registerLazySingleton<GetEducationByFreelancerIdUseCase>(() =>
-    GetEducationByFreelancerIdUseCase(
-      educationRepository: getIt<EducationRemoteRepository>(), 
-      tokenSharedPrefs: getIt<TokenSharedPrefs>()
-    )
-  );
+      GetEducationByFreelancerIdUseCase(
+          educationRepository: getIt<EducationRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 }
 
 //Employment dependencies
@@ -391,11 +391,9 @@ _initEmploymentDependencies() async {
           employmentRemoteDataSource: getIt<EmploymentRemoteDataSource>()));
 
   getIt.registerLazySingleton<GetEmploymentByFreelancerIdUseCase>(() =>
-    GetEmploymentByFreelancerIdUseCase(
-      employmentRepository: getIt<EmploymentRemoteRepository>(), 
-      tokenSharedPrefs: getIt<TokenSharedPrefs>()
-    )
-  );
+      GetEmploymentByFreelancerIdUseCase(
+          employmentRepository: getIt<EmploymentRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 }
 
 //Appointment dependencies
@@ -413,11 +411,17 @@ _initAppointmentDependencies() {
           appointmentRemoteDataSource: getIt<AppointmentRemoteDataSource>()));
 
   getIt.registerLazySingleton<GetAppointmentByFreelancerIdUseCase>(() =>
-    GetAppointmentByFreelancerIdUseCase(
-      appointmentRepository: getIt<AppointmentRemoteRepository>(), 
-      tokenSharedPrefs: getIt<TokenSharedPrefs>()
-    )
-  );
+      GetAppointmentByFreelancerIdUseCase(
+          appointmentRepository: getIt<AppointmentRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+}
+
+//Send an offer dependencies
+_initSendAnOfferDependencies() async {
+  getIt.registerFactory<SendAnOfferBloc>(() => SendAnOfferBloc(
+      getFreelancerByIdUseCase: getIt<GetFreelancerByIdUseCase>(),
+      getFreelancerServiceByFreelancerIdUseCase:
+          getIt<GetFreelancerServiceByFreelancerIdUseCase>()));
 }
 
 //Freelancer profile screen dependencies
@@ -427,8 +431,13 @@ _initFreelancerProfileDependencies() async {
       getFreelancerServiceByFreelancerIdUseCase:
           getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
       getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
-      getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
-      getEducationByFreelancerIdUseCase: getIt<GetEducationByFreelancerIdUseCase>(),
-      getEmploymentByFreelancerIdUseCase: getIt<GetEmploymentByFreelancerIdUseCase>(),
-      getAppointmentByFreelancerIdUseCase: getIt<GetAppointmentByFreelancerIdUseCase>()));
+      getPortfolioByFreelancerServiceIdUseCase:
+          getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
+      getEducationByFreelancerIdUseCase:
+          getIt<GetEducationByFreelancerIdUseCase>(),
+      getEmploymentByFreelancerIdUseCase:
+          getIt<GetEmploymentByFreelancerIdUseCase>(),
+      getAppointmentByFreelancerIdUseCase:
+          getIt<GetAppointmentByFreelancerIdUseCase>(),
+      sendAnOfferBloc: getIt<SendAnOfferBloc>()));
 }

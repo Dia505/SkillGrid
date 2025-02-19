@@ -30,4 +30,10 @@ class HiveTableConstant {
 
   static const int employmentTableId = 9;
   static const String employmentBox = "employmentBox";
+
+  static const int billingAddressTableId = 10;
+  static const String billingAddressBox = "billingAddressBox";
+
+  static const int paymentTableId = 11;
+  static const String paymentBox = "paymentBox";
 }
