@@ -38,4 +38,12 @@ class ApiEndpoints {
 
   //Employment routes
   static const String getEmploymentByFreelancerId = "employment/freelancer";
+
+  //Appointment routes
+  static const String saveAppointment = "appointment";
+  static const String getAppointmentById = "appointment";
+  static const String deleteAppointment = "appointment";
+  static const String updateAppointment = "appointment";
+  static const String getAppointmentByClientId = "appointment/client";
+  static const String getAppointmentByFreelancerId = "appointment/freelancer";
 }

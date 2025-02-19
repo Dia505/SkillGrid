@@ -1,6 +1,7 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:skill_grid/app/constants/hive_table_constant.dart';
+import 'package:skill_grid/features/appointment/data/model/appointment_hive_model.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_hive_model.dart';
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_hive_model.dart';
 import 'package:skill_grid/features/education/data/model/education_hive_model.dart';
@@ -23,6 +24,7 @@ class HiveService {
     Hive.registerAdapter(ReviewHiveModelAdapter());
     Hive.registerAdapter(EducationHiveModelAdapter());
     Hive.registerAdapter(EmploymentHiveModelAdapter());
+    Hive.registerAdapter(AppointmentHiveModelAdapter());
   }
 
   //-------------------------Client Queries--------------------------------------
@@ -268,5 +270,59 @@ class HiveService {
         .where(
             (employment) => employment.freelancer.freelancerId == freelancerId)
         .toList();
+  }
+
+  //---------------------Appointment Queries---------------------
+  Future<List<AppointmentHiveModel>> getAppointmentByFreelancerId(
+      String freelancerId) async {
+    var box = await Hive.openBox<AppointmentHiveModel>(
+        HiveTableConstant.appointmentBox);
+
+    return box.values
+        .where(
+            (appointment) => appointment.freelancerService.freelancer.freelancerId == freelancerId)
+        .toList();
+  }
+
+  Future<List<AppointmentHiveModel>> getAppointmentByClientId(
+      String clientId) async {
+    var box = await Hive.openBox<AppointmentHiveModel>(
+        HiveTableConstant.appointmentBox);
+
+    return box.values
+        .where(
+            (appointment) => appointment.client.clientId == clientId)
+        .toList();
+  }
+
+  Future<void> saveAppointment(AppointmentHiveModel appointment) async {
+    var box = await Hive.openBox<AppointmentHiveModel>(HiveTableConstant.appointmentBox);
+    await box.put(appointment.appointmentId, appointment);
+  }
+
+  Future<void> deleteAppointment(String appointmentId) async {
+    var box = await Hive.openBox<AppointmentHiveModel>(HiveTableConstant.appointmentBox);
+    await box.delete(appointmentId);
+  }
+
+  Future<AppointmentHiveModel?> getAppointmentById(String appointmentId) async {
+    var box = await Hive.openBox<AppointmentHiveModel>(HiveTableConstant.appointmentBox);
+    return box.get(appointmentId);
+  }
+
+  Future<void> updateAppointment(String appointmentId, {String? newAppointmentPurpose}) async {
+    var box = await Hive.openBox<AppointmentHiveModel>(HiveTableConstant.appointmentBox);
+
+    final appointment = box.get(appointmentId);
+
+    if (appointment == null) {
+      throw Exception("Appointment not found");
+    }
+
+    final updatedAppointment = appointment.copyWith(
+      
+    );
+
+    await box.put(appointmentId, updatedAppointment);
   }
 }

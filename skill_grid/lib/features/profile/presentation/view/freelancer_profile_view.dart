@@ -61,6 +61,7 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
           final reviews = state.reviews;
           final education = state.education;
           final employment = state.employment;
+          final appointments = state.appointments;
           String profilePictureUrl = freelancer.profilePicture ?? '';
           String bgPictureUrl = freelancer.backgroundPicture ?? '';
           List<String> skillList = freelancer.skills!.split(',');
@@ -209,21 +210,21 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Row(
+                          Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.event_available_outlined,
                                 size: 45,
                               ),
                               Column(
                                 children: [
                                   Text(
-                                    "120",
-                                    style: TextStyle(
+                                    appointments.length.toString(),
+                                    style: const TextStyle(
                                         fontSize: 24,
                                         fontFamily: "Inter SemiBold"),
                                   ),
-                                  Text(
+                                  const Text(
                                     "bookings",
                                     style: TextStyle(
                                         fontSize: 16, color: Color(0XFF707070)),

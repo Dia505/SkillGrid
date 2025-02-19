@@ -193,7 +193,6 @@ class ClientRemoteDataSource implements IClientDataSource {
             ));
 
         if (response.statusCode == 200) {
-          print("Client updated successfully.");
         } else {
           throw Exception(response.statusMessage);
         }

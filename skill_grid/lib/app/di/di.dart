@@ -5,6 +5,11 @@ import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
+import 'package:skill_grid/features/appointment/data/data_source/local_data_source/appointment_local_data_source.dart';
+import 'package:skill_grid/features/appointment/data/data_source/remote_data_source/appointment_remote_data_source.dart';
+import 'package:skill_grid/features/appointment/data/repository/local_repository/appointment_local_repository.dart';
+import 'package:skill_grid/features/appointment/data/repository/remote_repository/appointment_remote_repository.dart';
+import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/freelancer_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/remote_data_source/client_remote_data_source.dart';
@@ -92,6 +97,7 @@ Future<void> initDependencies() async {
   await _initFreelancerProfileDependencies();
   await _initEducationDependencies();
   await _initEmploymentDependencies();
+  await _initAppointmentDependencies();
 }
 
 _initHiveService() {
@@ -370,6 +376,7 @@ _initEducationDependencies() async {
   );
 }
 
+//Employment dependencies
 _initEmploymentDependencies() async {
   getIt.registerLazySingleton<EmploymentLocalDataSource>(
       () => EmploymentLocalDataSource(hiveService: getIt()));
@@ -391,6 +398,28 @@ _initEmploymentDependencies() async {
   );
 }
 
+//Appointment dependencies
+_initAppointmentDependencies() {
+  getIt.registerLazySingleton<AppointmentLocalDataSource>(
+      () => AppointmentLocalDataSource(hiveService: getIt()));
+  getIt.registerLazySingleton<AppointmentRemoteDataSource>(
+      () => AppointmentRemoteDataSource(dio: getIt<Dio>()));
+
+  getIt.registerLazySingleton<AppointmentLocalRepository>(() =>
+      AppointmentLocalRepository(
+          appointmentLocalDataSource: getIt<AppointmentLocalDataSource>()));
+  getIt.registerLazySingleton<AppointmentRemoteRepository>(() =>
+      AppointmentRemoteRepository(
+          appointmentRemoteDataSource: getIt<AppointmentRemoteDataSource>()));
+
+  getIt.registerLazySingleton<GetAppointmentByFreelancerIdUseCase>(() =>
+    GetAppointmentByFreelancerIdUseCase(
+      appointmentRepository: getIt<AppointmentRemoteRepository>(), 
+      tokenSharedPrefs: getIt<TokenSharedPrefs>()
+    )
+  );
+}
+
 //Freelancer profile screen dependencies
 _initFreelancerProfileDependencies() async {
   getIt.registerFactory<FreelancerProfileBloc>(() => FreelancerProfileBloc(
@@ -400,5 +429,6 @@ _initFreelancerProfileDependencies() async {
       getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
       getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
       getEducationByFreelancerIdUseCase: getIt<GetEducationByFreelancerIdUseCase>(),
-      getEmploymentByFreelancerIdUseCase: getIt<GetEmploymentByFreelancerIdUseCase>()));
+      getEmploymentByFreelancerIdUseCase: getIt<GetEmploymentByFreelancerIdUseCase>(),
+      getAppointmentByFreelancerIdUseCase: getIt<GetAppointmentByFreelancerIdUseCase>()));
 }
