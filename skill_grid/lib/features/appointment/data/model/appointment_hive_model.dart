@@ -34,20 +34,18 @@ class AppointmentHiveModel extends Equatable {
     required this.appointmentPurpose,
     required this.appointmentDate,
     required this.projectDuration,
-    DateTime? projectEndDate,
-    String? appointmentTime,
+    this.projectEndDate,
+    this.appointmentTime,
     required this.status,
     required this.freelancerService,
     required this.client,
-  })  : appointmentId = appointmentId ?? const Uuid().v4(),
-        projectEndDate = projectEndDate,
-        appointmentTime = appointmentTime ?? "";
+  })  : appointmentId = appointmentId ?? const Uuid().v4();
 
   AppointmentHiveModel.initial()
     : appointmentId = "",
       appointmentPurpose = "",
       appointmentDate = DateTime(1970, 1, 1),
-      projectDuration = ProjectDurationHiveModel(value: 1, unit: "day"), 
+      projectDuration = const ProjectDurationHiveModel(value: 1, unit: "day"), 
       projectEndDate = null,
       appointmentTime = "",
       status = false,
@@ -79,6 +77,22 @@ class AppointmentHiveModel extends Equatable {
       status: status, 
       freelancerService: freelancerService.toEntity(), 
       client: client.toEntity()
+    );
+  }
+
+  AppointmentHiveModel copyWith({
+    String? appointmentPurpose
+  }) {
+    return AppointmentHiveModel(
+      appointmentId: appointmentId,
+      appointmentPurpose: appointmentPurpose ?? this.appointmentPurpose, 
+      appointmentDate: appointmentDate, 
+      projectDuration: projectDuration, 
+      projectEndDate: projectEndDate,
+      appointmentTime: appointmentTime,
+      status: status, freelancerService: 
+      freelancerService, 
+      client: client
     );
   }
 

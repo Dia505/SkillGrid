@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
+import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 import 'package:skill_grid/features/education/domain/entity/education_entity.dart';
@@ -27,6 +29,8 @@ class FreelancerProfileBloc
   final GetReviewByFreelancerIdUseCase _getReviewByFreelancerIdUseCase;
   final GetEducationByFreelancerIdUseCase _getEducationByFreelancerIdUseCase;
   final GetEmploymentByFreelancerIdUseCase _getEmploymentByFreelancerIdUseCase;
+  final GetAppointmentByFreelancerIdUseCase
+      _getAppointmentByFreelancerIdUseCase;
 
   FreelancerProfileBloc(
       {required GetFreelancerByIdUseCase getFreelancerByIdUseCase,
@@ -37,7 +41,10 @@ class FreelancerProfileBloc
           getPortfolioByFreelancerServiceIdUseCase,
       required GetEducationByFreelancerIdUseCase
           getEducationByFreelancerIdUseCase,
-      required GetEmploymentByFreelancerIdUseCase getEmploymentByFreelancerIdUseCase})
+      required GetEmploymentByFreelancerIdUseCase
+          getEmploymentByFreelancerIdUseCase,
+      required GetAppointmentByFreelancerIdUseCase
+          getAppointmentByFreelancerIdUseCase})
       : _getFreelancerByIdUseCase = getFreelancerByIdUseCase,
         _getFreelancerServiceByFreelancerIdUseCase =
             getFreelancerServiceByFreelancerIdUseCase,
@@ -45,7 +52,10 @@ class FreelancerProfileBloc
         _getPortfolioByFreelancerServiceIdUseCase =
             getPortfolioByFreelancerServiceIdUseCase,
         _getEducationByFreelancerIdUseCase = getEducationByFreelancerIdUseCase,
-        _getEmploymentByFreelancerIdUseCase = getEmploymentByFreelancerIdUseCase,
+        _getEmploymentByFreelancerIdUseCase =
+            getEmploymentByFreelancerIdUseCase,
+        _getAppointmentByFreelancerIdUseCase =
+            getAppointmentByFreelancerIdUseCase,
         super(FreelancerProfileInitial()) {
     on<FetchFreelancerDetails>(_onFetchFreelancerDetails);
   }
@@ -137,11 +147,25 @@ class FreelancerProfileBloc
     final employment = employmentResult.fold(
       (failure) {
         emit(FreelancerProfileError(failure.message));
-        return <EmploymentEntity>[]; 
+        return <EmploymentEntity>[];
       },
       (employment) => employment,
     );
 
-    emit(FreelancerProfileLoaded(freelancer, services, portfolios, reviews, education, employment));
+    // Fetch appointment details
+    final appointmentResult = await _getAppointmentByFreelancerIdUseCase(
+      GetAppointmentByFreelancerIdParams(freelancerId: event.freelancerId),
+    );
+
+    final appointments = appointmentResult.fold(
+      (failure) {
+        emit(FreelancerProfileError(failure.message));
+        return <AppointmentEntity>[];
+      },
+      (appointment) => appointment,
+    );
+
+    emit(FreelancerProfileLoaded(freelancer, services, portfolios, reviews,
+        education, employment, appointments));
   }
 }
