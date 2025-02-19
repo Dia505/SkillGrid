@@ -15,7 +15,8 @@ class SendOfferView extends StatefulWidget {
 }
 
 class _SendOfferViewState extends State<SendOfferView> {
-  String? service;
+  String? selectedService;
+  int? hourlyRate;
 
   DateTime? selectedDate;
 
@@ -140,28 +141,31 @@ class _SendOfferViewState extends State<SendOfferView> {
                             items: serviceList,
                             onChanged: (value) {
                               if (value != null) {
-                                service = value;
+                                selectedService = value;
                               }
                             },
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          RichText(
-                            text: const TextSpan(
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                    fontFamily: "Inter Medium"),
-                                children: [
-                                  TextSpan(text: "Charge:"),
-                                  TextSpan(
-                                      text: " Rs. 4500/hr",
-                                      style: TextStyle(
-                                          color: Color(0XFF544FBD),
-                                          fontFamily: "Inter Bold"))
-                                ]),
-                          ),
+                          // Only show charge when a service is selected
+                          if (hourlyRate != null)
+                            RichText(
+                              text: TextSpan(
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontFamily: "Inter Medium"),
+                                  children: [
+                                    const TextSpan(text: "Charge:"),
+                                    TextSpan(
+                                        text:
+                                            " Rs. ${hourlyRate.toString()}/hr",
+                                        style: const TextStyle(
+                                            color: Color(0XFF544FBD),
+                                            fontFamily: "Inter Bold"))
+                                  ]),
+                            ),
                         ],
                       ),
                       Padding(
