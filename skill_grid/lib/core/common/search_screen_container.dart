@@ -51,7 +51,6 @@ class _SearchScreenContainerState extends State<SearchScreenContainer> {
                   CircleAvatar(
                       backgroundImage: widget
                               .freelancerProfileImgPath.isNotEmpty
-                          // ? Image.network()
                           ? NetworkImage(
                               "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}") // Adjust base URL
                           : const AssetImage(

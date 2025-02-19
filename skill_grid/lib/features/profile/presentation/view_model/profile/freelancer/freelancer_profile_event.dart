@@ -16,3 +16,14 @@ class FetchFreelancerDetails extends FreelancerProfileEvent {
   @override
   List<Object> get props => [freelancerId];
 }
+
+class NavigateToSendAnOffer extends FreelancerProfileEvent {
+  final String freelancerId;
+  final BuildContext context;
+  final Widget destination;
+
+  const NavigateToSendAnOffer({required this.freelancerId, required this.context, required this.destination});
+
+  @override
+  List<Object> get props => [freelancerId];
+}

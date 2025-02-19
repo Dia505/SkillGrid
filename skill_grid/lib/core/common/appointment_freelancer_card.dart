@@ -1,66 +1,71 @@
 import 'package:flutter/material.dart';
 
 class AppointmentFreelancerCard extends StatelessWidget {
-  const AppointmentFreelancerCard({super.key});
+  final String freelancerProfileImgPath;
+  final String freelancerName;
+  final String profession;
+  final String address;
+  final String city;
+  final String mobileNo;
+
+  const AppointmentFreelancerCard(
+      {super.key,
+      required this.freelancerProfileImgPath,
+      required this.freelancerName,
+      required this.profession,
+      required this.address,
+      required this.city,
+      required this.mobileNo});
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       width: 380,
       height: 160,
       child: Card(
-        color: Color(0XFF8984F2),
+        color: const Color(0XFF8984F2),
         child: Padding(
-          padding: EdgeInsets.only(left: 0),
+          padding: const EdgeInsets.only(left: 0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  CircleAvatar(
-                    radius: 45,
-                    backgroundImage: AssetImage(
-                        "assets/images/istockphoto-1354842602-612x612.jpg"),
-                  ),
-                  Positioned(
-                    left: 68,
-                    child: CircleAvatar(
-                      radius: 10,
-                      backgroundColor: Color(0xFF71D358),
-                      child: Icon(
-                        Icons.check,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                ],
+              Padding(
+                padding: const EdgeInsets.only(left: 40),
+                child: CircleAvatar(
+                  backgroundImage: freelancerProfileImgPath.isNotEmpty
+                      ? NetworkImage(freelancerProfileImgPath.replaceFirst(
+                          'localhost', '10.0.2.2'))
+                      : const AssetImage(
+                              "assets/images/default_profile_img.png")
+                          as ImageProvider,
+                  radius: 45,
+                ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 30.0),
+                padding: const EdgeInsets.only(top: 30.0, left: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Anjali Karki",
-                      style: TextStyle(
+                      freelancerName,
+                      style: const TextStyle(
                           fontFamily: "Inter Bold",
                           fontSize: 19,
                           color: Colors.white),
                     ),
                     Text(
-                      "UI/Ux Designer, Graphic Designer",
-                      style: TextStyle(fontSize: 15, color: Colors.white),
+                      profession,
+                      style: const TextStyle(fontSize: 15, color: Colors.white),
                     ),
                     Text(
-                      "Kalimati, Kathmandu",
-                      style: TextStyle(color: Color(0XFF450098), fontSize: 13),
+                      "$address, $city",
+                      style: const TextStyle(
+                          color: Color(0XFF450098), fontSize: 13),
                     ),
                     Text(
-                      "9841223790",
-                      style: TextStyle(color: Color(0XFF450098), fontSize: 13),
+                      mobileNo,
+                      style: const TextStyle(
+                          color: Color(0XFF450098), fontSize: 13),
                     ),
                   ],
                 ),

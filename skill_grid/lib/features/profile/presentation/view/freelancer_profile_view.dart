@@ -186,12 +186,13 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                             buttonText: "Book an Appointment",
                             buttonColor: const Color(0xFF7975D8),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SendOfferView(),
-                                ),
-                              );
+                              BlocProvider.of<FreelancerProfileBloc>(context)
+                                  .add(NavigateToSendAnOffer(
+                                      freelancerId: freelancer.freelancerId!,
+                                      context: context,
+                                      destination: SendOfferView(
+                                          freelancerId:
+                                              freelancer.freelancerId!)));
                             }),
                       ],
                     ),
@@ -577,7 +578,7 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
           );
         } else {
           return const Center(
-            child: Text("Hello"),
+            child: Text(""),
           );
         }
       },

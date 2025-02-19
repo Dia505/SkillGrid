@@ -62,27 +62,6 @@ class _FreelancerRegistrationViewState
     });
   }
 
-  void _validateForm() {
-    setState(() {
-      // Set error messages if date or time is not selected
-      dateError = selectedDate == null ? '*required' : null;
-    });
-
-    if (_formKey.currentState!.validate() && selectedDate != null) {
-      context.read<FreelancerBloc>().add(RegisterFreelancer(
-          context: context,
-          firstName: _fnameController.text.trim(),
-          lastName: _lnameController.text.trim(),
-          dateOfBirth: selectedDate!,
-          mobileNo: _mobNumberController.text.trim(),
-          address: _addressController.text.trim(),
-          city: city!,
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-          available: true));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

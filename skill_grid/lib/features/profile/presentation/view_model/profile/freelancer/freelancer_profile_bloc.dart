@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 import 'package:skill_grid/features/education/domain/entity/education_entity.dart';
@@ -31,6 +32,7 @@ class FreelancerProfileBloc
   final GetEmploymentByFreelancerIdUseCase _getEmploymentByFreelancerIdUseCase;
   final GetAppointmentByFreelancerIdUseCase
       _getAppointmentByFreelancerIdUseCase;
+  final SendAnOfferBloc _sendAnOfferBloc;
 
   FreelancerProfileBloc(
       {required GetFreelancerByIdUseCase getFreelancerByIdUseCase,
@@ -44,7 +46,8 @@ class FreelancerProfileBloc
       required GetEmploymentByFreelancerIdUseCase
           getEmploymentByFreelancerIdUseCase,
       required GetAppointmentByFreelancerIdUseCase
-          getAppointmentByFreelancerIdUseCase})
+          getAppointmentByFreelancerIdUseCase,
+      required SendAnOfferBloc sendAnOfferBloc})
       : _getFreelancerByIdUseCase = getFreelancerByIdUseCase,
         _getFreelancerServiceByFreelancerIdUseCase =
             getFreelancerServiceByFreelancerIdUseCase,
@@ -56,8 +59,19 @@ class FreelancerProfileBloc
             getEmploymentByFreelancerIdUseCase,
         _getAppointmentByFreelancerIdUseCase =
             getAppointmentByFreelancerIdUseCase,
+        _sendAnOfferBloc = sendAnOfferBloc,
         super(FreelancerProfileInitial()) {
     on<FetchFreelancerDetails>(_onFetchFreelancerDetails);
+
+    on<NavigateToSendAnOffer>((event, emit) {
+      Navigator.push(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+              value: _sendAnOfferBloc, child: event.destination),
+        ),
+      );
+    });
   }
 
   Future<void> _onFetchFreelancerDetails(FetchFreelancerDetails event,
