@@ -14,8 +14,9 @@ class FreelancerProfileLoading extends SendAnOfferState {}
 class FreelancerProfileLoaded extends SendAnOfferState {
   final FreelancerEntity freelancerEntity;
   final List<FreelancerServiceEntity> services;
+  final ClientEntity clientEntity;
 
-  const FreelancerProfileLoaded(this.freelancerEntity, this.services);
+  const FreelancerProfileLoaded(this.freelancerEntity, this.services, this.clientEntity);
 
   @override
   List<Object?> get props => [freelancerEntity, services];

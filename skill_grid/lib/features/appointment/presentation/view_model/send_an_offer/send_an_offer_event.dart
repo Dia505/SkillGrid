@@ -35,3 +35,15 @@ class NavigateToFreelancerProfile extends SendAnOfferEvent {
   @override
   List<Object> get props => [freelancerId];
 }
+
+class NavigateToBillingAndPayment extends SendAnOfferEvent {
+  final BuildContext context;
+  final FreelancerEntity freelancerEntity;
+  final AppointmentEntity appointmentEntity;
+
+  const NavigateToBillingAndPayment(
+      {required this.context, required this.freelancerEntity, required this.appointmentEntity});
+
+  @override
+  List<Object> get props => [];
+}

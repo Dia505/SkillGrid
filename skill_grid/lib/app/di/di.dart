@@ -10,6 +10,7 @@ import 'package:skill_grid/features/appointment/data/data_source/remote_data_sou
 import 'package:skill_grid/features/appointment/data/repository/local_repository/appointment_local_repository.dart';
 import 'package:skill_grid/features/appointment/data/repository/remote_repository/appointment_remote_repository.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/appointment/presentation/view_model/billing_and_payment/billing_and_payment_bloc.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/freelancer_local_data_source.dart';
@@ -100,6 +101,7 @@ Future<void> initDependencies() async {
   await _initEmploymentDependencies();
   await _initAppointmentDependencies();
   await _initSendAnOfferDependencies();
+  await _initBillingAndPaymentDependencies();
 }
 
 _initHiveService() {
@@ -421,7 +423,9 @@ _initSendAnOfferDependencies() async {
   getIt.registerFactory<SendAnOfferBloc>(() => SendAnOfferBloc(
       getFreelancerByIdUseCase: getIt<GetFreelancerByIdUseCase>(),
       getFreelancerServiceByFreelancerIdUseCase:
-          getIt<GetFreelancerServiceByFreelancerIdUseCase>()));
+          getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
+      tokenHelper: getIt<TokenHelper>(),
+      getClientByIdUseCase: getIt<GetClientByIdUseCase>()));
 }
 
 //Freelancer profile screen dependencies
@@ -440,4 +444,9 @@ _initFreelancerProfileDependencies() async {
       getAppointmentByFreelancerIdUseCase:
           getIt<GetAppointmentByFreelancerIdUseCase>(),
       sendAnOfferBloc: getIt<SendAnOfferBloc>()));
+}
+
+//Billing and payment dependencies
+_initBillingAndPaymentDependencies() async {
+  getIt.registerFactory<BillingAndPaymentBloc>(() => BillingAndPaymentBloc());
 }
