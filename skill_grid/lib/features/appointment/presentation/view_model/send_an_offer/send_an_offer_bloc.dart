@@ -35,14 +35,12 @@ class SendAnOfferBloc extends Bloc<SendAnOfferEvent, SendAnOfferState> {
       final freelancerProfileBloc = getIt<FreelancerProfileBloc>();
 
       Navigator.pushReplacement(
-        event.context, 
-        MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
-            value: freelancerProfileBloc,
-            child: event.destination,
-          )
-        )
-      );
+          event.context,
+          MaterialPageRoute(
+              builder: (context) => BlocProvider.value(
+                    value: freelancerProfileBloc,
+                    child: event.destination,
+                  )));
     });
   }
 

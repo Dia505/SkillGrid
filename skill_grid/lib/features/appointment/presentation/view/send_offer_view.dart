@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/appointment_freelancer_card.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
+import 'package:skill_grid/features/appointment/presentation/view/billing_and_payment_view.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 
@@ -15,7 +16,8 @@ class SendOfferView extends StatefulWidget {
 }
 
 class _SendOfferViewState extends State<SendOfferView> {
-  String? service;
+  String? selectedService;
+  int? hourlyRate;
 
   DateTime? selectedDate;
 
@@ -140,28 +142,39 @@ class _SendOfferViewState extends State<SendOfferView> {
                             items: serviceList,
                             onChanged: (value) {
                               if (value != null) {
-                                service = value;
+                                selectedService = value;
+                                final selectedServiceEntity =
+                                    services.firstWhere(
+                                  (service) =>
+                                      service.service.serviceName ==
+                                      selectedService,
+                                );
+
+                                hourlyRate = selectedServiceEntity.hourlyRate;
                               }
                             },
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          RichText(
-                            text: const TextSpan(
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                    fontFamily: "Inter Medium"),
-                                children: [
-                                  TextSpan(text: "Charge:"),
-                                  TextSpan(
-                                      text: " Rs. 4500/hr",
-                                      style: TextStyle(
-                                          color: Color(0XFF544FBD),
-                                          fontFamily: "Inter Bold"))
-                                ]),
-                          ),
+                          // Only show charge when a service is selected
+                          if (hourlyRate != null)
+                            RichText(
+                              text: TextSpan(
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontFamily: "Inter Medium"),
+                                  children: [
+                                    const TextSpan(text: "Charge:"),
+                                    TextSpan(
+                                        text:
+                                            " Rs. ${hourlyRate.toString()}/hr",
+                                        style: const TextStyle(
+                                            color: Color(0XFF544FBD),
+                                            fontFamily: "Inter Bold"))
+                                  ]),
+                            ),
                         ],
                       ),
                       Padding(
@@ -458,7 +471,14 @@ class _SendOfferViewState extends State<SendOfferView> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0XFF544FBD),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BillingAndPaymentView()),
+                                );
+                              },
                               child: const Text(
                                 "Continue",
                               ),
