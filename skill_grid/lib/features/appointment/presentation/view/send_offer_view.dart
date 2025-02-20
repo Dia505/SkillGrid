@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/appointment_freelancer_card.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
+import 'package:skill_grid/features/appointment/presentation/view/billing_and_payment_view.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 
@@ -142,6 +143,14 @@ class _SendOfferViewState extends State<SendOfferView> {
                             onChanged: (value) {
                               if (value != null) {
                                 selectedService = value;
+                                final selectedServiceEntity =
+                                    services.firstWhere(
+                                  (service) =>
+                                      service.service.serviceName ==
+                                      selectedService,
+                                );
+
+                                hourlyRate = selectedServiceEntity.hourlyRate;
                               }
                             },
                           ),
@@ -462,7 +471,14 @@ class _SendOfferViewState extends State<SendOfferView> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0XFF544FBD),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BillingAndPaymentView()),
+                                );
+                              },
                               child: const Text(
                                 "Continue",
                               ),
