@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:skill_grid/core/common/appointment_freelancer_card.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
+import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
+import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 
 class BillingAndPaymentView extends StatefulWidget {
-  const BillingAndPaymentView({super.key});
+  final FreelancerEntity freelancer;
+  final AppointmentEntity appointment;
+  const BillingAndPaymentView(
+      {super.key, required this.freelancer, required this.appointment});
 
   @override
   State<BillingAndPaymentView> createState() => _BillingAndPaymentViewState();
@@ -35,11 +42,11 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
       body: SingleChildScrollView(
         child: SafeArea(
             child: Form(
-              key: _formKey,
-              child: Padding(
-                        padding:
+          key: _formKey,
+          child: Padding(
+            padding:
                 const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 40),
-                        child: Column(
+            child: Column(
               children: [
                 const Text(
                   "Billing and Payment",
@@ -177,11 +184,11 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                           if (value == null || value.isEmpty) {
                             return '*required';
                           }
-              
+
                           return null;
                         },
-                        decoration:
-                            const InputDecoration(hintText: "Enter your address"),
+                        decoration: const InputDecoration(
+                            hintText: "Enter your address"),
                       ),
                       const SizedBox(
                         height: 15,
@@ -205,18 +212,21 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                   indent: 20,
                   endIndent: 20,
                 ),
-                // AppointmentFreelancerCard(
-                //   freelancerProfileImgPath: freelancer.profilePicture!,
-                //   freelancerName:
-                //       "${freelancer.firstName} ${freelancer.lastName}",
-                //   profession: freelancer.profession!,
-                //   address: freelancer.address,
-                //   city: freelancer.city,
-                //   mobileNo: freelancer.mobileNo,
-                // ),
+                const SizedBox(
+                  height: 20,
+                ),
+                AppointmentFreelancerCard(
+                  freelancerProfileImgPath: widget.freelancer.profilePicture!,
+                  freelancerName:
+                      "${widget.freelancer.firstName} ${widget.freelancer.lastName}",
+                  profession: widget.freelancer.profession!,
+                  address: widget.freelancer.address,
+                  city: widget.freelancer.city,
+                  mobileNo: widget.freelancer.mobileNo,
+                ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 27, vertical: 28),
+                      const EdgeInsets.symmetric(horizontal: 27, vertical: 25),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -224,21 +234,23 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           RichText(
-                            text: const TextSpan(
-                                style: TextStyle(
+                            text: TextSpan(
+                                style: const TextStyle(
                                     fontSize: 17,
                                     color: Colors.black,
                                     fontFamily: "Inter Bold"),
                                 children: [
-                                  TextSpan(text: "Service: "),
+                                  const TextSpan(text: "Service: "),
                                   TextSpan(
-                                      text: "serviceName",
-                                      style:
-                                          TextStyle(fontFamily: "Inter Regular"))
+                                      text: widget.appointment.freelancerService
+                                          .service.serviceName,
+                                      style: const TextStyle(
+                                          fontFamily: "Inter Regular"))
                                 ]),
                           ),
-                          const Text("Rs. hourlyRate/hr",
-                              style: TextStyle(
+                          Text(
+                              "Rs. ${widget.appointment.freelancerService.hourlyRate}/hr",
+                              style: const TextStyle(
                                   fontSize: 16,
                                   color: Color(0xFF544FBD),
                                   fontFamily: "Inter Bold"))
@@ -248,49 +260,53 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                         height: 15,
                       ),
                       RichText(
-                        text: const TextSpan(
-                            style: TextStyle(
+                        text: TextSpan(
+                            style: const TextStyle(
                                 fontSize: 17,
                                 color: Colors.black,
                                 fontFamily: "Inter Bold"),
                             children: [
-                              TextSpan(text: "Reason for appointment: "),
+                              const TextSpan(text: "Reason for appointment: "),
                               TextSpan(
-                                  text: "appointmentPurpose",
-                                  style: TextStyle(fontFamily: "Inter Regular"))
+                                  text: widget.appointment.appointmentPurpose,
+                                  style: const TextStyle(
+                                      fontFamily: "Inter Regular"))
                             ]),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       RichText(
-                        text: const TextSpan(
-                            style: TextStyle(
+                        text: TextSpan(
+                            style: const TextStyle(
                                 fontSize: 17,
                                 color: Colors.black,
                                 fontFamily: "Inter Bold"),
                             children: [
-                              TextSpan(text: "Appointment date: "),
+                              const TextSpan(text: "Appointment date: "),
                               TextSpan(
-                                  text: "appointmentDate",
-                                  style: TextStyle(fontFamily: "Inter Regular"))
+                                  text: DateFormat('d MMMM yyyy').format(
+                                      widget.appointment.appointmentDate),
+                                  style: const TextStyle(
+                                      fontFamily: "Inter Regular"))
                             ]),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       RichText(
-                        text: const TextSpan(
-                            style: TextStyle(
+                        text: TextSpan(
+                            style: const TextStyle(
                                 fontSize: 17,
                                 color: Colors.black,
                                 fontFamily: "Inter Bold"),
                             children: [
-                              TextSpan(text: "Project duration: "),
+                              const TextSpan(text: "Project duration: "),
                               TextSpan(
                                   text:
-                                      "projectDuration.value projectDuration.unit",
-                                  style: TextStyle(fontFamily: "Inter Regular"))
+                                      "${widget.appointment.projectDuration.value} ${widget.appointment.projectDuration.unit}",
+                                  style: const TextStyle(
+                                      fontFamily: "Inter Regular"))
                             ]),
                       ),
                     ],
@@ -301,9 +317,9 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                     onPressed: () {},
                     buttonColor: const Color(0xFF544FBD))
               ],
-                        ),
-                      ),
-            )),
+            ),
+          ),
+        )),
       ),
     );
   }

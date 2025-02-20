@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/appointment_freelancer_card.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
-import 'package:skill_grid/features/appointment/presentation/view/billing_and_payment_view.dart';
+import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
+import 'package:skill_grid/features/freelancer_service/domain/entity/freelancer_service_entity.dart';
 import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
 
 class SendOfferView extends StatefulWidget {
@@ -18,8 +19,10 @@ class SendOfferView extends StatefulWidget {
 class _SendOfferViewState extends State<SendOfferView> {
   String? selectedService;
   int? hourlyRate;
-
   DateTime? selectedDate;
+  String? duration;
+  TimeOfDay? selectedTime;
+  late FreelancerServiceEntity selectedServiceEntity;
 
   void _showDatePicker() {
     DateTime firstDate = DateTime.now();
@@ -45,10 +48,6 @@ class _SendOfferViewState extends State<SendOfferView> {
     const DropdownMenuItem(value: "year", child: Text("year"))
   ];
 
-  String? duration;
-
-  TimeOfDay? selectedTime;
-
   void _showTimePicker() {
     showTimePicker(
             context: context, initialTime: selectedTime ?? TimeOfDay.now())
@@ -72,7 +71,6 @@ class _SendOfferViewState extends State<SendOfferView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<SendAnOfferBloc>(context)
           .add(FetchFreelancerDetailsEvent(freelancerId: widget.freelancerId));
-      //
     });
 
     return BlocBuilder<SendAnOfferBloc, SendAnOfferState>(
@@ -80,6 +78,7 @@ class _SendOfferViewState extends State<SendOfferView> {
         if (state is FreelancerProfileLoaded) {
           final freelancer = state.freelancerEntity;
           final services = state.services;
+          final client = state.clientEntity;
 
           final serviceList = services
               .map((service) => DropdownMenuItem<String>(
@@ -87,6 +86,18 @@ class _SendOfferViewState extends State<SendOfferView> {
                     child: Text(service.service.serviceName),
                   ))
               .toList();
+
+          final AppointmentEntity appointmentEntity = AppointmentEntity(
+            appointmentPurpose: _appointmentPurposeController.text,
+            appointmentDate: selectedDate ?? DateTime.now(),
+            projectDuration: ProjectDuration(
+              value: int.tryParse(_projectDurationValueController.text) ?? 0,
+              unit: duration ?? 'hour',
+            ),
+            status: false,
+            freelancerService: FreelancerServiceEntity.empty(),
+            client: client,
+          );
 
           return Scaffold(
             body: SingleChildScrollView(
@@ -158,7 +169,7 @@ class _SendOfferViewState extends State<SendOfferView> {
                             height: 10,
                           ),
                           // Only show charge when a service is selected
-                          if (hourlyRate != null)
+                          if (selectedService != null)
                             RichText(
                               text: TextSpan(
                                   style: const TextStyle(
@@ -472,12 +483,11 @@ class _SendOfferViewState extends State<SendOfferView> {
                                 backgroundColor: const Color(0XFF544FBD),
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const BillingAndPaymentView()),
-                                );
+                                BlocProvider.of<SendAnOfferBloc>(context).add(
+                                    NavigateToBillingAndPayment(
+                                        context: context,
+                                        freelancerEntity: freelancer,
+                                        appointmentEntity: appointmentEntity));
                               },
                               child: const Text(
                                 "Continue",
