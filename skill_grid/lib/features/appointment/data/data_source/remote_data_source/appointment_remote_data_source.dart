@@ -86,19 +86,15 @@ class AppointmentRemoteDataSource implements IAppointmentDataSource {
 
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
-        print("Parsed data: $data");
 
         List<AppointmentApiModel> appointmentApiModels =
             data.map((json) => AppointmentApiModel.fromJson(json)).toList();
-
-        print("Appointment API Models: $appointmentApiModels");
 
         return AppointmentApiModel.toEntityList(appointmentApiModels);
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioException catch (e) {
-      print("Dio Error: ${e.response?.data}");
       throw Exception("Dio Error: ${e.message}");
     } catch (e) {
       throw Exception("An error occurred: ${e.toString()}");
@@ -137,19 +133,23 @@ class AppointmentRemoteDataSource implements IAppointmentDataSource {
   }
 
   @override
-  Future<void> saveAppointment(
+  Future<String> saveAppointment(
       AppointmentEntity appointmentEntity, String? token) async {
     try {
       Response response = await _dio.post(ApiEndpoints.saveAppointment,
           data: {
             "appointment_purpose": appointmentEntity.appointmentPurpose,
             "appointment_date": appointmentEntity.appointmentDate,
-            "project_duration": appointmentEntity.projectDuration,
+            "project_duration": {
+              "value": appointmentEntity.projectDuration.value,
+              "unit": appointmentEntity.projectDuration.unit
+            },
             "appointment_time": appointmentEntity.appointmentTime,
             "project_end_date": appointmentEntity.projectEndDate,
             "status": appointmentEntity.status,
-            "freelancer_service_id": appointmentEntity.freelancerService,
-            "client_id": appointmentEntity.client
+            "freelancer_service_id":
+                appointmentEntity.freelancerService.freelancerServiceId,
+            "client_id": appointmentEntity.client.clientId
           },
           options: Options(
             headers: {
@@ -157,11 +157,16 @@ class AppointmentRemoteDataSource implements IAppointmentDataSource {
             },
           ));
       if (response.statusCode == 201) {
-        return;
+        final appointmentId = response.data['_id'];
+        return appointmentId;
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioException catch (e) {
+      print('DioError: ${e.message}'); // Print the Dio error message.
+      print('DioError Type: ${e.type}'); //print the Dio error type.
+      print('DioError Response: ${e.response}'); //print the Dio error response.
+      print('DioError Stacktrace: ${e.stackTrace}');
       throw Exception(e);
     } catch (e) {
       throw Exception(e);

@@ -297,9 +297,10 @@ class HiveService {
         .toList();
   }
 
-  Future<void> saveAppointment(AppointmentHiveModel appointment) async {
+  Future<String> saveAppointment(AppointmentHiveModel appointment) async {
     var box = await Hive.openBox<AppointmentHiveModel>(HiveTableConstant.appointmentBox);
     await box.put(appointment.appointmentId, appointment);
+    return appointment.appointmentId!;
   }
 
   Future<void> deleteAppointment(String appointmentId) async {

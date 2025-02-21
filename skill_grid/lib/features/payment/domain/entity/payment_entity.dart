@@ -13,7 +13,7 @@ class PaymentEntity extends Equatable {
 
   const PaymentEntity({
     this.paymentId,
-    required this.amount,
+    this.amount = 0,
     required this.paymentMethod,
     required this.paymentStatus,
     this.paymentTimestamp,

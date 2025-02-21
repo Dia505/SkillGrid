@@ -47,9 +47,8 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
             "amount": paymentEntity.amount,
             "payment_method": paymentEntity.paymentMethod,
             "payment_status": paymentEntity.paymentStatus,
-            "payment_timestamp": paymentEntity.paymentTimestamp,
-            "appointment_id": paymentEntity.appointment,
-            "billing_address_id": paymentEntity.billingAddress
+            "appointment_id": paymentEntity.appointment.appointmentId,
+            "billing_address_id": paymentEntity.billingAddress.billingAddressId
           });
       if (response.statusCode == 201) {
         return;

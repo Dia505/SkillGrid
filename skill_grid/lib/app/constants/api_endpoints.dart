@@ -49,6 +49,7 @@ class ApiEndpoints {
 
   //Billing address routes
   static const String saveBillingAddress = "billing-address";
+  static const String getBillingAddressById = "billing-address";
 
   //Payment address routes
   static const String savePayment = "payment";

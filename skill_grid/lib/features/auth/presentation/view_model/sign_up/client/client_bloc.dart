@@ -17,7 +17,7 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
     required LoginBloc loginBloc,
   })  : _registerClientUseCase = registerClientUseCase,
         _loginBloc = loginBloc,
-        super(ClientState.initial()) {
+        super(const ClientState.initial()) {
     on<RegisterClient>(_onRegisterClient);
 
     on<NavigateToLoginScreen>((event, emit) {

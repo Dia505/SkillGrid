@@ -13,7 +13,7 @@ class AppointmentEntity extends Equatable {
   final FreelancerServiceEntity freelancerService;
   final ClientEntity client;
 
-  const AppointmentEntity({
+  const AppointmentEntity( {
     this.appointmentId,
     required this.appointmentPurpose,
     required this.appointmentDate,

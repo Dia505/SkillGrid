@@ -10,6 +10,8 @@ import 'package:skill_grid/features/appointment/data/data_source/remote_data_sou
 import 'package:skill_grid/features/appointment/data/repository/local_repository/appointment_local_repository.dart';
 import 'package:skill_grid/features/appointment/data/repository/remote_repository/appointment_remote_repository.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_id_use_case.dart';
+import 'package:skill_grid/features/appointment/domain/use_case/save_appointment_use_case.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/billing_and_payment/billing_and_payment_bloc.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
@@ -36,6 +38,10 @@ import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
+import 'package:skill_grid/features/billing_address/data/data_source/remote_data_source.dart/billing_address_remote_data_source.dart';
+import 'package:skill_grid/features/billing_address/data/repository/remote_repository/billing_address_remote_repository.dart';
+import 'package:skill_grid/features/billing_address/domain/use_case/get_billing_address_by_id_use_case.dart';
+import 'package:skill_grid/features/billing_address/domain/use_case/save_billing_address_use_case.dart';
 import 'package:skill_grid/features/education/data/data_source/local_data_source/education_local_data_source.dart';
 import 'package:skill_grid/features/education/data/data_source/remote_data_source/education_remote_data_source.dart';
 import 'package:skill_grid/features/education/data/repository/local_repository/education_local_repository.dart';
@@ -55,6 +61,11 @@ import 'package:skill_grid/features/home/presentation/view_model/client/dashboar
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
+import 'package:skill_grid/features/payment/data/data_source/local_data_source/payment_local_data_source.dart';
+import 'package:skill_grid/features/payment/data/data_source/remote_data_source/payment_remote_data_source.dart';
+import 'package:skill_grid/features/payment/data/repository/local_repository/payment_local_repository.dart';
+import 'package:skill_grid/features/payment/data/repository/remote_repository/payment_remote_repository.dart';
+import 'package:skill_grid/features/payment/domain/use_case/save_payment_use_case.dart';
 import 'package:skill_grid/features/portfolio/data/data_source/local_data_source/portfolio_local_data_source.dart';
 import 'package:skill_grid/features/portfolio/data/data_source/remote_data_source/portfolio_remote_data_source.dart';
 import 'package:skill_grid/features/portfolio/data/repository/local_repository/portfolio_local_repository.dart';
@@ -102,6 +113,8 @@ Future<void> initDependencies() async {
   await _initAppointmentDependencies();
   await _initSendAnOfferDependencies();
   await _initBillingAndPaymentDependencies();
+  await _initPaymentDependencies();
+  await _initBillingAddressDependencies();
 }
 
 _initHiveService() {
@@ -416,6 +429,15 @@ _initAppointmentDependencies() {
       GetAppointmentByFreelancerIdUseCase(
           appointmentRepository: getIt<AppointmentRemoteRepository>(),
           tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+  getIt.registerLazySingleton<SaveAppointmentUseCase>(() =>
+      SaveAppointmentUseCase(
+          appointmentRepository: getIt<AppointmentRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+          tokenHelper: getIt<TokenHelper>()));
+  getIt.registerLazySingleton<GetAppointmentByIdUseCase>(() =>
+      GetAppointmentByIdUseCase(
+          appointmentRepository: getIt<AppointmentRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 }
 
 //Send an offer dependencies
@@ -446,7 +468,56 @@ _initFreelancerProfileDependencies() async {
       sendAnOfferBloc: getIt<SendAnOfferBloc>()));
 }
 
+//Payment dependencies
+_initPaymentDependencies() async {
+  getIt.registerLazySingleton<PaymentLocalDataSource>(
+      () => PaymentLocalDataSource(hiveService: getIt()));
+  getIt.registerLazySingleton<PaymentRemoteDataSource>(
+      () => PaymentRemoteDataSource(dio: getIt<Dio>()));
+
+  getIt.registerLazySingleton<PaymentLocalRepository>(() =>
+      PaymentLocalRepository(
+          paymentLocalDataSource: getIt<PaymentLocalDataSource>()));
+  getIt.registerLazySingleton<PaymentRemoteRepository>(() =>
+      PaymentRemoteRepository(
+          paymentRemoteDataSource: getIt<PaymentRemoteDataSource>()));
+
+  getIt.registerLazySingleton<SavePaymentUseCase>(
+    () => SavePaymentUseCase(paymentRepository: getIt<PaymentRemoteRepository>())
+  );
+}
+
+//Billing address dependencies
+_initBillingAddressDependencies() async {
+  getIt.registerLazySingleton<BillingAddressRemoteDataSource>(
+      () => BillingAddressRemoteDataSource(dio: getIt<Dio>()));
+
+  getIt.registerLazySingleton<BillingAddressRemoteRepository>(() =>
+      BillingAddressRemoteRepository(
+          billingAddressRemoteDataSource: getIt<BillingAddressRemoteDataSource>()));
+
+  getIt.registerLazySingleton<SaveBillingAddressUseCase>(
+    () => SaveBillingAddressUseCase(
+      billlingAddressRepository: getIt<BillingAddressRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      tokenHelper: getIt<TokenHelper>()
+    )
+  );
+  getIt.registerLazySingleton<GetBillingAddressByIdUseCase>(
+    () => GetBillingAddressByIdUseCase(
+      billingAddressRepository: getIt<BillingAddressRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>()
+    )
+  );
+}
+
 //Billing and payment dependencies
 _initBillingAndPaymentDependencies() async {
-  getIt.registerFactory<BillingAndPaymentBloc>(() => BillingAndPaymentBloc());
+  getIt.registerFactory<BillingAndPaymentBloc>(() => BillingAndPaymentBloc(
+    saveAppointmentUseCase: getIt<SaveAppointmentUseCase>(),
+    saveBillingAddressUseCase: getIt<SaveBillingAddressUseCase>(),
+    savePaymentUseCase: getIt<SavePaymentUseCase>(),
+    getAppointmentByIdUseCase: getIt<GetAppointmentByIdUseCase>(),
+    getBillingAddressByIdUseCase: getIt<GetBillingAddressByIdUseCase>()
+  ));
 }

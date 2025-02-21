@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/appointment_freelancer_card.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
+import 'package:skill_grid/features/appointment/domain/use_case/save_appointment_use_case.dart';
+import 'package:skill_grid/features/appointment/presentation/view_model/billing_and_payment/billing_and_payment_bloc.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
+import 'package:skill_grid/features/billing_address/domain/entity/billing_address_entity.dart';
+import 'package:skill_grid/features/billing_address/domain/use_case/save_billing_address_use_case.dart';
+import 'package:skill_grid/features/payment/domain/use_case/save_payment_use_case.dart';
 
 class BillingAndPaymentView extends StatefulWidget {
   final FreelancerEntity freelancer;
@@ -35,6 +41,8 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _billingAddressController =
       TextEditingController();
+
+  String? selectedPayment;
 
   @override
   Widget build(BuildContext context) {
@@ -76,82 +84,111 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                              width: 28,
-                              height: 28,
-                              decoration: BoxDecoration(
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedPayment = "Cash";
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: const Color(0xFF929292),
                                   ),
-                                  color: const Color(0xFFE7E7FF))),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text(
-                            "Cash",
-                            style: TextStyle(fontSize: 18),
-                          )
-                        ],
+                                  color: selectedPayment == "Cash"
+                                      ? const Color(0xFF544FBD)
+                                      : const Color(0xFFE7E7FF),
+                                )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              "Cash",
+                              style: TextStyle(fontSize: 18),
+                            )
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                              width: 28,
-                              height: 28,
-                              decoration: BoxDecoration(
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedPayment = "Credit/Debit card";
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: const Color(0xFF929292),
                                   ),
-                                  color: const Color(0xFFE7E7FF))),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text(
-                            "Credit/Debit card",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          const SizedBox(
-                            width: 7,
-                          ),
-                          Image.asset(
-                            "assets/images/mastercard_logo.png",
-                            height: 28,
-                          ),
-                          Image.asset(
-                            "assets/images/visa_logo.png",
-                            height: 18,
-                          )
-                        ],
+                                  color: selectedPayment == "Credit/Debit card"
+                                      ? const Color(0xFF544FBD)
+                                      : const Color(0xFFE7E7FF),
+                                )),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              "Credit/Debit card",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            const SizedBox(
+                              width: 7,
+                            ),
+                            Image.asset(
+                              "assets/images/mastercard_logo.png",
+                              height: 28,
+                            ),
+                            Image.asset(
+                              "assets/images/visa_logo.png",
+                              height: 18,
+                            )
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                              width: 28,
-                              height: 28,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: const Color(0xFF929292),
-                                  ),
-                                  color: const Color(0xFFE7E7FF))),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Image.asset(
-                            "assets/images/esewa_logo.png",
-                            height: 20,
-                          )
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedPayment = "eSewa";
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color(0xFF929292),
+                                    ),
+                                    color: selectedPayment == "eSewa"
+                                        ? const Color(0xFF544FBD)
+                                        : const Color(0xFFE7E7FF))),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              "assets/images/esewa_logo.png",
+                              height: 20,
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -312,10 +349,78 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                     ],
                   ),
                 ),
-                CommonButton(
+                BlocListener<BillingAndPaymentBloc, BillingAndPaymentState>(
+                  listener: (context, state) {
+                    AppointmentEntity? savedAppointment;
+                    BillingAddressEntity? savedBillingAddress;
+
+                    if (state is AppointmentSavedState) {
+                      savedAppointment = state.appointment;
+                    }
+
+                    if (state is BillingAddressSavedState) {
+                      savedBillingAddress = state.billingAddress;
+                    }
+
+                    // Now trigger SavePayment after appointment is saved
+                    if (savedAppointment != null &&
+                        savedBillingAddress != null) {
+                      final paymentParams = SavePaymentParams(
+                        amount: 0,
+                        paymentMethod: selectedPayment!,
+                        paymentStatus: false,
+                        appointment: savedAppointment,
+                        billingAddress: savedBillingAddress,
+                      );
+
+                      // Trigger the SavePayment event after both appointment and billing address are saved
+                      context.read<BillingAndPaymentBloc>().add(SavePayment(
+                            paymentParams: paymentParams,
+                            context: context,
+                          ));
+                    }
+                  },
+                  child: CommonButton(
                     buttonText: "Send offer",
-                    onPressed: () {},
-                    buttonColor: const Color(0xFF544FBD))
+                    buttonColor: const Color(0xFF544FBD),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        final appointmentParams = SaveAppointmentParams(
+                          appointmentPurpose:
+                              widget.appointment.appointmentPurpose,
+                          appointmentDate: widget.appointment.appointmentDate,
+                          projectDuration: widget.appointment.projectDuration,
+                          appointmentTime:
+                              widget.appointment.appointmentTime ?? "",
+                          status: false,
+                          freelancerService:
+                              widget.appointment.freelancerService,
+                          client: widget.appointment.client,
+                        );
+
+                        final billingAddressParams = SaveBillingAddressParams(
+                          address: _billingAddressController.text.trim(),
+                          city: selectedCity!,
+                        );
+
+                        // Trigger SaveAppointment and SaveBillingAddress events simultaneously
+                        context
+                            .read<BillingAndPaymentBloc>()
+                            .add(SaveAppointment(
+                              appointmentParams: appointmentParams,
+                              context: context,
+                            ));
+
+                        context
+                            .read<BillingAndPaymentBloc>()
+                            .add(SaveBillingAddress(
+                              billingAddressParams: billingAddressParams,
+                              context: context,
+                            ));
+                      }
+                    },
+                  ),
+                )
               ],
             ),
           ),

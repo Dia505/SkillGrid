@@ -55,10 +55,10 @@ class AppointmentLocalDataSource implements IAppointmentDataSource {
   }
 
   @override
-  Future<void> saveAppointment(AppointmentEntity appointmentEntity, String? token) async {
+  Future<String> saveAppointment(AppointmentEntity appointmentEntity, String? token) async {
     try {
       final appointmentHiveModel = AppointmentHiveModel.fromEntity(appointmentEntity);
-      await _hiveService.saveAppointment(appointmentHiveModel);
+      return _hiveService.saveAppointment(appointmentHiveModel);
     } catch (e) {
       throw Exception(e);
     }

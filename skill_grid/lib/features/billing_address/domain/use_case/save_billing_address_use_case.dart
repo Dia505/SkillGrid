@@ -21,7 +21,7 @@ class SaveBillingAddressParams extends Equatable {
   List<Object?> get props => [address, city];
 }
 
-class SaveBillingAddressUseCase implements UsecaseWithParams<void, SaveBillingAddressParams> {
+class SaveBillingAddressUseCase implements UsecaseWithParams<String, SaveBillingAddressParams> {
   final IBillingAddressRepository billlingAddressRepository;
   final TokenSharedPrefs tokenSharedPrefs;
   final TokenHelper tokenHelper;
@@ -33,7 +33,7 @@ class SaveBillingAddressUseCase implements UsecaseWithParams<void, SaveBillingAd
   });
 
   @override
-  Future<Either<Failure, void>> call(SaveBillingAddressParams params) async {
+  Future<Either<Failure, String>> call(SaveBillingAddressParams params) async {
     final token = await tokenSharedPrefs.getToken();
 
     return token.fold((l) {
@@ -42,10 +42,12 @@ class SaveBillingAddressUseCase implements UsecaseWithParams<void, SaveBillingAd
       final role = await tokenHelper.getRoleFromToken();
 
       if(role == "client") {
-        return await billlingAddressRepository.saveBillingAddress(
+        final billingAddressResult = await billlingAddressRepository.saveBillingAddress(
           BillingAddressEntity(address: params.address, city: params.city), 
           r
         );
+
+        return billingAddressResult;
       } else {
         return const Left(RoleMismatchFailure(message: "Access denied. You have to be a client"));
       }

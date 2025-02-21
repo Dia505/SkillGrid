@@ -8,19 +8,19 @@ class FreelancerServiceEntity extends Equatable {
   final ServiceEntity service;
   final FreelancerEntity freelancer;
 
-  const FreelancerServiceEntity({
-    this.freelancerServiceId,
-    required this.hourlyRate,
-    required this.service,
-    required this.freelancer
-  });
+  const FreelancerServiceEntity(
+      {this.freelancerServiceId,
+      required this.hourlyRate,
+      required this.service,
+      required this.freelancer});
 
   FreelancerServiceEntity.empty()
-    : freelancerServiceId = "_empty.freelancerServiceId",
-      hourlyRate = 0,
-      service = ServiceEntity.empty(),
-      freelancer = FreelancerEntity.empty();
+      : freelancerServiceId = "_empty.freelancerServiceId",
+        hourlyRate = 0,
+        service = const ServiceEntity.empty(),
+        freelancer = FreelancerEntity.empty();
 
   @override
-  List<Object?> get props => [freelancerServiceId, hourlyRate, service, freelancer];
+  List<Object?> get props =>
+      [freelancerServiceId, hourlyRate, service, freelancer];
 }

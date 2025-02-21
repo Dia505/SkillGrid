@@ -10,10 +10,21 @@ class BillingAddressRemoteRepository implements IBillingAddressRepository {
     : _billingAddressRemoteDataSource = billingAddressRemoteDataSource;
 
   @override
-  Future<Either<Failure, void>> saveBillingAddress(BillingAddressEntity billingAddressEntity, String? token) async {
+  Future<Either<Failure, String>> saveBillingAddress(BillingAddressEntity billingAddressEntity, String? token) async {
     try {
-      _billingAddressRemoteDataSource.saveBillingAddress(billingAddressEntity, token);
-      return const Right(null);
+      final billingAddressId = await _billingAddressRemoteDataSource.saveBillingAddress(billingAddressEntity, token);
+      return Right(billingAddressId);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, BillingAddressEntity>> getBillingAddressById(String billingAddressId, String? token) async {
+    try {
+      final billingAddress = await _billingAddressRemoteDataSource.getBillingAddressById(
+          billingAddressId, token);
+      return Right(billingAddress);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }

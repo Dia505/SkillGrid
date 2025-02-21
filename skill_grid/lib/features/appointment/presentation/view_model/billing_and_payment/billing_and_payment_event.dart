@@ -8,8 +8,26 @@ sealed class BillingAndPaymentEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadBillingDetails extends BillingAndPaymentEvent {
-  final FreelancerEntity freelancerEntity;
+class SaveAppointment extends BillingAndPaymentEvent {
+  final SaveAppointmentParams appointmentParams;
+  final BuildContext context;
 
-  const LoadBillingDetails(this.freelancerEntity);
+  const SaveAppointment(
+      {required this.appointmentParams,
+      required this.context});
+}
+
+class SavePayment extends BillingAndPaymentEvent {
+  final SavePaymentParams paymentParams;
+  final BuildContext context;
+
+  const SavePayment({required this.paymentParams, required this.context});
+}
+
+class SaveBillingAddress extends BillingAndPaymentEvent {
+  final SaveBillingAddressParams billingAddressParams;
+  final BuildContext context;
+
+  const SaveBillingAddress(
+      {required this.billingAddressParams, required this.context});
 }

@@ -41,8 +41,34 @@ class AppointmentApiModel extends Equatable {
     required this.client,
   });
 
-  factory AppointmentApiModel.fromJson(Map<String, dynamic> json) =>
-      _$AppointmentApiModelFromJson(json);
+  factory AppointmentApiModel.fromJson(Map<String, dynamic> json) {
+
+    json.forEach((key, value) {
+      print("Key: $key, Type: ${value.runtimeType}, Value: $value");
+    });
+    try {
+      return AppointmentApiModel(
+        appointmentId: json["_id"],
+        appointmentPurpose: json["appointment_purpose"],
+        appointmentDate: DateTime.parse(json["appointment_date"]),
+        projectDuration:
+            ProjectDurationApiModel.fromJson(json["project_duration"]),
+        projectEndDate: json["project_end_date"] != null
+            ? DateTime.parse(json["project_end_date"])
+            : null,
+        appointmentTime: json["appointment_time"],
+        status: json["status"],
+        freelancerService:
+            FreelancerServiceApiModel.fromJson(json["freelancer_service_id"]),
+        client: ClientApiModel.fromJson(json["client_id"]),
+      );
+    } catch (e, stacktrace) {
+      print("Error parsing AppointmentApiModel: $e");
+      print(stacktrace);
+      throw const FormatException(
+          "Invalid JSON format for AppointmentApiModel");
+    }
+  }
 
   Map<String, dynamic> toJson() => _$AppointmentApiModelToJson(this);
 
@@ -121,20 +147,17 @@ class AppointmentApiModel extends Equatable {
         client: appointmentDto.client.toEntity());
   }
 
-  AppointmentApiModel copyWith({
-    String? appointmentPurpose
-  }) {
+  AppointmentApiModel copyWith({String? appointmentPurpose}) {
     return AppointmentApiModel(
-      appointmentId: appointmentId,
-      appointmentPurpose: appointmentPurpose ?? this.appointmentPurpose, 
-      appointmentDate: appointmentDate, 
-      projectDuration: projectDuration, 
-      appointmentTime: appointmentTime,
-      projectEndDate: projectEndDate,
-      status: status, freelancerService: 
-      freelancerService, 
-      client: client
-    );
+        appointmentId: appointmentId,
+        appointmentPurpose: appointmentPurpose ?? this.appointmentPurpose,
+        appointmentDate: appointmentDate,
+        projectDuration: projectDuration,
+        appointmentTime: appointmentTime,
+        projectEndDate: projectEndDate,
+        status: status,
+        freelancerService: freelancerService,
+        client: client);
   }
 
   @override
@@ -169,7 +192,12 @@ class ProjectDurationApiModel extends Equatable {
   }
 
   factory ProjectDurationApiModel.fromJson(Map<String, dynamic> json) {
-    return ProjectDurationApiModel(unit: json["unit"], value: json["value"]);
+    return ProjectDurationApiModel(
+      unit: json["unit"],
+      value: (json["value"] is int)
+          ? json["value"]
+          : (json["value"] as num).toInt(),
+    );
   }
 
   @override
