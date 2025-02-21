@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:skill_grid/features/billing_address/data/dto/get_billing_address_by_id_dto.dart';
 import 'package:skill_grid/features/billing_address/domain/entity/billing_address_entity.dart';
 
 part 'billing_address_api_model.g.dart';
@@ -32,6 +33,15 @@ class BillingAddressApiModel extends Equatable {
       billingAddressId: billingAddressId,
       address: address, 
       city: city
+    );
+  }
+
+  static BillingAddressEntity findBillingAddressByIdDtoToEntity(
+      GetBillingAddressByIdDto billingAddressDto) {
+    return BillingAddressEntity(
+      billingAddressId: billingAddressDto.billingAddressId,
+      address: billingAddressDto.address,
+      city: billingAddressDto.city
     );
   }
 

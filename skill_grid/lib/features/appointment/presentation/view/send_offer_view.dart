@@ -7,6 +7,7 @@ import 'package:skill_grid/features/appointment/domain/entity/appointment_entity
 import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/freelancer_service/domain/entity/freelancer_service_entity.dart';
 import 'package:skill_grid/features/profile/presentation/view/freelancer_profile_view.dart';
+import 'package:skill_grid/features/service/domain/entity/service_entity.dart';
 
 class SendOfferView extends StatefulWidget {
   final String freelancerId;
@@ -22,7 +23,8 @@ class _SendOfferViewState extends State<SendOfferView> {
   DateTime? selectedDate;
   String? duration;
   TimeOfDay? selectedTime;
-  late FreelancerServiceEntity selectedServiceEntity;
+  String? selectedFreelancerServiceId;
+  String? selectedServiceId;
 
   void _showDatePicker() {
     DateTime firstDate = DateTime.now();
@@ -58,9 +60,15 @@ class _SendOfferViewState extends State<SendOfferView> {
     });
   }
 
+  String? formatTimeOfDay(TimeOfDay? time) {
+    if (time == null) return null;
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
+    return "$hour:$minute";
+  }
+
   bool _isChecked = false;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _appointmentPurposeController =
       TextEditingController();
   final TextEditingController _projectDurationValueController =
@@ -72,6 +80,8 @@ class _SendOfferViewState extends State<SendOfferView> {
       BlocProvider.of<SendAnOfferBloc>(context)
           .add(FetchFreelancerDetailsEvent(freelancerId: widget.freelancerId));
     });
+
+    String? appointmentTimeString = formatTimeOfDay(selectedTime);
 
     return BlocBuilder<SendAnOfferBloc, SendAnOfferState>(
       builder: (context, state) {
@@ -87,7 +97,7 @@ class _SendOfferViewState extends State<SendOfferView> {
                   ))
               .toList();
 
-          final AppointmentEntity appointmentEntity = AppointmentEntity(
+          late AppointmentEntity appointmentEntity = AppointmentEntity(
             appointmentPurpose: _appointmentPurposeController.text,
             appointmentDate: selectedDate ?? DateTime.now(),
             projectDuration: ProjectDuration(
@@ -95,7 +105,14 @@ class _SendOfferViewState extends State<SendOfferView> {
               unit: duration ?? 'hour',
             ),
             status: false,
-            freelancerService: FreelancerServiceEntity.empty(),
+            appointmentTime: appointmentTimeString,
+            freelancerService: FreelancerServiceEntity(
+                freelancerServiceId: selectedFreelancerServiceId,
+                hourlyRate: hourlyRate!,
+                service: ServiceEntity(
+                    serviceId: selectedServiceId,
+                    serviceName: selectedService!),
+                freelancer: freelancer),
             client: client,
           );
 
@@ -160,32 +177,14 @@ class _SendOfferViewState extends State<SendOfferView> {
                                       service.service.serviceName ==
                                       selectedService,
                                 );
-
+                                selectedFreelancerServiceId =
+                                    selectedServiceEntity.freelancerServiceId;
+                                selectedServiceId =
+                                    selectedServiceEntity.service.serviceId;
                                 hourlyRate = selectedServiceEntity.hourlyRate;
                               }
                             },
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          // Only show charge when a service is selected
-                          if (selectedService != null)
-                            RichText(
-                              text: TextSpan(
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      fontFamily: "Inter Medium"),
-                                  children: [
-                                    const TextSpan(text: "Charge:"),
-                                    TextSpan(
-                                        text:
-                                            " Rs. ${hourlyRate.toString()}/hr",
-                                        style: const TextStyle(
-                                            color: Color(0XFF544FBD),
-                                            fontFamily: "Inter Bold"))
-                                  ]),
-                            ),
                         ],
                       ),
                       Padding(
@@ -349,7 +348,7 @@ class _SendOfferViewState extends State<SendOfferView> {
                                       side: const BorderSide(
                                           color: Color(0xFF322E86)))),
                               child: Text(
-                                selectedTime?.format(context) ?? "Choose time",
+                                appointmentTimeString ?? "Choose time",
                                 style: const TextStyle(
                                     color: Color(0xFF322E86),
                                     fontSize: 17,
