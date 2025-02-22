@@ -50,14 +50,8 @@ class AppointmentRemoteDataSource implements IAppointmentDataSource {
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
 
-        List<GetAppointmentByClientIdDto> appointmentDto = data
-            .map((json) => GetAppointmentByClientIdDto.fromJson(json))
-            .toList();
-
-        List<AppointmentApiModel> appointmentApiModels = appointmentDto
-            .map((dto) =>
-                AppointmentApiModel.fromGetAppointmentByClientIdDto(dto))
-            .toList();
+        List<AppointmentApiModel> appointmentApiModels =
+            data.map((json) => AppointmentApiModel.fromJson(json)).toList();
 
         return AppointmentApiModel.toEntityList(appointmentApiModels);
       } else {

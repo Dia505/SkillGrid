@@ -41,8 +41,10 @@ class AppointmentApiModel extends Equatable {
     required this.client,
   });
 
-  factory AppointmentApiModel.fromJson(Map<String, dynamic> json) {
+  // factory AppointmentApiModel.fromJson(Map<String, dynamic> json) =>
+  //     _$AppointmentApiModelFromJson(json);
 
+  factory AppointmentApiModel.fromJson(Map<String, dynamic> json) {
     json.forEach((key, value) {
       print("Key: $key, Type: ${value.runtimeType}, Value: $value");
     });
@@ -58,8 +60,8 @@ class AppointmentApiModel extends Equatable {
             : null,
         appointmentTime: json["appointment_time"],
         status: json["status"],
-        freelancerService:
-            FreelancerServiceApiModel.fromJson(json["freelancer_service_id"]),
+        freelancerService: FreelancerServiceApiModel.fromJson(
+            json['freelancer_service_id'] as Map<String, dynamic>),
         client: ClientApiModel.fromJson(json["client_id"]),
       );
     } catch (e, stacktrace) {
