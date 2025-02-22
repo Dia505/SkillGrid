@@ -4,17 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
+import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_client_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/calendar_screen_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/client_contracts_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/home_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/notification_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/contracts/contracts_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
+import 'package:skill_grid/features/payment/domain/use_case/get_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/profile/client/client_profile_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
@@ -51,7 +54,12 @@ class ClientDashboardState extends Equatable {
               getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
               freelancerProfileBloc: getIt<FreelancerProfileBloc>()),
           child: const SearchScreenView()),
-      const CalendarScreenView(),
+      BlocProvider(
+          create: (context) => ContractsBloc(
+              getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>(),
+              tokenHelper: getIt<TokenHelper>(),
+              getPaymentByAppointmentIdUseCase: getIt<GetPaymentByAppointmentIdUseCase>()),
+          child: const ClientContractsView()),
       const NotificationScreenView()
     ]);
   }

@@ -26,8 +26,8 @@ class ClientDashboard extends StatelessWidget {
                 BottomNavigationBarItem(
                     icon: Icon(Icons.search_rounded), label: "Search"),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.calendar_month_rounded),
-                    label: "Calendar"),
+                    icon: Icon(Icons.description_outlined),
+                    label: "Contracts"),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.notifications), label: "Notification"),
               ],

@@ -124,40 +124,6 @@ class _DashboardSidebarState extends State<DashboardSidebar> {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
-            child: Divider(
-              color: Colors.grey,
-              thickness: 1,
-              indent: 0,
-              endIndent: 0,
-            ),
-          ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.description_outlined,
-                    size: 28,
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Text(
-                    "Contracts",
-                    style:
-                        TextStyle(fontSize: 18, fontFamily: "Inter SemiBold"),
-                  ),
-                ],
-              ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 24,
-              ),
-            ],
-          ),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.only(left: 80.0),
