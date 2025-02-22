@@ -24,8 +24,33 @@ class FreelancerServiceApiModel extends Equatable {
       required this.service,
       required this.freelancer});
 
-  factory FreelancerServiceApiModel.fromJson(Map<String, dynamic> json) =>
-      _$FreelancerServiceApiModelFromJson(json);
+  factory FreelancerServiceApiModel.fromJson(Map<String, dynamic> json) {
+    try {
+      return FreelancerServiceApiModel(
+        freelancerServiceId: json["_id"],
+        hourlyRate: json["hourly_rate"],
+        service: json["service_id"] is Map<String, dynamic>
+            ? ServiceApiModel.fromJson(json["service_id"])
+            : ServiceApiModel(
+                serviceId: json["service_id"], serviceName: "Unknown"),
+        freelancer: json["freelancer_id"] is Map<String, dynamic>
+            ? FreelancerApiModel.fromJson(json["freelancer_id"])
+            : FreelancerApiModel(
+                freelancerId: json["freelancer_id"],
+                firstName: "Unknown",
+                lastName: "Unknown",
+                dateOfBirth: DateTime(1970, 1, 1),
+                address: "Unknown",
+                city: "Unknown",
+                mobileNo: "Unknown",
+                email: "Unknown",
+                password: "Unknown"),
+      );
+    } catch (e) {
+      throw const FormatException(
+          "***Invalid JSON format for FreelancerServiceApiModel");
+    }
+  }
 
   Map<String, dynamic> toJson() => _$FreelancerServiceApiModelToJson(this);
 
@@ -49,15 +74,16 @@ class FreelancerServiceApiModel extends Equatable {
           List<FreelancerServiceApiModel> models) =>
       models.map((model) => model.toEntity()).toList();
 
-  static FreelancerServiceApiModel fromDto(GetFreelancerServiceByFreelancerIdDto dto) {
+  static FreelancerServiceApiModel fromDto(
+      GetFreelancerServiceByFreelancerIdDto dto) {
     return FreelancerServiceApiModel(
-      freelancerServiceId: dto.freelancerServiceId,
-      hourlyRate: dto.hourlyRate, 
-      service: dto.service, 
-      freelancer: dto.freelancer
-    );
+        freelancerServiceId: dto.freelancerServiceId,
+        hourlyRate: dto.hourlyRate,
+        service: dto.service,
+        freelancer: dto.freelancer);
   }
 
   @override
-  List<Object?> get props => [freelancerServiceId, hourlyRate, service, freelancer];
+  List<Object?> get props =>
+      [freelancerServiceId, hourlyRate, service, freelancer];
 }

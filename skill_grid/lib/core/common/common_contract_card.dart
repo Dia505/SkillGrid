@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CommonContractCard extends StatelessWidget {
   final String freelancerProfileImgPath;
@@ -10,6 +11,10 @@ class CommonContractCard extends StatelessWidget {
   final int amount;
   final String paymentMethod;
   final bool paymentStatus;
+  final String appointmentDate;
+  final String? appointmentTime;
+  final int projectDurationValue;
+  final String projectDurationUnit;
 
   const CommonContractCard(
       {super.key,
@@ -21,10 +26,29 @@ class CommonContractCard extends StatelessWidget {
       required this.projectEndDate,
       required this.amount,
       required this.paymentMethod,
-      required this.paymentStatus});
+      required this.paymentStatus,
+      required this.appointmentDate,
+      this.appointmentTime,
+      required this.projectDurationUnit,
+      required this.projectDurationValue});
+
+  double calculateCompletionPercent() {
+    DateTime startDate = DateFormat('dd-MM-yyyy').parse(appointmentDate);
+    DateTime endDate = DateFormat('dd-MM-yyyy').parse(projectEndDate);
+
+    int totalDays = endDate.difference(startDate).inDays;
+
+    int elapsedDays = DateTime.now().difference(startDate).inDays;
+
+    double percent = (elapsedDays / totalDays) * 100;
+
+    return percent.clamp(0, 100);
+  }
 
   @override
   Widget build(BuildContext context) {
+    double completePercent = calculateCompletionPercent();
+
     return SizedBox(
       width: 400,
       height: 185,
@@ -41,8 +65,8 @@ class CommonContractCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundImage: freelancerProfileImgPath.isNotEmpty
-                        ? NetworkImage(freelancerProfileImgPath.replaceFirst(
-                            'localhost', '10.0.2.2'))
+                        ? NetworkImage(
+                            "http://10.0.2.2:3000/freelancer_images/$freelancerProfileImgPath") // Adjust base URL
                         : const AssetImage(
                                 "assets/images/default_profile_img.png")
                             as ImageProvider,
@@ -53,10 +77,14 @@ class CommonContractCard extends StatelessWidget {
                     style:
                         const TextStyle(fontFamily: "Inter Bold", fontSize: 15),
                   ),
-                  Text(
-                    profession,
-                    style: const TextStyle(
-                        fontSize: 13, fontFamily: "Inter Medium"),
+                  SizedBox(
+                    width: 100,
+                    child: Text(
+                      profession,
+                      style: const TextStyle(
+                          fontSize: 13, fontFamily: "Inter Medium"),
+                      textAlign: TextAlign.center,
+                    ),
                   )
                 ],
               ),
@@ -75,20 +103,23 @@ class CommonContractCard extends StatelessWidget {
                         fontSize: 17,
                         color: Color(0XFF322E86)),
                   ),
-                  RichText(
-                    text: TextSpan(
-                        style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0XFF322E86),
-                            fontFamily: "Inter Bold"),
-                        children: [
-                          const TextSpan(text: "Project: "),
-                          TextSpan(
-                              text: appointmentPurpose,
-                              style: const TextStyle(
-                                  fontFamily: "Inter Regular",
-                                  color: Colors.black))
-                        ]),
+                  SizedBox(
+                    width: 235,
+                    child: RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0XFF322E86),
+                              fontFamily: "Inter Bold"),
+                          children: [
+                            const TextSpan(text: "Project: "),
+                            TextSpan(
+                                text: appointmentPurpose,
+                                style: const TextStyle(
+                                    fontFamily: "Inter Regular",
+                                    color: Colors.black))
+                          ]),
+                    ),
                   ),
                   RichText(
                     text: TextSpan(
@@ -109,19 +140,19 @@ class CommonContractCard extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: const SizedBox(
+                        child: SizedBox(
                           width: 180,
                           height: 6,
                           child: LinearProgressIndicator(
-                            value: 65 / 100,
-                            backgroundColor: Color(0xFFC5BDBD),
-                            valueColor: AlwaysStoppedAnimation<Color>(
+                            value: completePercent / 100,
+                            backgroundColor: const Color(0xFFC5BDBD),
+                            valueColor: const AlwaysStoppedAnimation<Color>(
                                 Color(0xFF236FD2)),
                           ),
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Text("65%"),
+                      Text("${completePercent.toStringAsFixed(2)}%"),
                     ],
                   ),
                   RichText(
