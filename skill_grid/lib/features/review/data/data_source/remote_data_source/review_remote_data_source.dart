@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:skill_grid/app/constants/api_endpoints.dart';
 import 'package:skill_grid/features/review/data/data_source/review_data_source.dart';
-import 'package:skill_grid/features/review/data/dto/get_review_by_freelancer_id_dto.dart';
 import 'package:skill_grid/features/review/data/dto/get_review_by_rating_dto.dart';
 import 'package:skill_grid/features/review/data/model/review_api_model.dart';
 import 'package:skill_grid/features/review/domain/entity/review_entity.dart';
@@ -19,21 +18,10 @@ class ReviewRemoteDataSource implements IReviewDataSource {
       var response = await _dio.get(url);
 
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data as List<dynamic>;
-        print("Response data: ${response.data}");
+        List<dynamic> data = response.data;
 
-        List<GetReviewByFreelancerIdDto> reviewDto = data
-            .map((json) => GetReviewByFreelancerIdDto.fromJson(
-                json as Map<String, dynamic>))
-            .toList();
-
-        print("ReviewDto: $reviewDto");
-
-        List<ReviewApiModel> reviewApiModels = reviewDto
-            .map((dto) => ReviewApiModel.fromGetReviewByFreelancerIdDto(dto))
-            .toList();
-
-        print("ReviewApiModels: $reviewApiModels");
+        List<ReviewApiModel> reviewApiModels =
+            data.map((json) => ReviewApiModel.fromJson(json)).toList();
 
         return ReviewApiModel.toEntityList(reviewApiModels);
       } else {

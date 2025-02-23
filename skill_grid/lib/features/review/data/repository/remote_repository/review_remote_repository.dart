@@ -16,7 +16,6 @@ class ReviewRemoteRepository implements IReviewRepository {
     try {
       final reviewList =
           await _reviewRemoteDataSource.getReviewByFreelancerId(freelancerId);
-      print("review list: $reviewList");
       return Right(reviewList);
     } catch (e) {
       return Left(

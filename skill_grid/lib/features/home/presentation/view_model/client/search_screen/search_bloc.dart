@@ -111,17 +111,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           // Fetch reviews concurrently
           final reviewsResult = await _getReviewByFreelancerIdUseCase(
               GetReviewByFreelancerIdParams(freelancerId: freelancerId));
-          print("reviewsResult: $reviewsResult");
 
           await reviewsResult.fold(
-            (failure) async => null, // Log error if necessary
+            (failure) async => null,
             (reviews) async {
-              print("Fetched reviews: ${reviews.length}");
               avgRatingMap[freelancerId] = _calculateAverageRating(reviews);
             },
           );
         }));
 
+        print("Rating map: $avgRatingMap");
         emit(SearchLoaded(
             freelancers, portfolioMap, avgHourlyRateMap, avgRatingMap));
       },
@@ -144,9 +143,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     final total = reviews.fold(0, (sum, review) => sum + (review.rating ?? 0));
     final avg = total ~/ reviews.length;
-
-    print(
-        "Calculated avg rating: $avg from ratings: ${reviews.map((r) => r.rating).toList()}");
     return avg;
   }
 
@@ -182,9 +178,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           return rating >= event.rating!;
         }).toList();
       }
-
-      print("Filtered: $filteredFreelancers");
-      print("Filtered count: ${filteredFreelancers.length}");
 
       emit(SearchLoaded(filteredFreelancers, currentState.portfolioMap,
           currentState.avgHourlyRateMap, currentState.avgRatingMap,
