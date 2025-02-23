@@ -54,4 +54,5 @@ class ApiEndpoints {
   //Payment address routes
   static const String savePayment = "payment";
   static const String getPaymentByAppointmentId = "payment/appointment";
+  static const String updatePayment = "payment";
 }

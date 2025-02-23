@@ -61,4 +61,48 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
       throw Exception(e);
     }
   }
+  
+  @override
+  Future<void> updatePayment(String paymentId, String appointmentId, PaymentEntity updatedPayment, String? token) async {
+    try {
+      final String url = "${ApiEndpoints.updatePayment}/$paymentId";
+      Map<String, dynamic> updateData = {};
+
+      final currentPayment =
+          await _dio.get("${ApiEndpoints.getPaymentByAppointmentId}/$appointmentId",
+              options: Options(
+                headers: {
+                  'Authorization': 'Bearer $token',
+                },
+              ));
+
+      final currentPaymentData = currentPayment.data;
+
+      if (updatedPayment.paymentMethod !=
+          currentPaymentData['payment_method']) {
+        updateData["payment_method"] =
+            updatedPayment.paymentMethod;
+      }
+
+      // Proceed to update only changed fields
+      if (updateData.isNotEmpty) {
+        var response = await _dio.put(url,
+            data: updateData,
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ));
+
+        if (response.statusCode == 200) {
+        } else {
+          throw Exception(response.statusMessage);
+        }
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

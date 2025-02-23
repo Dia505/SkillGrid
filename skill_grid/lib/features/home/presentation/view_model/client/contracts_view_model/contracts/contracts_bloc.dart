@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_client_id_use_case.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/edit_delete_contract/edit_delete_contract_bloc.dart';
 import 'package:skill_grid/features/payment/domain/entity/payment_entity.dart';
 import 'package:skill_grid/features/payment/domain/use_case/get_payment_by_appointment_id_use_case.dart';
 
@@ -23,7 +25,19 @@ class ContractsBloc extends Bloc<ContractsEvent, ContractsState> {
       : _getAppointmentByClientIdUseCase = getAppointmentByClientIdUseCase,
         _tokenHelper = tokenHelper,
         _getPaymentByAppointmentIdUseCase = getPaymentByAppointmentIdUseCase,
-        super(ContractsInitialState());
+        super(ContractsInitialState()) {
+    on<NavigateToEditDeleteContract>((event, emit) {
+      final editDeleteContractBloc = getIt<EditDeleteContractBloc>();
+
+      Navigator.pushReplacement(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+              value: editDeleteContractBloc, child: event.destination),
+        ),
+      );
+    });
+  }
 
   Future<void> loadClientContracts() async {
     emit(ContractsLoadingState());

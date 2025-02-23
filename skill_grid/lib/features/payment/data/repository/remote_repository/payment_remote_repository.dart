@@ -28,4 +28,14 @@ class PaymentRemoteRepository implements IPaymentRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> updatePayment(String paymentId, String appointmentId, PaymentEntity updatedPayemnt, String? token) async {
+    try {
+      await _paymentRemoteDataSource.updatePayment(paymentId, appointmentId, updatedPayemnt, token);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }
