@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/freelancer_profile_education_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_employment_container.dart';
+import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
 import 'package:skill_grid/features/appointment/presentation/view/send_offer_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
@@ -368,73 +369,75 @@ class _FreelancerProfileViewState extends State<FreelancerProfileView> {
                       endIndent: 20,
                     ),
 
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Reviews",
                             style: TextStyle(
                                 fontFamily: "Inter Bold", fontSize: 24),
                           ),
-                          SizedBox(height: 10),
-                          // SizedBox(
-                          //   height: 472, // Height for 4 reviews and spacing
-                          //   child: PageView.builder(
-                          //     controller: _reviewPageController,
-                          //     itemCount: (reviews.length / 4).ceil(),
-                          //     itemBuilder: (context, pageIndex) {
-                          //       final startIndex = pageIndex * 4;
-                          //       final endIndex = startIndex + 4;
-                          //       final currentPageReviews = reviews.sublist(
-                          //           startIndex,
-                          //           endIndex > reviews.length
-                          //               ? reviews.length
-                          //               : endIndex);
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            height: 472, // Height for 4 reviews and spacing
+                            child: PageView.builder(
+                              controller: _reviewPageController,
+                              itemCount: (reviews.length / 4).ceil(),
+                              itemBuilder: (context, pageIndex) {
+                                final startIndex = pageIndex * 4;
+                                final endIndex = startIndex + 4;
+                                final currentPageReviews = reviews.sublist(
+                                    startIndex,
+                                    endIndex > reviews.length
+                                        ? reviews.length
+                                        : endIndex);
 
-                          //       return Column(
-                          //         children: currentPageReviews.map((review) {
-                          //           return Column(
-                          //             children: [
-                          //               FreelancerProfileReviewContainer(
-                          //                 projectTitle: review
-                          //                     .appointment.appointmentPurpose,
-                          //                 rating: review.rating.toString(),
-                          //                 reviewDate: review.reviewDate
-                          //                     .toIso8601String(),
-                          //                 review: review.review,
-                          //               ),
-                          //               const SizedBox(height: 5),
-                          //               const Divider(
-                          //                 color: Colors.grey,
-                          //                 thickness: 1,
-                          //                 indent: 0,
-                          //                 endIndent: 0,
-                          //               ),
-                          //               const SizedBox(height: 5),
-                          //             ],
-                          //           );
-                          //         }).toList(),
-                          //       );
-                          //     },
-                          //   ),
-                          // ),
-                          SizedBox(height: 10),
-                          // Center(
-                          //   child: SmoothPageIndicator(
-                          //     controller: _reviewPageController,
-                          //     count: (reviews.length / 4).ceil(),
-                          //     effect: const WormEffect(
-                          //       activeDotColor: Color(0xFF544FBD),
-                          //       dotColor: Color(0xFF707070),
-                          //       dotHeight: 8,
-                          //       dotWidth: 8,
-                          //       spacing: 8,
-                          //     ),
-                          //   ),
-                          // )
+                                return Column(
+                                  children: currentPageReviews.map((review) {
+                                    final formattedReviewDate =
+                                        DateFormat("dd-MM-yyyy")
+                                            .format(review.reviewDate);
+                                    return Column(
+                                      children: [
+                                        FreelancerProfileReviewContainer(
+                                          projectTitle: review
+                                              .appointment.appointmentPurpose,
+                                          rating: review.rating.toString(),
+                                          reviewDate: formattedReviewDate,
+                                          review: review.review,
+                                        ),
+                                        const SizedBox(height: 5),
+                                        const Divider(
+                                          color: Colors.grey,
+                                          thickness: 1,
+                                          indent: 0,
+                                          endIndent: 0,
+                                        ),
+                                        const SizedBox(height: 5),
+                                      ],
+                                    );
+                                  }).toList(),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: SmoothPageIndicator(
+                              controller: _reviewPageController,
+                              count: (reviews.length / 4).ceil(),
+                              effect: const WormEffect(
+                                activeDotColor: Color(0xFF544FBD),
+                                dotColor: Color(0xFF707070),
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                spacing: 8,
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

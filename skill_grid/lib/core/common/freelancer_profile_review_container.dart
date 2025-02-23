@@ -15,6 +15,9 @@ class FreelancerProfileReviewContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int ratingValue = int.tryParse(rating) ?? 0;
+    String stars = '⭐' * ratingValue;
+
     return SizedBox(
       width: 332,
       height: review != null && review!.isNotEmpty ? 92 : 55,
@@ -32,7 +35,7 @@ class FreelancerProfileReviewContainer extends StatelessWidget {
           Row(
             children: [
               Text(
-                rating,
+                stars,
                 style: const TextStyle(fontSize: 13),
               ),
               const SizedBox(

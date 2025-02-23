@@ -390,8 +390,7 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                               widget.appointment.appointmentPurpose,
                           appointmentDate: widget.appointment.appointmentDate,
                           projectDuration: widget.appointment.projectDuration,
-                          appointmentTime:
-                              widget.appointment.appointmentTime ?? "",
+                          appointmentTime: widget.appointment.appointmentTime,
                           status: false,
                           freelancerService:
                               widget.appointment.freelancerService,

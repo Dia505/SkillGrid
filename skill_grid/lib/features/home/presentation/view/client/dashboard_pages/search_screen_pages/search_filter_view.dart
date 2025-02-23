@@ -48,6 +48,8 @@ class _SearchFilterViewState extends State<SearchFilterView> {
 
   @override
   Widget build(BuildContext context) {
+    print("Selected rating: $selectedRating");
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(30.0),
@@ -150,8 +152,8 @@ class _SearchFilterViewState extends State<SearchFilterView> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<SearchBloc>().add(FilterByCriteria(
-                      selectedCity, selectedHourlyRates.toList(), selectedRating.toInt()));
+                  context.read<SearchBloc>().add(FilterByCriteria(selectedCity,
+                      selectedHourlyRates.toList(), selectedRating.toInt()));
                   Navigator.pop(context); // Close the filter page
                 },
                 child: const Text("Apply"),

@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:skill_grid/app/constants/api_endpoints.dart';
 import 'package:skill_grid/features/appointment/data/data_source/appointment_data_source.dart';
-import 'package:skill_grid/features/appointment/data/dto/get_appointment_by_client_id_dto.dart';
 import 'package:skill_grid/features/appointment/data/dto/get_appointment_by_id_dto.dart';
 import 'package:skill_grid/features/appointment/data/model/appointment_api_model.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';

@@ -41,36 +41,8 @@ class AppointmentApiModel extends Equatable {
     required this.client,
   });
 
-  // factory AppointmentApiModel.fromJson(Map<String, dynamic> json) =>
-  //     _$AppointmentApiModelFromJson(json);
-
-  factory AppointmentApiModel.fromJson(Map<String, dynamic> json) {
-    json.forEach((key, value) {
-      print("Key: $key, Type: ${value.runtimeType}, Value: $value");
-    });
-    try {
-      return AppointmentApiModel(
-        appointmentId: json["_id"],
-        appointmentPurpose: json["appointment_purpose"],
-        appointmentDate: DateTime.parse(json["appointment_date"]),
-        projectDuration:
-            ProjectDurationApiModel.fromJson(json["project_duration"]),
-        projectEndDate: json["project_end_date"] != null
-            ? DateTime.parse(json["project_end_date"])
-            : null,
-        appointmentTime: json["appointment_time"],
-        status: json["status"],
-        freelancerService: FreelancerServiceApiModel.fromJson(
-            json['freelancer_service_id'] as Map<String, dynamic>),
-        client: ClientApiModel.fromJson(json["client_id"]),
-      );
-    } catch (e, stacktrace) {
-      print("Error parsing AppointmentApiModel: $e");
-      print(stacktrace);
-      throw const FormatException(
-          "Invalid JSON format for AppointmentApiModel");
-    }
-  }
+  factory AppointmentApiModel.fromJson(Map<String, dynamic> json) =>
+      _$AppointmentApiModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppointmentApiModelToJson(this);
 
