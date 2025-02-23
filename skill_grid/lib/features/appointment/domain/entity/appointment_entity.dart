@@ -34,7 +34,7 @@ class AppointmentEntity extends Equatable {
         appointmentTime = null,
         status = false,
         freelancerService = FreelancerServiceEntity.empty(),
-        client = const ClientEntity.empty();
+        client = ClientEntity.empty();
 
   @override
   List<Object?> get props => [

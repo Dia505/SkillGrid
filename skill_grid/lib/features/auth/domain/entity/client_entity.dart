@@ -10,6 +10,8 @@ class ClientEntity extends Equatable {
   final String password;
   final String? profilePicture;
   final String role;
+  final String? otp;
+  final DateTime? otpExpiresAt;
 
   const ClientEntity({
     this.clientId,
@@ -20,7 +22,9 @@ class ClientEntity extends Equatable {
     required this.email,
     required this.password,
     this.profilePicture,
-    this.role = "client"
+    this.role = "client",
+    this.otp,
+    this.otpExpiresAt
   });
 
   ClientEntity copyWith({
@@ -46,7 +50,7 @@ class ClientEntity extends Equatable {
     );
   }
 
-  const ClientEntity.empty()
+  ClientEntity.empty()
     : clientId = "_empty.clientId",
       firstName = "_empty.firstName",
       lastName = "_empty.lastName",
@@ -55,10 +59,12 @@ class ClientEntity extends Equatable {
       email = "_empty.email",
       password = "_empty.password",
       profilePicture = "_empty.profilePicture",
-      role = "_empty.role";
+      role = "_empty.role",
+      otp = "_empty.otp",
+      otpExpiresAt = DateTime(1970);
 
   @override
   List<Object?> get props =>
-      [clientId, firstName, lastName, mobileNo, city, email, password, profilePicture, role];
+      [clientId, firstName, lastName, mobileNo, city, email, password, profilePicture, role, otp, otpExpiresAt];
 }
 

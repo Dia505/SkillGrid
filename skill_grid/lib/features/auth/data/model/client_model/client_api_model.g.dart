@@ -17,6 +17,10 @@ ClientApiModel _$ClientApiModelFromJson(Map<String, dynamic> json) =>
       password: json['password'] as String,
       profilePicture: json['profile_picture'] as String?,
       role: json['role'] as String? ?? "client",
+      otp: json['otp'] as String?,
+      otpExpiresAt: json['otpExpiresAt'] == null
+          ? null
+          : DateTime.parse(json['otpExpiresAt'] as String),
     );
 
 Map<String, dynamic> _$ClientApiModelToJson(ClientApiModel instance) =>
@@ -30,4 +34,6 @@ Map<String, dynamic> _$ClientApiModelToJson(ClientApiModel instance) =>
       'password': instance.password,
       'profile_picture': instance.profilePicture,
       'role': instance.role,
+      'otp': instance.otp,
+      'otpExpiresAt': instance.otpExpiresAt?.toIso8601String(),
     };

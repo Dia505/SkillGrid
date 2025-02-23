@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/common_contract_card.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/contracts/contracts_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
 
 class ClientContractsView extends StatefulWidget {
   const ClientContractsView({super.key});

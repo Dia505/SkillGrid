@@ -13,6 +13,7 @@ import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/get_appointment_by_id_use_case.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/save_appointment_use_case.dart';
+import 'package:skill_grid/features/appointment/domain/use_case/update_appointment_use_case.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/billing_and_payment/billing_and_payment_bloc.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/send_an_offer/send_an_offer_bloc.dart';
 import 'package:skill_grid/features/auth/data/data_source/local_data_source/client_local_data_source.dart';
@@ -43,7 +44,6 @@ import 'package:skill_grid/features/billing_address/data/data_source/remote_data
 import 'package:skill_grid/features/billing_address/data/repository/remote_repository/billing_address_remote_repository.dart';
 import 'package:skill_grid/features/billing_address/domain/use_case/get_billing_address_by_id_use_case.dart';
 import 'package:skill_grid/features/billing_address/domain/use_case/save_billing_address_use_case.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/contracts/contracts_bloc.dart';
 import 'package:skill_grid/features/education/data/data_source/local_data_source/education_local_data_source.dart';
 import 'package:skill_grid/features/education/data/data_source/remote_data_source/education_remote_data_source.dart';
 import 'package:skill_grid/features/education/data/repository/local_repository/education_local_repository.dart';
@@ -59,6 +59,8 @@ import 'package:skill_grid/features/freelancer_service/data/data_source/remote_d
 import 'package:skill_grid/features/freelancer_service/data/repository/local_repository/freelancer_service_local_repository.dart';
 import 'package:skill_grid/features/freelancer_service/data/repository/remote_repository/freelancer_service_remote_repository.dart';
 import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/edit_delete_contract/edit_delete_contract_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
@@ -69,6 +71,7 @@ import 'package:skill_grid/features/payment/data/repository/local_repository/pay
 import 'package:skill_grid/features/payment/data/repository/remote_repository/payment_remote_repository.dart';
 import 'package:skill_grid/features/payment/domain/use_case/get_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/save_payment_use_case.dart';
+import 'package:skill_grid/features/payment/domain/use_case/update_payment_use_case.dart';
 import 'package:skill_grid/features/portfolio/data/data_source/local_data_source/portfolio_local_data_source.dart';
 import 'package:skill_grid/features/portfolio/data/data_source/remote_data_source/portfolio_remote_data_source.dart';
 import 'package:skill_grid/features/portfolio/data/repository/local_repository/portfolio_local_repository.dart';
@@ -119,6 +122,7 @@ Future<void> initDependencies() async {
   await _initPaymentDependencies();
   await _initBillingAddressDependencies();
   await _initClientContractsDependencies();
+  await _initEditDeleteContractDependencies();
 }
 
 _initHiveService() {
@@ -447,6 +451,11 @@ _initAppointmentDependencies() {
           appointmentRepository: getIt<AppointmentRemoteRepository>(),
           tokenSharedPrefs: getIt<TokenSharedPrefs>(),
           tokenHelper: getIt<TokenHelper>()));
+  getIt.registerLazySingleton<UpdateAppointmentUseCase>(() =>
+      UpdateAppointmentUseCase(
+          appointmentRepository: getIt<AppointmentRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+          tokenHelper: getIt<TokenHelper>()));
 }
 
 //Send an offer dependencies
@@ -494,7 +503,14 @@ _initPaymentDependencies() async {
   getIt.registerLazySingleton<SavePaymentUseCase>(() =>
       SavePaymentUseCase(paymentRepository: getIt<PaymentRemoteRepository>()));
   getIt.registerLazySingleton<GetPaymentByAppointmentIdUseCase>(() =>
-      GetPaymentByAppointmentIdUseCase(paymentRepository: getIt<PaymentRemoteRepository>(), tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+      GetPaymentByAppointmentIdUseCase(
+          paymentRepository: getIt<PaymentRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+  getIt.registerLazySingleton<UpdatePaymentUseCase>(() =>
+      UpdatePaymentUseCase(
+          paymentRepository: getIt<PaymentRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+          tokenHelper: getIt<TokenHelper>()));
 }
 
 //Billing address dependencies
@@ -531,8 +547,18 @@ _initBillingAndPaymentDependencies() async {
 //Client contracts dependencies
 _initClientContractsDependencies() async {
   getIt.registerFactory<ContractsBloc>(() => ContractsBloc(
-    getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>(),
-    tokenHelper: getIt<TokenHelper>(),
-    getPaymentByAppointmentIdUseCase: getIt<GetPaymentByAppointmentIdUseCase>()
+      getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>(),
+      tokenHelper: getIt<TokenHelper>(),
+      getPaymentByAppointmentIdUseCase:
+          getIt<GetPaymentByAppointmentIdUseCase>()));
+}
+
+//Edit delete contract dependencies
+_initEditDeleteContractDependencies() async {
+  getIt.registerFactory<EditDeleteContractBloc>(() => EditDeleteContractBloc(
+    getAppointmentByIdUseCase: getIt<GetAppointmentByIdUseCase>(), 
+    updateAppointmentUseCase: getIt<UpdateAppointmentUseCase>(), 
+    getPaymentByAppointmentIdUseCase: getIt<GetPaymentByAppointmentIdUseCase>(), 
+    updatePaymentUseCase: getIt<UpdatePaymentUseCase>()
   ));
 }

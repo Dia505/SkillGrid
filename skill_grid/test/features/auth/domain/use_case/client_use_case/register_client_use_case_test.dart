@@ -12,7 +12,7 @@ void main() {
   setUp(() {
     repository = MockClientRepository();
     useCase = RegisterClientUseCase(clientRepository: repository);
-    registerFallbackValue(const ClientEntity.empty());
+    registerFallbackValue(ClientEntity.empty());
   });
 
   const params = CreateClientParams.empty();

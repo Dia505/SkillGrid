@@ -13,7 +13,7 @@ import 'package:skill_grid/features/home/presentation/view/client/dashboard_page
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/home_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/notification_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/contracts/contracts_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
