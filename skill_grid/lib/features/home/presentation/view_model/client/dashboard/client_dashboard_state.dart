@@ -9,7 +9,7 @@ import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_cli
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/freelancer_service/domain/use_case/get_freelancer_service_by_freelancer_id_use_case.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/client_contracts_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/home_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/notification_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';

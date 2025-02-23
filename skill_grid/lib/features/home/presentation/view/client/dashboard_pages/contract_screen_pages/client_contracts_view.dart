@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/common_contract_card.dart';
+import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/edit_delete_contract_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
 
 class ClientContractsView extends StatefulWidget {
@@ -105,35 +106,86 @@ class _ClientContractsViewState extends State<ClientContractsView> {
 
                                   return Column(
                                     children: [
-                                      CommonContractCard(
-                                        freelancerProfileImgPath: appointment
-                                            .freelancerService
-                                            .freelancer
-                                            .profilePicture!,
-                                        freelancerFirstName: appointment
-                                            .freelancerService
-                                            .freelancer
-                                            .firstName,
-                                        freelancerLastName: appointment
-                                            .freelancerService
-                                            .freelancer
-                                            .lastName,
-                                        profession: appointment
-                                            .freelancerService
-                                            .freelancer
-                                            .profession!,
-                                        appointmentPurpose:
-                                            appointment.appointmentPurpose,
-                                        projectEndDate: formattedProjectEndDate,
-                                        amount: payment.amount,
-                                        paymentMethod: payment.paymentMethod,
-                                        paymentStatus: payment.paymentStatus,
-                                        appointmentDate:
-                                            formattedAppointmentDate,
-                                        projectDurationUnit:
-                                            appointment.projectDuration.unit,
-                                        projectDurationValue:
-                                            appointment.projectDuration.value,
+                                      GestureDetector(
+                                        onTap: () {
+                                          BlocProvider.of<ContractsBloc>(
+                                                  context)
+                                              .add(NavigateToEditDeleteContract(
+                                                  context: context,
+                                                  destination:
+                                                      EditDeleteContractView(
+                                                    freelancerProfileImgPath:
+                                                        appointment
+                                                            .freelancerService
+                                                            .freelancer
+                                                            .profilePicture!,
+                                                    freelancerFirstName:
+                                                        appointment
+                                                            .freelancerService
+                                                            .freelancer
+                                                            .firstName,
+                                                    freelancerLastName:
+                                                        appointment
+                                                            .freelancerService
+                                                            .freelancer
+                                                            .lastName,
+                                                    profession: appointment
+                                                        .freelancerService
+                                                        .freelancer
+                                                        .profession!,
+                                                    appointmentPurpose:
+                                                        appointment
+                                                            .appointmentPurpose,
+                                                    projectEndDate:
+                                                        formattedProjectEndDate,
+                                                    amount: payment.amount,
+                                                    paymentMethod:
+                                                        payment.paymentMethod,
+                                                    paymentStatus:
+                                                        payment.paymentStatus,
+                                                    appointmentDate:
+                                                        formattedAppointmentDate,
+                                                    projectDurationUnit:
+                                                        appointment
+                                                            .projectDuration
+                                                            .unit,
+                                                    projectDurationValue:
+                                                        appointment
+                                                            .projectDuration
+                                                            .value,
+                                                  )));
+                                        },
+                                        child: CommonContractCard(
+                                          freelancerProfileImgPath: appointment
+                                              .freelancerService
+                                              .freelancer
+                                              .profilePicture!,
+                                          freelancerFirstName: appointment
+                                              .freelancerService
+                                              .freelancer
+                                              .firstName,
+                                          freelancerLastName: appointment
+                                              .freelancerService
+                                              .freelancer
+                                              .lastName,
+                                          profession: appointment
+                                              .freelancerService
+                                              .freelancer
+                                              .profession!,
+                                          appointmentPurpose:
+                                              appointment.appointmentPurpose,
+                                          projectEndDate:
+                                              formattedProjectEndDate,
+                                          amount: payment.amount,
+                                          paymentMethod: payment.paymentMethod,
+                                          paymentStatus: payment.paymentStatus,
+                                          appointmentDate:
+                                              formattedAppointmentDate,
+                                          projectDurationUnit:
+                                              appointment.projectDuration.unit,
+                                          projectDurationValue:
+                                              appointment.projectDuration.value,
+                                        ),
                                       ),
                                       const SizedBox(height: 10),
                                     ],
@@ -149,7 +201,7 @@ class _ClientContractsViewState extends State<ClientContractsView> {
           );
         } else {
           return const Center(
-            child: Text("No contracts found"),
+            child: Text(""),
           );
         }
       },
