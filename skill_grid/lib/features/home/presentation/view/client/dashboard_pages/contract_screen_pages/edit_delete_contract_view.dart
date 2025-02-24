@@ -294,8 +294,13 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                     TextButton(
                                       child: const Text('Delete'),
                                       onPressed: () {
-                                        context.read<EditDeleteContractBloc>().add(
-                                              DeletePaymentByAppointmentId(appointmentId: widget.appointmentId, context: context),
+                                        context
+                                            .read<EditDeleteContractBloc>()
+                                            .add(
+                                              DeletePaymentByAppointmentId(
+                                                  appointmentId:
+                                                      widget.appointmentId,
+                                                  context: context),
                                             );
 
                                         Navigator.of(context).pop();
@@ -322,33 +327,58 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 185,
-                        height: 43,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0XFF544FBD),
-                          ),
-                          onPressed: () {
-                            BlocProvider.of<EditDeleteContractBloc>(context).add(
-                            NavigateToReview(
-                                context: context,
-                                destination: ReviewView(
-                                  freelancerProfileImgPath: widget.freelancerProfileImgPath, 
-                                  freelancerFirstName: widget.freelancerFirstName, 
-                                  freelancerLastName: widget.freelancerLastName, 
-                                  profession: widget.profession, 
-                                  appointmentPurpose: widget.appointmentPurpose, 
-                                  freelancer: widget.freelancer, 
-                                  appointment: widget.appointment
-                                )));
+                      if (completePercent == 100.00)
+                        BlocBuilder<EditDeleteContractBloc,
+                            EditDeleteContractState>(
+                          builder: (context, state) {
+                            if (state is ReviewLoadedState) {
+                              return const Row(
+                                children: [
+                                  Text(
+                                    "Review sent",
+                                    style: TextStyle(color: Color(0XFF322E86)),
+                                  ),
+                                  Icon(
+                                    Icons.check_rounded,
+                                    color: Colors.green,
+                                  )
+                                ],
+                              );
+                            }
+                            return SizedBox(
+                              width: 185,
+                              height: 43,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0XFF544FBD),
+                                ),
+                                onPressed: () {
+                                  BlocProvider.of<
+                                          EditDeleteContractBloc>(context)
+                                      .add(NavigateToReview(
+                                          context: context,
+                                          destination: ReviewView(
+                                              freelancerProfileImgPath: widget
+                                                  .freelancerProfileImgPath,
+                                              freelancerFirstName:
+                                                  widget.freelancerFirstName,
+                                              freelancerLastName:
+                                                  widget.freelancerLastName,
+                                              profession: widget.profession,
+                                              appointmentPurpose:
+                                                  widget.appointmentPurpose,
+                                              freelancer: widget.freelancer,
+                                              appointment:
+                                                  widget.appointment)));
+                                },
+                                child: const Text(
+                                  "Write review ⭐",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            );
                           },
-                          child: const Text(
-                            "Write review ⭐",
-                            style: TextStyle(fontSize: 16),
-                          ),
                         ),
-                      ),
                     ],
                   ),
                   const SizedBox(

@@ -13,6 +13,8 @@ class EditDeleteContractLoading extends EditDeleteContractState {}
 
 class EditDeleteContractSuccess extends EditDeleteContractState {}
 
+class ReviewLoadedState extends EditDeleteContractState {}
+
 class EditDeleteContractError extends EditDeleteContractState {
   final String message;
   const EditDeleteContractError(this.message);

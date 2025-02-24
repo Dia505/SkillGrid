@@ -52,4 +52,15 @@ class ReviewRemoteRepository implements IReviewRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, ReviewEntity>> getReviewByAppointmentId(String appointmentId, String? token) async {
+    try {
+      final review = await _reviewRemoteDataSource.getReviewByAppointmentId(
+          appointmentId, token);
+      return Right(review);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }
