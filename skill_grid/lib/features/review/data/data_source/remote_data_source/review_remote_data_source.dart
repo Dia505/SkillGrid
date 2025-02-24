@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:skill_grid/app/constants/api_endpoints.dart';
 import 'package:skill_grid/features/review/data/data_source/review_data_source.dart';
+import 'package:skill_grid/features/review/data/dto/get_review_by_appointment_id_dto.dart';
 import 'package:skill_grid/features/review/data/dto/get_review_by_rating_dto.dart';
 import 'package:skill_grid/features/review/data/model/review_api_model.dart';
 import 'package:skill_grid/features/review/domain/entity/review_entity.dart';
@@ -91,6 +92,37 @@ class ReviewRemoteDataSource implements IReviewDataSource {
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<ReviewEntity> getReviewByAppointmentId(String appointmentId, String? token) async {
+    try {
+      final String url =
+          "${ApiEndpoints.getReviewByAppointmentId}/$appointmentId";
+
+      var response = await _dio.get(url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+
+      if (response.statusCode == 200) {
+        GetReviewByAppointmentIdDto reviewDto =
+            GetReviewByAppointmentIdDto.fromJson(response.data);
+
+        ReviewEntity reviewEntity =
+            ReviewApiModel.getReviewByAppointmentIdDtoToEntity(reviewDto);
+
+        return reviewEntity;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception('Error occurred while fetching payment: $e');
     }
   }
 }

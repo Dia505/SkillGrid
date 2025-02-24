@@ -33,6 +33,7 @@ class ApiEndpoints {
   static const String getReviewByFreelancerId = "review/freelancer";
   static const String getReviewByRating = "review/rating";
   static const String saveReview = "review";
+  static const String getReviewByAppointmentId = " review/appointment";
 
   //Education routes
   static const String getEducationByFreelancerId = "education/freelancer";

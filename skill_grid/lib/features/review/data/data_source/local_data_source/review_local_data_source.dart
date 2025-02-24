@@ -36,4 +36,10 @@ class ReviewLocalDataSource implements IReviewDataSource {
     // TODO: implement saveReview
     throw UnimplementedError();
   }
+
+  @override
+  Future<ReviewEntity> getReviewByAppointmentId(String appointmentId, String? token) {
+    // TODO: implement getReviewByAppointmentId
+    throw UnimplementedError();
+  }
 }

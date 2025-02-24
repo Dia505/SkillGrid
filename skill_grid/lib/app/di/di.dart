@@ -86,6 +86,7 @@ import 'package:skill_grid/features/review/data/data_source/local_data_source/re
 import 'package:skill_grid/features/review/data/data_source/remote_data_source/review_remote_data_source.dart';
 import 'package:skill_grid/features/review/data/repository/local_repository/review_local_repository.dart';
 import 'package:skill_grid/features/review/data/repository/remote_repository/review_remote_repository.dart';
+import 'package:skill_grid/features/review/domain/use_case/get_review_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/review/domain/use_case/get_review_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/review/domain/use_case/get_review_by_rating_use_case.dart';
 import 'package:skill_grid/features/review/domain/use_case/save_review_use_case.dart';
@@ -364,19 +365,18 @@ _initReviewDependencies() async {
   getIt.registerLazySingleton<GetReviewByRatingUseCase>(() =>
       GetReviewByRatingUseCase(
           reviewRepository: getIt<ReviewRemoteRepository>()));
-  getIt.registerLazySingleton<SaveReviewUseCase>(
-    () => SaveReviewUseCase(
-      reviewRepository: getIt<ReviewRemoteRepository>(), 
-      tokenSharedPrefs: getIt<TokenSharedPrefs>(), 
-      tokenHelper: getIt<TokenHelper>()
-    )
-  );
+  getIt.registerLazySingleton<SaveReviewUseCase>(() => SaveReviewUseCase(
+      reviewRepository: getIt<ReviewRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      tokenHelper: getIt<TokenHelper>()));
+  getIt.registerLazySingleton<GetReviewByAppointmentIdUseCase>(() => GetReviewByAppointmentIdUseCase(
+      reviewRepository: getIt<ReviewRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 
   getIt.registerFactory<ReviewBloc>(() => ReviewBloc(
-    saveReviewUseCase: getIt<SaveReviewUseCase>(), 
-    tokenHelper: getIt<TokenHelper>(), 
-    getClientByIdUseCase: getIt<GetClientByIdUseCase>()
-  ));
+      saveReviewUseCase: getIt<SaveReviewUseCase>(),
+      tokenHelper: getIt<TokenHelper>(),
+      getClientByIdUseCase: getIt<GetClientByIdUseCase>()));
 }
 
 //Search screen dependencies
@@ -578,5 +578,7 @@ _initEditDeleteContractDependencies() async {
   getIt.registerFactory<EditDeleteContractBloc>(() => EditDeleteContractBloc(
       updateAppointmentUseCase: getIt<UpdateAppointmentUseCase>(),
       updatePaymentUseCase: getIt<UpdatePaymentUseCase>(),
-      deletePaymentByAppointmentIdUseCase: getIt<DeletePaymentByAppointmentIdUseCase>()));
+      deletePaymentByAppointmentIdUseCase:
+          getIt<DeletePaymentByAppointmentIdUseCase>(),
+      getReviewByAppointmentIdUseCase: getIt<GetReviewByAppointmentIdUseCase>()));
 }

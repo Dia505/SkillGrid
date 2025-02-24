@@ -8,6 +8,7 @@ import 'package:skill_grid/features/home/presentation/view/client/dashboard_page
 import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
 import 'package:skill_grid/features/payment/domain/use_case/delete_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/update_payment_use_case.dart';
+import 'package:skill_grid/features/review/domain/use_case/get_review_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/review/presentation/view_model/review_bloc.dart';
 
 part 'edit_delete_contract_event.dart';
@@ -19,20 +20,24 @@ class EditDeleteContractBloc
   final UpdatePaymentUseCase _updatePaymentUseCase;
   final DeletePaymentByAppointmentIdUseCase
       _deletePaymentByAppointmentIdUseCase;
+  final GetReviewByAppointmentIdUseCase _getReviewByAppointmentIdUseCase;
 
   EditDeleteContractBloc(
       {required UpdateAppointmentUseCase updateAppointmentUseCase,
       required UpdatePaymentUseCase updatePaymentUseCase,
       required DeletePaymentByAppointmentIdUseCase
-          deletePaymentByAppointmentIdUseCase})
+          deletePaymentByAppointmentIdUseCase,
+      required GetReviewByAppointmentIdUseCase getReviewByAppointmentIdUseCase})
       : _updateAppointmentUseCase = updateAppointmentUseCase,
         _updatePaymentUseCase = updatePaymentUseCase,
         _deletePaymentByAppointmentIdUseCase =
             deletePaymentByAppointmentIdUseCase,
+        _getReviewByAppointmentIdUseCase = getReviewByAppointmentIdUseCase,
         super(EditDeleteContractInitial()) {
     on<UpdateAppointment>(_onUpdateAppointment);
     on<UpdatePayment>(_onUpdatePayment);
     on<DeletePaymentByAppointmentId>(_onDeletePaymentByAppointmentId);
+    on<GetReviewByAppointmentIdEvent>(_onGetReviewByAppointmentId);
 
     on<NavigateToContracts>((event, emit) {
       final contractsBloc = getIt<ContractsBloc>();
@@ -140,6 +145,26 @@ class EditDeleteContractBloc
             message: "Contract deleted successfully!",
             color: Colors.green,
           );
+        },
+      );
+    } catch (e) {
+      emit(EditDeleteContractError("Error occurred: $e"));
+    }
+  }
+
+  Future<void> _onGetReviewByAppointmentId(
+      GetReviewByAppointmentIdEvent event,
+      Emitter<EditDeleteContractState> emit) async {
+    emit(EditDeleteContractLoading());
+
+    try {
+      final result = await _getReviewByAppointmentIdUseCase(
+          GetReviewByAppointmentIdParams(appointmentId: event.appointmentId));
+
+      await result.fold(
+        (failure) async => emit(EditDeleteContractError(failure.message)),
+        (review) async {
+          emit(EditDeleteContractSuccess());
         },
       );
     } catch (e) {

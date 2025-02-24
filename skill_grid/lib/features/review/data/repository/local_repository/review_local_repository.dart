@@ -36,4 +36,10 @@ class ReviewLocalRepository implements IReviewRepository {
     // TODO: implement saveReview
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, ReviewEntity>> getReviewByAppointmentId(String appointmentId, String? token) {
+    // TODO: implement getReviewByAppointmentId
+    throw UnimplementedError();
+  }
 }

@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:skill_grid/features/appointment/data/model/appointment_api_model.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_api_model.dart';
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_api_model.dart';
+import 'package:skill_grid/features/review/data/dto/get_review_by_appointment_id_dto.dart';
 import 'package:skill_grid/features/review/data/dto/get_review_by_freelancer_id_dto.dart';
 import 'package:skill_grid/features/review/data/dto/get_review_by_rating_dto.dart';
 import 'package:skill_grid/features/review/domain/entity/review_entity.dart';
@@ -84,6 +85,17 @@ class ReviewApiModel extends Equatable {
         client: dto.client,
         freelancer: dto.freelancer,
         appointment: dto.appointment);
+  }
+
+  static ReviewEntity getReviewByAppointmentIdDtoToEntity(GetReviewByAppointmentIdDto dto) {
+    return ReviewEntity(
+      review: dto.review, 
+      rating: dto.rating, 
+      reviewDate: dto.reviewDate, 
+      client: dto.client.toEntity(), 
+      freelancer: dto.freelancer.toEntity(), 
+      appointment: dto.appointment.toEntity()
+    );
   }
 
   @override

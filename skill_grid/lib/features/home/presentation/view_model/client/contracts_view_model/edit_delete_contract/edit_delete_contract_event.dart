@@ -49,7 +49,8 @@ class DeletePaymentByAppointmentId extends EditDeleteContractEvent {
   final String appointmentId;
   final BuildContext context;
 
-  const DeletePaymentByAppointmentId({required this.appointmentId, required this.context});
+  const DeletePaymentByAppointmentId(
+      {required this.appointmentId, required this.context});
 
   @override
   List<Object?> get props => [appointmentId, context];
@@ -60,4 +61,13 @@ class NavigateToReview extends EditDeleteContractEvent {
   final Widget destination;
 
   const NavigateToReview({required this.context, required this.destination});
+}
+
+class GetReviewByAppointmentIdEvent extends EditDeleteContractEvent {
+  final String appointmentId;
+
+  const GetReviewByAppointmentIdEvent({required this.appointmentId});
+
+  @override
+  List<Object?> get props => [appointmentId];
 }
