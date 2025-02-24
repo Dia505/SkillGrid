@@ -5,4 +5,5 @@ abstract interface class IPaymentDataSource {
   Future<PaymentEntity> getPaymentByAppointmentId(String appointmentId, String? token);
   Future<void> updatePayment(String paymentId, PaymentEntity updatedPayment, String? token);
   Future<PaymentEntity> getPaymentById(String paymentId, String? token);
+  Future<void> deletePaymentByAppointmentId(String appointmentId, String? token);
 }

@@ -269,7 +269,36 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                         width: 115,
                         height: 43,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context2) {
+                                return AlertDialog(
+                                  title: const Text('Delete Contract'),
+                                  content: const Text(
+                                      'Are you sure you want to delete the contract?'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('Delete'),
+                                      onPressed: () {
+                                        context.read<EditDeleteContractBloc>().add(
+                                              DeletePaymentByAppointmentId(appointmentId: widget.appointmentId, context: context),
+                                            );
+
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0XFFE7E7FF),
                             shape: RoundedRectangleBorder(

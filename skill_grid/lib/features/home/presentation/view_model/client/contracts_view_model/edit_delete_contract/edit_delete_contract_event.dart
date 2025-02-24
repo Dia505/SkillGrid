@@ -42,7 +42,15 @@ class NavigateToContracts extends EditDeleteContractEvent {
   final BuildContext context;
   final Widget destination;
 
-  const NavigateToContracts(
-      {required this.context, required this.destination});
+  const NavigateToContracts({required this.context, required this.destination});
 }
 
+class DeletePaymentByAppointmentId extends EditDeleteContractEvent {
+  final String appointmentId;
+  final BuildContext context;
+
+  const DeletePaymentByAppointmentId({required this.appointmentId, required this.context});
+
+  @override
+  List<Object?> get props => [appointmentId, context];
+}

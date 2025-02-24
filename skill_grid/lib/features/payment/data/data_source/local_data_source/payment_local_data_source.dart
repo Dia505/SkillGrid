@@ -35,4 +35,10 @@ class PaymentLocalDataSource implements IPaymentDataSource {
     // TODO: implement getPaymentById
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> deletePaymentByAppointmentId(String appointmentId, String? token) {
+    // TODO: implement deletePaymentByAppointmentId
+    throw UnimplementedError();
+  }
 }

@@ -56,4 +56,5 @@ class ApiEndpoints {
   static const String getPaymentByAppointmentId = "payment/appointment";
   static const String getPaymentById = "payment";
   static const String updatePayment = "payment";
+  static const String deletePaymentByAppointmentId = "payment/appointment";
 }

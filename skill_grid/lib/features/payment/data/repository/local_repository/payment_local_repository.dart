@@ -41,4 +41,10 @@ class PaymentLocalRepository implements IPaymentRepository {
     // TODO: implement getPaymentById
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, void>> deletePaymentByAppointmentId(String appointmentId, String? token) {
+    // TODO: implement deletePaymentByAppointmentId
+    throw UnimplementedError();
+  }
 }

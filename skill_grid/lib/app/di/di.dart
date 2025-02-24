@@ -69,6 +69,7 @@ import 'package:skill_grid/features/payment/data/data_source/local_data_source/p
 import 'package:skill_grid/features/payment/data/data_source/remote_data_source/payment_remote_data_source.dart';
 import 'package:skill_grid/features/payment/data/repository/local_repository/payment_local_repository.dart';
 import 'package:skill_grid/features/payment/data/repository/remote_repository/payment_remote_repository.dart';
+import 'package:skill_grid/features/payment/domain/use_case/delete_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/get_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/save_payment_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/update_payment_use_case.dart';
@@ -506,8 +507,12 @@ _initPaymentDependencies() async {
       GetPaymentByAppointmentIdUseCase(
           paymentRepository: getIt<PaymentRemoteRepository>(),
           tokenSharedPrefs: getIt<TokenSharedPrefs>()));
-  getIt.registerLazySingleton<UpdatePaymentUseCase>(() =>
-      UpdatePaymentUseCase(
+  getIt.registerLazySingleton<UpdatePaymentUseCase>(() => UpdatePaymentUseCase(
+      paymentRepository: getIt<PaymentRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      tokenHelper: getIt<TokenHelper>()));
+  getIt.registerLazySingleton<DeletePaymentByAppointmentIdUseCase>(() =>
+      DeletePaymentByAppointmentIdUseCase(
           paymentRepository: getIt<PaymentRemoteRepository>(),
           tokenSharedPrefs: getIt<TokenSharedPrefs>(),
           tokenHelper: getIt<TokenHelper>()));
@@ -556,7 +561,7 @@ _initClientContractsDependencies() async {
 //Edit delete contract dependencies
 _initEditDeleteContractDependencies() async {
   getIt.registerFactory<EditDeleteContractBloc>(() => EditDeleteContractBloc(
-    updateAppointmentUseCase: getIt<UpdateAppointmentUseCase>(), 
-    updatePaymentUseCase: getIt<UpdatePaymentUseCase>()
-  ));
+      updateAppointmentUseCase: getIt<UpdateAppointmentUseCase>(),
+      updatePaymentUseCase: getIt<UpdatePaymentUseCase>(),
+      deletePaymentByAppointmentIdUseCase: getIt<DeletePaymentByAppointmentIdUseCase>()));
 }
