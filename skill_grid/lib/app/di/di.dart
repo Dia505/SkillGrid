@@ -88,6 +88,8 @@ import 'package:skill_grid/features/review/data/repository/local_repository/revi
 import 'package:skill_grid/features/review/data/repository/remote_repository/review_remote_repository.dart';
 import 'package:skill_grid/features/review/domain/use_case/get_review_by_freelancer_id_use_case.dart';
 import 'package:skill_grid/features/review/domain/use_case/get_review_by_rating_use_case.dart';
+import 'package:skill_grid/features/review/domain/use_case/save_review_use_case.dart';
+import 'package:skill_grid/features/review/presentation/view_model/review_bloc.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/onboard_screen/onboard_screen_cubit.dart';
 import 'package:skill_grid/features/splash_onboard/presentation/view_model/splash_screen/splash_screen_cubit.dart';
 
@@ -362,6 +364,19 @@ _initReviewDependencies() async {
   getIt.registerLazySingleton<GetReviewByRatingUseCase>(() =>
       GetReviewByRatingUseCase(
           reviewRepository: getIt<ReviewRemoteRepository>()));
+  getIt.registerLazySingleton<SaveReviewUseCase>(
+    () => SaveReviewUseCase(
+      reviewRepository: getIt<ReviewRemoteRepository>(), 
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(), 
+      tokenHelper: getIt<TokenHelper>()
+    )
+  );
+
+  getIt.registerFactory<ReviewBloc>(() => ReviewBloc(
+    saveReviewUseCase: getIt<SaveReviewUseCase>(), 
+    tokenHelper: getIt<TokenHelper>(), 
+    getClientByIdUseCase: getIt<GetClientByIdUseCase>()
+  ));
 }
 
 //Search screen dependencies

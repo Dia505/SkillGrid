@@ -60,4 +60,37 @@ class ReviewRemoteDataSource implements IReviewDataSource {
       throw Exception("An error occurred: ${e.toString()}");
     }
   }
+
+  @override
+  Future<void> saveReview(ReviewEntity reviewEntity, String? token) async {
+    try {
+      Response response = await _dio.post(
+        ApiEndpoints.saveReview,
+        data: {
+          "review": reviewEntity.review,
+          "rating": reviewEntity.rating,
+          "review_date": reviewEntity.reviewDate,
+          "client_id": reviewEntity.client.clientId,
+          "freelancer_id": reviewEntity.freelancer.freelancerId,
+          "appointment_id": reviewEntity.appointment.appointmentId 
+        },
+        options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          )
+      );
+
+      if(response.statusCode == 201) {
+        return;
+      }
+      else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

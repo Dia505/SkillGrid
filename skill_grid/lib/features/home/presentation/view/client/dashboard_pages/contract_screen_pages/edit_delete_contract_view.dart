@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/common_button.dart';
+import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
+import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/edit_delete_contract/edit_delete_contract_bloc.dart';
+import 'package:skill_grid/features/review/presentation/view/review_view.dart';
 
 class EditDeleteContractView extends StatefulWidget {
   final String freelancerProfileImgPath;
@@ -21,6 +24,8 @@ class EditDeleteContractView extends StatefulWidget {
   final String projectDurationUnit;
   final String appointmentId;
   final String paymentId;
+  final FreelancerEntity freelancer;
+  final AppointmentEntity appointment;
 
   const EditDeleteContractView(
       {super.key,
@@ -38,7 +43,9 @@ class EditDeleteContractView extends StatefulWidget {
       required this.projectDurationUnit,
       required this.projectDurationValue,
       required this.appointmentId,
-      required this.paymentId});
+      required this.paymentId,
+      required this.freelancer,
+      required this.appointment});
 
   @override
   State<EditDeleteContractView> createState() => _EditDeleteContractViewState();
@@ -322,7 +329,20 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0XFF544FBD),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<EditDeleteContractBloc>(context).add(
+                            NavigateToReview(
+                                context: context,
+                                destination: ReviewView(
+                                  freelancerProfileImgPath: widget.freelancerProfileImgPath, 
+                                  freelancerFirstName: widget.freelancerFirstName, 
+                                  freelancerLastName: widget.freelancerLastName, 
+                                  profession: widget.profession, 
+                                  appointmentPurpose: widget.appointmentPurpose, 
+                                  freelancer: widget.freelancer, 
+                                  appointment: widget.appointment
+                                )));
+                          },
                           child: const Text(
                             "Write review ⭐",
                             style: TextStyle(fontSize: 16),
