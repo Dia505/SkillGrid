@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:skill_grid/features/appointment/data/model/appointment_api_model.dart';
 import 'package:skill_grid/features/billing_address/data/model/billing_address_api_model.dart';
 import 'package:skill_grid/features/payment/data/dto/get_payment_by_appointment_id_dto.dart';
+import 'package:skill_grid/features/payment/data/dto/get_payment_by_id_dto.dart';
 import 'package:skill_grid/features/payment/domain/entity/payment_entity.dart';
 
 part 'payment_api_model.g.dart';
@@ -64,6 +65,18 @@ class PaymentApiModel extends Equatable {
   }
 
   static PaymentEntity getPaymentByAppointmentIdDtoToEntity(GetPaymentByAppointmentIdDto dto) {
+    return PaymentEntity(
+      paymentId: dto.paymentId,
+      amount: dto.amount, 
+      paymentMethod: dto.paymentMethod, 
+      paymentStatus: dto.paymentStatus, 
+      paymentTimestamp: dto.paymentTimestamp,
+      appointment: dto.appointment.toEntity(), 
+      billingAddress: dto.billingAddress.toEntity()
+    );
+  }
+
+  static PaymentEntity getPaymentByIdDtoToEntity(GetPaymentByIdDto dto) {
     return PaymentEntity(
       paymentId: dto.paymentId,
       amount: dto.amount, 

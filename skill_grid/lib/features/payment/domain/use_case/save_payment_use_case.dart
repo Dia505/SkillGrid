@@ -26,9 +26,6 @@ class SavePaymentParams {
         paymentStatus = false,
         appointment = AppointmentEntity.empty(),
         billingAddress = const BillingAddressEntity.empty();
-
-  @override
-  List<Object?> get props => [amount, paymentMethod, paymentStatus, appointment, billingAddress];
 }
 
 class SavePaymentUseCase implements UsecaseWithParams<void, SavePaymentParams> {

@@ -556,9 +556,7 @@ _initClientContractsDependencies() async {
 //Edit delete contract dependencies
 _initEditDeleteContractDependencies() async {
   getIt.registerFactory<EditDeleteContractBloc>(() => EditDeleteContractBloc(
-    getAppointmentByIdUseCase: getIt<GetAppointmentByIdUseCase>(), 
     updateAppointmentUseCase: getIt<UpdateAppointmentUseCase>(), 
-    getPaymentByAppointmentIdUseCase: getIt<GetPaymentByAppointmentIdUseCase>(), 
     updatePaymentUseCase: getIt<UpdatePaymentUseCase>()
   ));
 }

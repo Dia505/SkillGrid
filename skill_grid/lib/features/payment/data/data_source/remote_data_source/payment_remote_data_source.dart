@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:skill_grid/app/constants/api_endpoints.dart';
 import 'package:skill_grid/features/payment/data/data_source/payment_data_source.dart';
 import 'package:skill_grid/features/payment/data/dto/get_payment_by_appointment_id_dto.dart';
+import 'package:skill_grid/features/payment/data/dto/get_payment_by_id_dto.dart';
 import 'package:skill_grid/features/payment/data/model/payment_api_model.dart';
 import 'package:skill_grid/features/payment/domain/entity/payment_entity.dart';
 
@@ -63,13 +64,13 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
   }
   
   @override
-  Future<void> updatePayment(String paymentId, String appointmentId, PaymentEntity updatedPayment, String? token) async {
+  Future<void> updatePayment(String paymentId, PaymentEntity updatedPayment, String? token) async {
     try {
       final String url = "${ApiEndpoints.updatePayment}/$paymentId";
       Map<String, dynamic> updateData = {};
 
       final currentPayment =
-          await _dio.get("${ApiEndpoints.getPaymentByAppointmentId}/$appointmentId",
+          await _dio.get("${ApiEndpoints.getPaymentById}/$paymentId",
               options: Options(
                 headers: {
                   'Authorization': 'Bearer $token',
@@ -103,6 +104,36 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
+    }
+  }
+  
+  @override
+  Future<PaymentEntity> getPaymentById(String paymentId, String? token) async {
+    try {
+      final String url = "${ApiEndpoints.getPaymentById}/$paymentId";
+
+      var response = await _dio.get(url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+
+      if (response.statusCode == 200) {
+        GetPaymentByIdDto paymentDto =
+            GetPaymentByIdDto.fromJson(response.data);
+
+        PaymentEntity paymentEntity =
+            PaymentApiModel.getPaymentByIdDtoToEntity(paymentDto);
+
+        return paymentEntity;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception('Error occurred while fetching payment: $e');
     }
   }
 }

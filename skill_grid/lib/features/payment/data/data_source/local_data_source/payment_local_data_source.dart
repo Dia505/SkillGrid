@@ -25,8 +25,14 @@ class PaymentLocalDataSource implements IPaymentDataSource {
   }
   
   @override
-  Future<void> updatePayment(String paymentId, String appointmentId, PaymentEntity updatedPayment, String? token) {
+  Future<void> updatePayment(String paymentId, PaymentEntity updatedPayment, String? token) {
     // TODO: implement updatePayment
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<PaymentEntity> getPaymentById(String paymentId, String? token) {
+    // TODO: implement getPaymentById
     throw UnimplementedError();
   }
 }

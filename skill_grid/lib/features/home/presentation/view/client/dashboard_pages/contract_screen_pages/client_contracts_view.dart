@@ -153,6 +153,8 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                                                         appointment
                                                             .projectDuration
                                                             .value,
+                                                    appointmentId: appointment.appointmentId,
+                                                    paymentId: payment.paymentId!,
                                                   )));
                                         },
                                         child: CommonContractCard(
