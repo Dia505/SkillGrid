@@ -19,6 +19,8 @@ class EditDeleteContractView extends StatefulWidget {
   final String? appointmentTime;
   final int projectDurationValue;
   final String projectDurationUnit;
+  final String appointmentId;
+  final String paymentId;
 
   const EditDeleteContractView(
       {super.key,
@@ -34,7 +36,9 @@ class EditDeleteContractView extends StatefulWidget {
       required this.appointmentDate,
       this.appointmentTime,
       required this.projectDurationUnit,
-      required this.projectDurationValue});
+      required this.projectDurationValue,
+      required this.appointmentId,
+      required this.paymentId});
 
   @override
   State<EditDeleteContractView> createState() => _EditDeleteContractViewState();
@@ -475,8 +479,34 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                       ),
                       CommonButton(
                         buttonText: "Update",
-                        onPressed: () {},
                         buttonColor: const Color(0xFF544FBD),
+                        onPressed: () {
+                          bool isAppointmentPurposeChanged =
+                              _appointmentPurposeController.text !=
+                                  widget.appointmentPurpose;
+                          bool isPaymentMethodChanged =
+                              selectedPayment != widget.paymentMethod;
+
+                          if (isAppointmentPurposeChanged) {
+                            context.read<EditDeleteContractBloc>().add(
+                                  UpdateAppointment(
+                                      appointmentId: widget.appointmentId,
+                                      appointmentPurpose:
+                                          _appointmentPurposeController.text,
+                                      context: context),
+                                );
+                          }
+
+                          if (isPaymentMethodChanged) {
+                            context.read<EditDeleteContractBloc>().add(
+                                  UpdatePayment(
+                                      paymentId: widget.paymentId,
+                                      appointmentId: widget.appointmentId,
+                                      paymentMethod: selectedPayment!,
+                                      context: context),
+                                );
+                          }
+                        },
                       )
                     ],
                   )

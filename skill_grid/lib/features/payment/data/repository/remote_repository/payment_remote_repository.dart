@@ -12,8 +12,8 @@ class PaymentRemoteRepository implements IPaymentRepository {
   @override
   Future<Either<Failure, PaymentEntity>> getPaymentByAppointmentId(String appointmentId, String? token) async {
     try {
-      final client = await _paymentRemoteDataSource.getPaymentByAppointmentId(appointmentId, token);
-      return Right(client);
+      final payment = await _paymentRemoteDataSource.getPaymentByAppointmentId(appointmentId, token);
+      return Right(payment);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }
@@ -30,10 +30,20 @@ class PaymentRemoteRepository implements IPaymentRepository {
   }
   
   @override
-  Future<Either<Failure, void>> updatePayment(String paymentId, String appointmentId, PaymentEntity updatedPayemnt, String? token) async {
+  Future<Either<Failure, void>> updatePayment(String paymentId, PaymentEntity updatedPayemnt, String? token) async {
     try {
-      await _paymentRemoteDataSource.updatePayment(paymentId, appointmentId, updatedPayemnt, token);
+      await _paymentRemoteDataSource.updatePayment(paymentId, updatedPayemnt, token);
       return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PaymentEntity>> getPaymentById(String paymentId, String? token) async {
+    try {
+      final payment = await _paymentRemoteDataSource.getPaymentById(paymentId, token);
+      return Right(payment);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }

@@ -9,28 +9,24 @@ import 'package:skill_grid/features/payment/domain/repository/payment_repository
 
 class UpdatePaymentParams extends Equatable {
   final String paymentId;
-  final String appointmentId;
   final String? paymentMethod;
 
-  const UpdatePaymentParams(
-      {required this.paymentId,
-      required this.appointmentId,
-      this.paymentMethod});
+  const UpdatePaymentParams({required this.paymentId, this.paymentMethod});
 
   @override
-  List<Object?> get props => [paymentId, appointmentId, paymentMethod];
+  List<Object?> get props => [paymentId, paymentMethod];
 }
 
-class UpdatePaymentUseCase implements UsecaseWithParams<void, UpdatePaymentParams> {
+class UpdatePaymentUseCase
+    implements UsecaseWithParams<void, UpdatePaymentParams> {
   final IPaymentRepository paymentRepository;
   final TokenSharedPrefs tokenSharedPrefs;
   final TokenHelper tokenHelper;
 
-  UpdatePaymentUseCase({
-    required this.paymentRepository,
-    required this.tokenSharedPrefs,
-    required this.tokenHelper
-  });
+  UpdatePaymentUseCase(
+      {required this.paymentRepository,
+      required this.tokenSharedPrefs,
+      required this.tokenHelper});
 
   @override
   Future<Either<Failure, void>> call(UpdatePaymentParams params) async {
@@ -41,19 +37,19 @@ class UpdatePaymentUseCase implements UsecaseWithParams<void, UpdatePaymentParam
       final role = await tokenHelper.getRoleFromToken();
       if (role == "client") {
         final existingPayment =
-            await paymentRepository.getPaymentByAppointmentId(params.appointmentId, r);
+            await paymentRepository.getPaymentById(params.paymentId, r);
         return existingPayment.fold(
           (failure) => Left(failure),
           (currentPayment) async {
             final updatedPayment = PaymentEntity(
-              paymentId: params.paymentId,
-              paymentMethod: params.paymentMethod ?? currentPayment.paymentMethod, 
-              paymentStatus: currentPayment.paymentStatus, 
-              appointment: currentPayment.appointment, 
-              billingAddress: currentPayment.billingAddress
-            );
+                paymentId: params.paymentId,
+                paymentMethod:
+                    params.paymentMethod ?? currentPayment.paymentMethod,
+                paymentStatus: currentPayment.paymentStatus,
+                appointment: currentPayment.appointment,
+                billingAddress: currentPayment.billingAddress);
             return paymentRepository.updatePayment(
-                params.appointmentId, params.paymentId, updatedPayment, r);
+                params.paymentId, updatedPayment, r);
           },
         );
       } else {
@@ -61,4 +57,5 @@ class UpdatePaymentUseCase implements UsecaseWithParams<void, UpdatePaymentParam
             message: "Access denied. You have to be a client"));
       }
     });
-  }}
+  }
+}
