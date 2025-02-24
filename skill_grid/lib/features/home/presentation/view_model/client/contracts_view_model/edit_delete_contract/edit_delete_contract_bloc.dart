@@ -8,6 +8,7 @@ import 'package:skill_grid/features/home/presentation/view/client/dashboard_page
 import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
 import 'package:skill_grid/features/payment/domain/use_case/delete_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/update_payment_use_case.dart';
+import 'package:skill_grid/features/review/presentation/view_model/review_bloc.dart';
 
 part 'edit_delete_contract_event.dart';
 part 'edit_delete_contract_state.dart';
@@ -41,6 +42,18 @@ class EditDeleteContractBloc
         MaterialPageRoute(
           builder: (context) => BlocProvider.value(
               value: contractsBloc, child: event.destination),
+        ),
+      );
+    });
+
+    on<NavigateToReview>((event, emit) {
+      final reviewBloc = getIt<ReviewBloc>();
+
+      Navigator.pushReplacement(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+              value: reviewBloc, child: event.destination),
         ),
       );
     });

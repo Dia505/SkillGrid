@@ -30,4 +30,10 @@ class ReviewLocalDataSource implements IReviewDataSource {
       throw Exception("Error retrieving reviews by rating: $e");
     }
   }
+  
+  @override
+  Future<void> saveReview(ReviewEntity reviewEntity, String? token) {
+    // TODO: implement saveReview
+    throw UnimplementedError();
+  }
 }

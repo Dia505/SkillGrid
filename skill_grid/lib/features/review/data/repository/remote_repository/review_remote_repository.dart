@@ -41,4 +41,15 @@ class ReviewRemoteRepository implements IReviewRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> saveReview(
+      ReviewEntity reviewEntity, String? token) async {
+    try {
+      await _reviewRemoteDataSource.saveReview(reviewEntity, token);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

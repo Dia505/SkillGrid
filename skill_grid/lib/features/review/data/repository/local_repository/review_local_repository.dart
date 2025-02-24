@@ -30,4 +30,10 @@ class ReviewLocalRepository implements IReviewRepository {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> saveReview(ReviewEntity reviewEntity, String? token) {
+    // TODO: implement saveReview
+    throw UnimplementedError();
+  }
 }
