@@ -6,6 +6,7 @@ import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/update_appointment_use_case.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
+import 'package:skill_grid/features/payment/domain/use_case/delete_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/update_payment_use_case.dart';
 
 part 'edit_delete_contract_event.dart';
@@ -15,15 +16,22 @@ class EditDeleteContractBloc
     extends Bloc<EditDeleteContractEvent, EditDeleteContractState> {
   final UpdateAppointmentUseCase _updateAppointmentUseCase;
   final UpdatePaymentUseCase _updatePaymentUseCase;
+  final DeletePaymentByAppointmentIdUseCase
+      _deletePaymentByAppointmentIdUseCase;
 
-  EditDeleteContractBloc({
-    required UpdateAppointmentUseCase updateAppointmentUseCase,
-    required UpdatePaymentUseCase updatePaymentUseCase,
-  })  : _updateAppointmentUseCase = updateAppointmentUseCase,
+  EditDeleteContractBloc(
+      {required UpdateAppointmentUseCase updateAppointmentUseCase,
+      required UpdatePaymentUseCase updatePaymentUseCase,
+      required DeletePaymentByAppointmentIdUseCase
+          deletePaymentByAppointmentIdUseCase})
+      : _updateAppointmentUseCase = updateAppointmentUseCase,
         _updatePaymentUseCase = updatePaymentUseCase,
+        _deletePaymentByAppointmentIdUseCase =
+            deletePaymentByAppointmentIdUseCase,
         super(EditDeleteContractInitial()) {
     on<UpdateAppointment>(_onUpdateAppointment);
     on<UpdatePayment>(_onUpdatePayment);
+    on<DeletePaymentByAppointmentId>(_onDeletePaymentByAppointmentId);
 
     on<NavigateToContracts>((event, emit) {
       final contractsBloc = getIt<ContractsBloc>();
@@ -52,7 +60,9 @@ class EditDeleteContractBloc
         (_) async {
           emit(EditDeleteContractSuccess());
 
-          add(NavigateToContracts(context: event.context, destination: const ClientContractsView()));
+          add(NavigateToContracts(
+              context: event.context,
+              destination: const ClientContractsView()));
 
           showSnackBar(
               context: event.context,
@@ -71,8 +81,7 @@ class EditDeleteContractBloc
 
     try {
       final result = await _updatePaymentUseCase(UpdatePaymentParams(
-          paymentId: event.paymentId,
-          paymentMethod: event.paymentMethod));
+          paymentId: event.paymentId, paymentMethod: event.paymentMethod));
 
       await result.fold(
         (failure) async => emit(EditDeleteContractError(failure.message)),
@@ -87,6 +96,37 @@ class EditDeleteContractBloc
               context: event.context,
               message: "Contract updated!",
               color: Colors.green);
+        },
+      );
+    } catch (e) {
+      emit(EditDeleteContractError("Error occurred: $e"));
+    }
+  }
+
+  Future<void> _onDeletePaymentByAppointmentId(
+      DeletePaymentByAppointmentId event,
+      Emitter<EditDeleteContractState> emit) async {
+    emit(EditDeleteContractLoading());
+
+    try {
+      final result = await _deletePaymentByAppointmentIdUseCase(
+          DeletePaymentByAppointmentIdParams(
+              appointmentId: event.appointmentId));
+
+      await result.fold(
+        (failure) async => emit(EditDeleteContractError(failure.message)),
+        (_) async {
+          emit(EditDeleteContractSuccess());
+
+          add(NavigateToContracts(
+              context: event.context,
+              destination: const ClientContractsView()));
+
+          showSnackBar(
+            context: event.context,
+            message: "Contract deleted successfully!",
+            color: Colors.green,
+          );
         },
       );
     } catch (e) {

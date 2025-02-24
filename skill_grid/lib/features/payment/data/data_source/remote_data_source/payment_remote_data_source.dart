@@ -11,9 +11,11 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
   PaymentRemoteDataSource({required Dio dio}) : _dio = dio;
 
   @override
-  Future<PaymentEntity> getPaymentByAppointmentId(String appointmentId, String? token) async {
+  Future<PaymentEntity> getPaymentByAppointmentId(
+      String appointmentId, String? token) async {
     try {
-      final String url = "${ApiEndpoints.getPaymentByAppointmentId}/$appointmentId";
+      final String url =
+          "${ApiEndpoints.getPaymentByAppointmentId}/$appointmentId";
 
       var response = await _dio.get(url,
           options: Options(
@@ -26,14 +28,14 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
         GetPaymentByAppointmentIdDto paymentDto =
             GetPaymentByAppointmentIdDto.fromJson(response.data);
 
-        PaymentEntity paymentEntity = PaymentApiModel.getPaymentByAppointmentIdDtoToEntity(paymentDto);
+        PaymentEntity paymentEntity =
+            PaymentApiModel.getPaymentByAppointmentIdDtoToEntity(paymentDto);
 
         return paymentEntity;
       } else {
         throw Exception(response.statusMessage);
       }
-    }
-    on DioException catch (e) {
+    } on DioException catch (e) {
       throw Exception(e);
     } catch (e) {
       throw Exception('Error occurred while fetching payment: $e');
@@ -43,14 +45,13 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
   @override
   Future<void> savePayment(PaymentEntity paymentEntity) async {
     try {
-      Response response = await _dio.post(ApiEndpoints.savePayment,
-          data: {
-            "amount": paymentEntity.amount,
-            "payment_method": paymentEntity.paymentMethod,
-            "payment_status": paymentEntity.paymentStatus,
-            "appointment_id": paymentEntity.appointment.appointmentId,
-            "billing_address_id": paymentEntity.billingAddress.billingAddressId
-          });
+      Response response = await _dio.post(ApiEndpoints.savePayment, data: {
+        "amount": paymentEntity.amount,
+        "payment_method": paymentEntity.paymentMethod,
+        "payment_status": paymentEntity.paymentStatus,
+        "appointment_id": paymentEntity.appointment.appointmentId,
+        "billing_address_id": paymentEntity.billingAddress.billingAddressId
+      });
       if (response.statusCode == 201) {
         return;
       } else {
@@ -62,9 +63,10 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
       throw Exception(e);
     }
   }
-  
+
   @override
-  Future<void> updatePayment(String paymentId, PaymentEntity updatedPayment, String? token) async {
+  Future<void> updatePayment(
+      String paymentId, PaymentEntity updatedPayment, String? token) async {
     try {
       final String url = "${ApiEndpoints.updatePayment}/$paymentId";
       Map<String, dynamic> updateData = {};
@@ -81,8 +83,7 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
 
       if (updatedPayment.paymentMethod !=
           currentPaymentData['payment_method']) {
-        updateData["payment_method"] =
-            updatedPayment.paymentMethod;
+        updateData["payment_method"] = updatedPayment.paymentMethod;
       }
 
       // Proceed to update only changed fields
@@ -106,7 +107,7 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
       throw Exception(e);
     }
   }
-  
+
   @override
   Future<PaymentEntity> getPaymentById(String paymentId, String? token) async {
     try {
@@ -134,6 +135,32 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
       throw Exception(e);
     } catch (e) {
       throw Exception('Error occurred while fetching payment: $e');
+    }
+  }
+
+  @override
+  Future<void> deletePaymentByAppointmentId(
+      String appointmentId, String? token) async {
+    try {
+      final String url =
+          "${ApiEndpoints.deletePaymentByAppointmentId}/$appointmentId";
+
+      var response = await _dio.delete(url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+
+      if (response.statusCode == 200) {
+        print("Payment and Appointment successfully deleted");
+      } else {
+        throw Exception("Failed to delete: ${response.statusMessage}");
+      }
+    } on DioException catch (e) {
+      throw Exception("Dio Error: ${e.message}");
+    } catch (e) {
+      throw Exception("Error: $e");
     }
   }
 }
