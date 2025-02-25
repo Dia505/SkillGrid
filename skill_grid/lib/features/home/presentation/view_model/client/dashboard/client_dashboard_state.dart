@@ -30,7 +30,7 @@ class ClientDashboardState extends Equatable {
   const ClientDashboardState(
       {required this.selectedIndex, required this.views});
 
-  static ClientDashboardState initial() {
+  static ClientDashboardState initial({int selectedIndex = 0}) {
     return ClientDashboardState(selectedIndex: 0, views: [
       MultiBlocProvider(providers: [
         BlocProvider(
@@ -45,21 +45,27 @@ class ClientDashboardState extends Equatable {
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
                 tokenHelper: getIt<TokenHelper>(),
                 searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
-                getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>()))
+                getAppointmentByClientIdUseCase:
+                    getIt<GetAppointmentByClientIdUseCase>()))
       ], child: const HomeScreenView()),
       BlocProvider(
           create: (context) => SearchBloc(
               searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
-              getPortfolioByFreelancerServiceIdUseCase: getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
-              getFreelancerSerivceByFreelancerIdUseCase: getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
-              getReviewByFreelancerIdUseCase: getIt<GetReviewByFreelancerIdUseCase>(),
+              getPortfolioByFreelancerServiceIdUseCase:
+                  getIt<GetPortfolioByFreelancerServiceIdUseCase>(),
+              getFreelancerSerivceByFreelancerIdUseCase:
+                  getIt<GetFreelancerServiceByFreelancerIdUseCase>(),
+              getReviewByFreelancerIdUseCase:
+                  getIt<GetReviewByFreelancerIdUseCase>(),
               freelancerProfileBloc: getIt<FreelancerProfileBloc>()),
           child: const SearchScreenView()),
       BlocProvider(
           create: (context) => ContractsBloc(
-              getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>(),
+              getAppointmentByClientIdUseCase:
+                  getIt<GetAppointmentByClientIdUseCase>(),
               tokenHelper: getIt<TokenHelper>(),
-              getPaymentByAppointmentIdUseCase: getIt<GetPaymentByAppointmentIdUseCase>()),
+              getPaymentByAppointmentIdUseCase:
+                  getIt<GetPaymentByAppointmentIdUseCase>()),
           child: const ClientContractsView()),
       const NotificationScreenView()
     ]);
