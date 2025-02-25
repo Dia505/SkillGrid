@@ -10,8 +10,8 @@ import 'package:skill_grid/features/appointment/domain/entity/appointment_entity
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/review/domain/use_case/save_review_use_case.dart';
 
 part 'review_event.dart';
@@ -34,13 +34,14 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     on<SaveReview>(_onSaveReview);
 
     on<NavigateToContracts>((event, emit) {
-      final contractsBloc = getIt<ContractsBloc>();
+      final clientDashboardCubit = getIt<ClientDashboardCubit>();
 
       Navigator.pushReplacement(
         event.context,
         MaterialPageRoute(
           builder: (context) => BlocProvider.value(
-              value: contractsBloc, child: event.destination),
+              value: clientDashboardCubit..setInitialIndex(2),
+              child: event.destination),
         ),
       );
     });
@@ -93,8 +94,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
           emit(ReviewSuccess());
 
           add(NavigateToContracts(
-              context: event.context,
-              destination: const ClientContractsView()));
+              context: event.context, destination: const ClientDashboard()));
 
           showSnackBar(
               context: event.context,

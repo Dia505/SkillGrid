@@ -7,4 +7,8 @@ class ClientDashboardCubit extends Cubit<ClientDashboardState> {
   void onTabTapped(int index) {
     emit(state.copyWith(selectedIndex: index));
   }
+
+  void setInitialIndex(int index) {
+    emit(state.copyWith(selectedIndex: index));
+  }
 }

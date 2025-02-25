@@ -5,7 +5,7 @@ import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/update_appointment_use_case.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/payment/domain/use_case/delete_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/update_payment_use_case.dart';
 import 'package:skill_grid/features/review/domain/use_case/get_review_by_appointment_id_use_case.dart';
@@ -40,13 +40,14 @@ class EditDeleteContractBloc
     on<GetReviewByAppointmentIdEvent>(_onGetReviewByAppointmentId);
 
     on<NavigateToContracts>((event, emit) {
-      final contractsBloc = getIt<ContractsBloc>();
+      final clientDashboardCubit = getIt<ClientDashboardCubit>();
 
       Navigator.pushReplacement(
         event.context,
         MaterialPageRoute(
           builder: (context) => BlocProvider.value(
-              value: contractsBloc, child: event.destination),
+              value: clientDashboardCubit..setInitialIndex(2),
+              child: event.destination),
         ),
       );
     });
@@ -57,8 +58,8 @@ class EditDeleteContractBloc
       Navigator.pushReplacement(
         event.context,
         MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
-              value: reviewBloc, child: event.destination),
+          builder: (context) =>
+              BlocProvider.value(value: reviewBloc, child: event.destination),
         ),
       );
     });
@@ -152,8 +153,7 @@ class EditDeleteContractBloc
     }
   }
 
-  Future<void> _onGetReviewByAppointmentId(
-      GetReviewByAppointmentIdEvent event,
+  Future<void> _onGetReviewByAppointmentId(GetReviewByAppointmentIdEvent event,
       Emitter<EditDeleteContractState> emit) async {
     emit(EditDeleteContractLoading());
 

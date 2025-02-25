@@ -62,12 +62,12 @@ class BillingAndPaymentBloc
 
     on<SaveBillingAddress>((event, emit) async {
       emit(BillingAndPaymentLoading());
-
       final billingAddressResult =
           await _saveBillingAddressUseCase(event.billingAddressParams);
 
       if (billingAddressResult.isRight()) {
-        final billingAddressId = billingAddressResult.getOrElse(() => "").toString();
+        final billingAddressId =
+            billingAddressResult.getOrElse(() => "").toString();
 
         final billingAddressEntityResult = await _getBillingAddressByIdUseCase(
           GetBillingAddressByIdParams(billingAddressId: billingAddressId),
@@ -78,7 +78,8 @@ class BillingAndPaymentBloc
             emit(BillingAndPaymentError(failure.message));
           },
           (billingAddressEntity) {
-            emit(BillingAddressSavedState(billingAddress: billingAddressEntity));
+            emit(
+                BillingAddressSavedState(billingAddress: billingAddressEntity));
           },
         );
       } else {
@@ -88,7 +89,6 @@ class BillingAndPaymentBloc
 
     on<SavePayment>((event, emit) async {
       emit(BillingAndPaymentLoading());
-
       final paymentResult = await _savePaymentUseCase(event.paymentParams);
 
       if (paymentResult.isRight()) {

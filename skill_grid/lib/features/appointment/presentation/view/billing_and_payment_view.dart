@@ -356,10 +356,12 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
 
                     if (state is AppointmentSavedState) {
                       savedAppointment = state.appointment;
+                      print("Saved appointment: $savedAppointment");
                     }
 
                     if (state is BillingAddressSavedState) {
                       savedBillingAddress = state.billingAddress;
+                      print("Saved billing address: $savedBillingAddress");
                     }
 
                     // Now trigger SavePayment after appointment is saved

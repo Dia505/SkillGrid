@@ -45,13 +45,16 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
   @override
   Future<void> savePayment(PaymentEntity paymentEntity) async {
     try {
-      Response response = await _dio.post(ApiEndpoints.savePayment, data: {
-        "amount": paymentEntity.amount,
-        "payment_method": paymentEntity.paymentMethod,
-        "payment_status": paymentEntity.paymentStatus,
-        "appointment_id": paymentEntity.appointment.appointmentId,
-        "billing_address_id": paymentEntity.billingAddress.billingAddressId
-      });
+      Response response = await _dio.post(
+        ApiEndpoints.savePayment,
+        data: {
+          "amount": paymentEntity.amount,
+          "payment_method": paymentEntity.paymentMethod,
+          "payment_status": paymentEntity.paymentStatus,
+          "appointment_id": paymentEntity.appointment.appointmentId,
+          "billing_address_id": paymentEntity.billingAddress.billingAddressId
+        },
+      );
       if (response.statusCode == 201) {
         return;
       } else {
