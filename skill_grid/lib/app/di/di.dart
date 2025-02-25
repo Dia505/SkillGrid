@@ -28,8 +28,11 @@ import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/delete_client_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/register_client_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/client_use_case/reset_password_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/client_use_case/send_otp_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_profile_picture_usecase.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/update_client_use_case.dart';
+import 'package:skill_grid/features/auth/domain/use_case/client_use_case/verify_otp_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/delete_freelancer_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/freelancer_login_usec_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_all_freelancer_use_case.dart';
@@ -38,8 +41,11 @@ import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/reg
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_freelancer/join_as_client_freelancer_cubit.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/reset_password/reset_password_bloc.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/send_otp/send_otp_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/freelancer/freelancer_bloc.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/verify_otp/verify_otp_bloc.dart';
 import 'package:skill_grid/features/billing_address/data/data_source/remote_data_source.dart/billing_address_remote_data_source.dart';
 import 'package:skill_grid/features/billing_address/data/repository/remote_repository/billing_address_remote_repository.dart';
 import 'package:skill_grid/features/billing_address/domain/use_case/get_billing_address_by_id_use_case.dart';
@@ -125,6 +131,9 @@ Future<void> initDependencies() async {
   await _initBillingAddressDependencies();
   await _initClientContractsDependencies();
   await _initEditDeleteContractDependencies();
+  await _initSendOtpDependencies();
+  await _initVerifyOtpDependencies();
+  await _initResetPasswordDependencies();
 }
 
 _initHiveService() {
@@ -173,6 +182,16 @@ _initClientRegistrationDependencies() async {
       clientRepository: getIt<ClientRemoteRepository>(),
       tokenSharedPrefs: getIt<TokenSharedPrefs>(),
       tokenHelper: getIt<TokenHelper>()));
+
+  getIt.registerLazySingleton<SendOtpUseCase>(() => SendOtpUseCase(
+    clientRepository: getIt<ClientRemoteRepository>(),
+  ));
+  getIt.registerLazySingleton<VerifyOtpUseCase>(() => VerifyOtpUseCase(
+    clientRepository: getIt<ClientRemoteRepository>(),
+  ));
+  getIt.registerLazySingleton<ResetPasswordUseCase>(() => ResetPasswordUseCase(
+    clientRepository: getIt<ClientRemoteRepository>(),
+  ));
 
   getIt.registerFactory<ClientBloc>(() => ClientBloc(
       registerClientUseCase: getIt<RegisterClientUseCase>(),
@@ -574,4 +593,27 @@ _initEditDeleteContractDependencies() async {
       deletePaymentByAppointmentIdUseCase:
           getIt<DeletePaymentByAppointmentIdUseCase>(),
       getReviewByAppointmentIdUseCase: getIt<GetReviewByAppointmentIdUseCase>()));
+}
+
+//Reset password dependencies
+_initResetPasswordDependencies() async {
+  getIt.registerFactory<ResetPasswordBloc>(() => ResetPasswordBloc(
+    resetPasswordUseCase: getIt<ResetPasswordUseCase>()
+  ));
+}
+
+//Verify otp dependencies
+_initVerifyOtpDependencies() async {
+  getIt.registerFactory<VerifyOtpBloc>(() => VerifyOtpBloc(
+    verifyOtpUseCase: getIt<VerifyOtpUseCase>(),
+    resetPasswordBloc: getIt<ResetPasswordBloc>()
+  ));
+}
+
+//Send otp dependencies
+_initSendOtpDependencies() async {
+  getIt.registerFactory<SendOtpBloc>(() => SendOtpBloc(
+    sendOtpUseCase: getIt<SendOtpUseCase>(), 
+    verifyOtpBloc: getIt<VerifyOtpBloc>()
+  ));
 }

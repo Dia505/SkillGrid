@@ -39,3 +39,13 @@ class LoginUserEvent extends LoginEvent {
     required this.password,
   });
 }
+
+class NavigateToSendOtpScreen extends LoginEvent {
+  final BuildContext context;
+  final Widget destination;
+
+  const NavigateToSendOtpScreen({
+    required this.context,
+    required this.destination,
+  });
+}
