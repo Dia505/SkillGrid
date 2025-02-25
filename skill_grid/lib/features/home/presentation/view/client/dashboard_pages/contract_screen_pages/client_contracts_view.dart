@@ -25,6 +25,7 @@ class _ClientContractsViewState extends State<ClientContractsView> {
   Widget build(BuildContext context) {
     return BlocBuilder<ContractsBloc, ContractsState>(
       builder: (context, state) {
+        print("State: $state");
         if (state is ContractsLoadedState) {
           final appointments = state.appointments;
           final payments = state.payments;
@@ -153,8 +154,10 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                                                         appointment
                                                             .projectDuration
                                                             .value,
-                                                    appointmentId: appointment.appointmentId,
-                                                    paymentId: payment.paymentId!,
+                                                    appointmentId: appointment
+                                                        .appointmentId,
+                                                    paymentId:
+                                                        payment.paymentId!,
                                                     freelancer: appointment
                                                         .freelancerService
                                                         .freelancer,

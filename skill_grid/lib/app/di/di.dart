@@ -64,7 +64,6 @@ import 'package:skill_grid/features/home/presentation/view_model/client/contract
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
-import 'package:skill_grid/features/home/presentation/view_model/freelancer/freelancer_dashboard_cubit.dart';
 import 'package:skill_grid/features/payment/data/data_source/local_data_source/payment_local_data_source.dart';
 import 'package:skill_grid/features/payment/data/data_source/remote_data_source/payment_remote_data_source.dart';
 import 'package:skill_grid/features/payment/data/repository/local_repository/payment_local_repository.dart';
@@ -109,7 +108,6 @@ Future<void> initDependencies() async {
   await _initSplashScreenDependencies();
   await _initOnboardScreenDependencies();
   await _initClientDashboardDependencies();
-  await _initFreelancerDashboardDependencies();
   await _initClientHomeScreenDependencies();
   await _initClientProfileDependencies();
   await _initEditClientProfileDependencies();
@@ -257,18 +255,13 @@ _initClientDashboardDependencies() async {
   getIt.registerFactory<ClientDashboardCubit>(() => ClientDashboardCubit());
 }
 
-//Freelancer dashboard dependencies
-_initFreelancerDashboardDependencies() async {
-  getIt.registerFactory<FreelancerDashboardCubit>(
-      () => FreelancerDashboardCubit());
-}
-
 //Client home screen dependencies
 _initClientHomeScreenDependencies() async {
   getIt.registerFactory<ClientHomeBloc>(() => ClientHomeBloc(
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
       tokenHelper: getIt<TokenHelper>(),
-      searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()));
+      searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
+      getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>()));
 }
 
 //Edit client profile dependencies

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
+import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/edit_delete_contract/edit_delete_contract_bloc.dart';
 import 'package:skill_grid/features/review/presentation/view/review_view.dart';
@@ -94,7 +95,7 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                         BlocProvider.of<EditDeleteContractBloc>(context).add(
                             NavigateToContracts(
                                 context: context,
-                                destination: const ClientContractsView()));
+                                destination: const ClientDashboard()));
                       },
                       child: const Icon(Icons.arrow_back, size: 30)),
                   const SizedBox(

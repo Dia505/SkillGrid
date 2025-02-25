@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/review/presentation/view_model/review_bloc.dart';
 
 class ReviewView extends StatefulWidget {
@@ -57,8 +57,7 @@ class _ReviewViewState extends State<ReviewView> {
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 context.read<ReviewBloc>().add(NavigateToContracts(
-                    context: context,
-                    destination: const ClientContractsView()));
+                    context: context, destination: const ClientDashboard()));
               },
             ),
           ),

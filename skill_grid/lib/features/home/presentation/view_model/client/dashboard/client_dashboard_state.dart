@@ -44,7 +44,8 @@ class ClientDashboardState extends Equatable {
             create: (context) => ClientHomeBloc(
                 getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
                 tokenHelper: getIt<TokenHelper>(),
-                searchFreelancersUseCase: getIt<SearchFreelancersUseCase>()))
+                searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
+                getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>()))
       ], child: const HomeScreenView()),
       BlocProvider(
           create: (context) => SearchBloc(

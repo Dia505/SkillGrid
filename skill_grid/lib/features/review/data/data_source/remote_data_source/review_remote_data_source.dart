@@ -65,16 +65,18 @@ class ReviewRemoteDataSource implements IReviewDataSource {
   @override
   Future<void> saveReview(ReviewEntity reviewEntity, String? token) async {
     try {
-      Response response = await _dio.post(
-        ApiEndpoints.saveReview,
-        data: {
+      var data = {
           "review": reviewEntity.review,
           "rating": reviewEntity.rating,
-          "review_date": reviewEntity.reviewDate,
+          "review_date": reviewEntity.reviewDate.toIso8601String(),
           "client_id": reviewEntity.client.clientId,
           "freelancer_id": reviewEntity.freelancer.freelancerId,
           "appointment_id": reviewEntity.appointment.appointmentId 
-        },
+        };
+
+      Response response = await _dio.post(
+        ApiEndpoints.saveReview,
+        data: data,
         options: Options(
             headers: {
               'Authorization': 'Bearer $token',

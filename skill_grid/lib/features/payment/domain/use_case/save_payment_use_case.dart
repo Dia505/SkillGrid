@@ -34,14 +34,11 @@ class SavePaymentUseCase implements UsecaseWithParams<void, SavePaymentParams> {
 
   @override
   Future<Either<Failure, void>> call(SavePaymentParams params) async {
-    return await paymentRepository.savePayment(
-      PaymentEntity(
-        amount: params.amount, 
-        paymentMethod: params.paymentMethod, 
+    return await paymentRepository.savePayment(PaymentEntity(
+        amount: params.amount,
+        paymentMethod: params.paymentMethod,
         paymentStatus: params.paymentStatus,
-        appointment: params.appointment, 
-        billingAddress: params.billingAddress
-      )
-    );
+        appointment: params.appointment,
+        billingAddress: params.billingAddress));
   }
 }

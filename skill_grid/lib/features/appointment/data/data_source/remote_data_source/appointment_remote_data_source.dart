@@ -129,21 +129,22 @@ class AppointmentRemoteDataSource implements IAppointmentDataSource {
   Future<String> saveAppointment(
       AppointmentEntity appointmentEntity, String? token) async {
     try {
+      var data = {
+        "appointment_purpose": appointmentEntity.appointmentPurpose,
+        "appointment_date": appointmentEntity.appointmentDate.toIso8601String(),
+        "project_duration": {
+          "value": appointmentEntity.projectDuration.value,
+          "unit": appointmentEntity.projectDuration.unit
+        },
+        "status": appointmentEntity.status,
+        "freelancer_service_id":
+            appointmentEntity.freelancerService.freelancerServiceId,
+        "client_id": appointmentEntity.client.clientId
+      };
+      String url = ApiEndpoints.saveAppointment;
+      print("Data to be sent::: $url");
       Response response = await _dio.post(ApiEndpoints.saveAppointment,
-          data: {
-            "appointment_purpose": appointmentEntity.appointmentPurpose,
-            "appointment_date": appointmentEntity.appointmentDate,
-            "project_duration": {
-              "value": appointmentEntity.projectDuration.value,
-              "unit": appointmentEntity.projectDuration.unit
-            },
-            "appointment_time": appointmentEntity.appointmentTime,
-            "project_end_date": appointmentEntity.projectEndDate,
-            "status": appointmentEntity.status,
-            "freelancer_service_id":
-                appointmentEntity.freelancerService.freelancerServiceId,
-            "client_id": appointmentEntity.client.clientId
-          },
+          data: data,
           options: Options(
             headers: {
               'Authorization': 'Bearer $token',
@@ -156,10 +157,6 @@ class AppointmentRemoteDataSource implements IAppointmentDataSource {
         throw Exception(response.statusMessage);
       }
     } on DioException catch (e) {
-      print('DioError: ${e.message}'); // Print the Dio error message.
-      print('DioError Type: ${e.type}'); //print the Dio error type.
-      print('DioError Response: ${e.response}'); //print the Dio error response.
-      print('DioError Stacktrace: ${e.stackTrace}');
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
