@@ -48,8 +48,6 @@ class _SearchFilterViewState extends State<SearchFilterView> {
 
   @override
   Widget build(BuildContext context) {
-    print("Selected rating: $selectedRating");
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(30.0),

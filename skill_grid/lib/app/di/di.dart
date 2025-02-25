@@ -244,8 +244,7 @@ _initLoginDependencies() async {
 
   getIt.registerFactory<LoginBloc>(() => LoginBloc(
       clientLoginUseCase: getIt<ClientLoginUseCase>(),
-      clientDashboardCubit: getIt<ClientDashboardCubit>(),
-      tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+      clientDashboardCubit: getIt<ClientDashboardCubit>()));
 }
 
 //Join as client/freelancer dependencies
