@@ -2,7 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
+import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/reset_password_use_case.dart';
+import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 
 part 'reset_password_event.dart';
@@ -41,9 +43,12 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
       newPassword: event.newPassword,
     ));
 
-    result.fold(
-      (failure) => emit(state.copyWith(isLoading: false, isSuccess: false)),
-      (success) => emit(state.copyWith(isLoading: false, isSuccess: true)),
-    );
+    result.fold((l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
+        (r) {
+      emit(state.copyWith(isLoading: false, isSuccess: true));
+      showSnackBar(context: event.context, message: "Password reset successful");
+      add(NavigateToLoginScreen(
+          context: event.context, destination: const LoginScreenView()));
+    });
   }
 }

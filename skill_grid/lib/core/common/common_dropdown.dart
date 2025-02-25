@@ -41,8 +41,6 @@ class _CommonDropdownState<T> extends State<CommonDropdown<T>> {
 
   @override
   Widget build(BuildContext context) {
-    print('Dropdown value: $selectedValue');
-
     return SizedBox(
       width: widget.width,
       child: DropdownButtonFormField<T>(

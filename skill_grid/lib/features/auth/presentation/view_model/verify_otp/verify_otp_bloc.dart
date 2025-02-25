@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/verify_otp_use_case.dart';
+import 'package:skill_grid/features/auth/presentation/view/forgot_password_screens/reset_password_view.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/reset_password/reset_password_bloc.dart';
 
@@ -55,6 +56,8 @@ class VerifyOtpBloc extends Bloc<VerifyOtpEvent, VerifyOtpState> {
     result.fold((l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
         (r) {
       emit(state.copyWith(isLoading: false, isSuccess: true));
+      add(NavigateToResetPasswodScreen(
+            context: event.context, destination: ResetPasswordView(email: event.email, otp: event.otp)));
     });
   }
 }

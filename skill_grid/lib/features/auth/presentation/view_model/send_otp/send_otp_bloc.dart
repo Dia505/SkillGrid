@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/send_otp_use_case.dart';
+import 'package:skill_grid/features/auth/presentation/view/forgot_password_screens/verify_otp_view.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/verify_otp/verify_otp_bloc.dart';
 
@@ -55,6 +56,8 @@ class SendOtpBloc extends Bloc<SendOtpEvent, SendOtpState> {
     result.fold((l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
         (r) {
       emit(state.copyWith(isLoading: false, isSuccess: true));
+      add(NavigateToVerifyOtpScreen(
+            context: event.context, destination: VerifyOtpView(email: event.email)));
     });
   }
 }
