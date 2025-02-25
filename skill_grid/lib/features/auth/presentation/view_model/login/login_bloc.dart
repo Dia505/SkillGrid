@@ -5,6 +5,7 @@ import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
+import 'package:skill_grid/features/auth/presentation/view_model/send_otp/send_otp_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
@@ -43,6 +44,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     });
 
+    on<NavigateToSendOtpScreen>((event, emit) {
+      final sendOtpBloc = getIt<SendOtpBloc>();
+
+      Navigator.pushReplacement(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [BlocProvider.value(value: sendOtpBloc)],
+            child: event.destination,
+          ),
+        ),
+      );
+    });
+
     on<NavigateHomeScreenEvent>((event, emit) {
       Navigator.pushReplacement(
           event.context,
@@ -71,7 +86,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }, (token) async {
         emit(state.copyWith(isLoading: false, isSuccess: true));
 
-        add(NavigateHomeScreenEvent(context: event.context, destination: const ClientDashboard()));
+        add(NavigateHomeScreenEvent(
+            context: event.context, destination: const ClientDashboard()));
       });
     });
   }

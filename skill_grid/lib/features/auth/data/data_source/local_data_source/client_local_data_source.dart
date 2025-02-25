@@ -89,4 +89,22 @@ class ClientLocalDataSource implements IClientDataSource {
       throw Exception("Failed to update client data: $e");
     }
   }
+  
+  @override
+  Future<void> sendOtp(String email) {
+    // TODO: implement sendOtp
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> resetPassword(String email, String otp, String newPassword) {
+    // TODO: implement resetPassword
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> verifyOtp(String email, String otp) {
+    // TODO: implement verifyOtp
+    throw UnimplementedError();
+  }
 }

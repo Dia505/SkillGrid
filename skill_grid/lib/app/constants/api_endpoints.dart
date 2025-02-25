@@ -53,10 +53,15 @@ class ApiEndpoints {
   static const String saveBillingAddress = "billing-address";
   static const String getBillingAddressById = "billing-address";
 
-  //Payment address routes
+  //Payment routes
   static const String savePayment = "payment";
   static const String getPaymentByAppointmentId = "payment/appointment";
   static const String getPaymentById = "payment";
   static const String updatePayment = "payment";
   static const String deletePaymentByAppointmentId = "payment/appointment";
+
+  //Forgot password routes
+  static const String sendOtp = "reset/send-otp";
+  static const String verifyOtp = "reset/verify-otp";
+  static const String resetPassword = "reset/reset-password";
 }

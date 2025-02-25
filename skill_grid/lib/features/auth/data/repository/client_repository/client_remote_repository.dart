@@ -80,4 +80,34 @@ class ClientRemoteRepository implements IClientRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> sendOtp(String email) async {
+    try {
+      _clientRemoteDataSource.sendOtp(email);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, void>> verifyOtp(String email, String otp) async {
+    try {
+      _clientRemoteDataSource.verifyOtp(email, otp);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword(String email, String otp, String newPassword) async {
+    try {
+      _clientRemoteDataSource.resetPassword(email, otp, newPassword);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }
