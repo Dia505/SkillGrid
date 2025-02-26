@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
+import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 
 class SearchFilterView extends StatefulWidget {
@@ -48,118 +49,130 @@ class _SearchFilterViewState extends State<SearchFilterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(30.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize:
-            MainAxisSize.min, // Ensures the sheet only takes up necessary space
-        children: [
-          const Text(
-            "Filters",
-            style: TextStyle(fontSize: 28, fontFamily: "Caprasimo"),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          CommonDropdown(
-            width: 325,
-            hintText: "Location",
-            items: cityList,
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  selectedCity = value;
-                });
-              }
-            },
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const Text(
-            "Hourly rate",
-            style: TextStyle(fontFamily: "Inter Medium"),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Wrap(
-            spacing: 8,
-            children: hourlyRateRanges.keys.map((option) {
-              return FilterChip(
-                label: Text(option,
-                    style: const TextStyle(fontFamily: "Inter Medium")),
-                selected: selectedHourlyRates.contains(option),
-                selectedColor: const Color(0xFFCCCAFF),
-                backgroundColor: Colors.white,
-                onSelected: (bool selected) {
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, themeState) {
+        Color filterContainerBgColour =
+            themeState.isDarkMode ? Colors.black : Colors.white;
+        Color hourlyRateFilterColour =
+            themeState.isDarkMode ? Colors.grey : Colors.white;
+        return Container(
+          width: double.infinity,
+          color: filterContainerBgColour,
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize
+                .min, // Ensures the sheet only takes up necessary space
+            children: [
+              const Text(
+                "Filters",
+                style: TextStyle(fontSize: 28, fontFamily: "Caprasimo"),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              CommonDropdown(
+                width: 325,
+                hintText: "Location",
+                items: cityList,
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedCity = value;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                "Hourly rate",
+                style: TextStyle(fontFamily: "Inter Medium"),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Wrap(
+                spacing: 8,
+                children: hourlyRateRanges.keys.map((option) {
+                  return FilterChip(
+                    label: Text(option,
+                        style: const TextStyle(fontFamily: "Inter Medium")),
+                    selected: selectedHourlyRates.contains(option),
+                    selectedColor: const Color(0xFFCCCAFF),
+                    backgroundColor: hourlyRateFilterColour,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        if (selected) {
+                          selectedHourlyRates.add(option);
+                        } else {
+                          selectedHourlyRates.remove(option);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                "Rating",
+                style: TextStyle(fontFamily: "Inter Medium"),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) {
+                  return Icon(
+                    Icons.star,
+                    color: index < selectedRating.ceil()
+                        ? Colors.amber
+                        : Colors.grey,
+                    size: 36,
+                  );
+                }),
+              ),
+              const SizedBox(height: 16),
+              // Slider
+              Slider(
+                value: selectedRating,
+                min: 0,
+                max: 5,
+                divisions: 5,
+                label: selectedRating.toStringAsFixed(0),
+                activeColor: Colors.amber,
+                inactiveColor: Colors.grey.shade300,
+                onChanged: (value) {
                   setState(() {
-                    if (selected) {
-                      selectedHourlyRates.add(option);
-                    } else {
-                      selectedHourlyRates.remove(option);
-                    }
+                    selectedRating = value;
                   });
                 },
-              );
-            }).toList(),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const Text(
-            "Rating",
-            style: TextStyle(fontFamily: "Inter Medium"),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (index) {
-              return Icon(
-                Icons.star,
-                color:
-                    index < selectedRating.ceil() ? Colors.amber : Colors.grey,
-                size: 36,
-              );
-            }),
-          ),
-          const SizedBox(height: 16),
-          // Slider
-          Slider(
-            value: selectedRating,
-            min: 0,
-            max: 5,
-            divisions: 5,
-            label: selectedRating.toStringAsFixed(0),
-            activeColor: Colors.amber,
-            inactiveColor: Colors.grey.shade300,
-            onChanged: (value) {
-              setState(() {
-                selectedRating = value;
-              });
-            },
-          ),
-          const SizedBox(height: 24),
-          Center(
-            child: SizedBox(
-              width: 150,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  context.read<SearchBloc>().add(FilterByCriteria(selectedCity,
-                      selectedHourlyRates.toList(), selectedRating.toInt()));
-                  Navigator.pop(context); // Close the filter page
-                },
-                child: const Text("Apply"),
               ),
-            ),
+              const SizedBox(height: 24),
+              Center(
+                child: SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<SearchBloc>().add(FilterByCriteria(
+                          selectedCity,
+                          selectedHourlyRates.toList(),
+                          selectedRating.toInt()));
+                      Navigator.pop(context); // Close the filter page
+                    },
+                    child: const Text("Apply"),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
