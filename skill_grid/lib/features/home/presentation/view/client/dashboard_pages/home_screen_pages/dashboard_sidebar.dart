@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
+import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';

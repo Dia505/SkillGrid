@@ -4,7 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
-import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
+import 'package:skill_grid/core/theme/theme_sensor/data/repository/light_sensor_repository_impl.dart';
+import 'package:skill_grid/core/theme/theme_sensor/domain/repository/light_sensor_repository.dart';
+import 'package:skill_grid/core/theme/theme_sensor/domain/use_case/get_theme_mode_by_sensor_use_case.dart';
+import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/appointment/data/data_source/local_data_source/appointment_local_data_source.dart';
 import 'package:skill_grid/features/appointment/data/data_source/remote_data_source/appointment_remote_data_source.dart';
@@ -108,6 +111,7 @@ Future<void> initDependencies() async {
   await _initSharedPreferences();
   await _initTokenHelper();
   await _initThemeBloc();
+  await _initLightSensor();
 
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
@@ -158,8 +162,19 @@ _initTokenHelper() {
       () => TokenHelper(tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 }
 
+_initLightSensor() {
+  getIt.registerLazySingleton<LightSensorRepository>(
+    () => LightSensorRepositoryImpl()
+  );
+  getIt.registerLazySingleton<GetThemeModeBySensorUseCase>(
+    () => GetThemeModeBySensorUseCase(getIt<LightSensorRepository>())
+  );
+}
+
 _initThemeBloc() {
-  getIt.registerLazySingleton<ThemeBloc>(() => ThemeBloc());
+  getIt.registerLazySingleton<ThemeBloc>(
+    () => ThemeBloc(getIt<GetThemeModeBySensorUseCase>())
+  );
 }
 
 //Client dependencies
