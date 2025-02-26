@@ -44,9 +44,14 @@ class HomeOngoingCollabCard extends StatelessWidget {
                   Text(
                     projectName,
                     style: const TextStyle(
-                        fontFamily: "Inter Medium", fontSize: 16),
+                        fontFamily: "Inter Medium",
+                        fontSize: 16,
+                        color: Colors.black),
                   ),
-                  Text("$deadlineDuration to complete"),
+                  Text(
+                    "$deadlineDuration to complete",
+                    style: const TextStyle(color: Colors.black),
+                  ),
                   Row(
                     children: [
                       ClipRRect(
@@ -70,7 +75,10 @@ class HomeOngoingCollabCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(freelancerName),
+                      Text(
+                        freelancerName,
+                        style: const TextStyle(color: Colors.black),
+                      ),
                       const SizedBox(width: 10),
                       Text(rating ?? " "),
                     ],

@@ -42,156 +42,166 @@ class _ReviewViewState extends State<ReviewView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReviewBloc, ReviewState>(builder: (context, event) {
-      return Scaffold(
-          appBar: AppBar(
-            title: const Text("Review",
-                style: TextStyle(
-                    color: Color(0xFFE7E7FF),
-                    fontSize: 24,
-                    fontFamily: "Caprasimo")),
-            elevation: 0,
-            centerTitle: true,
-            backgroundColor: const Color(0xFF322E86),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                context.read<ReviewBloc>().add(NavigateToContracts(
-                    context: context, destination: const ClientDashboard()));
-              },
-            ),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        Color reviewTitleColour = themeState.isDarkMode
+            ? const Color(0xFFE7E7FF)
+            : const Color(0XFF322E86);
+        Color reviewValueColour = themeState.isDarkMode
+            ? const Color(0xFFE7E7FF)
+            : const Color(0XFF322E86);
+        return BlocBuilder<ReviewBloc, ReviewState>(builder: (context, event) {
+          return Scaffold(
+              appBar: AppBar(
+                title: const Text("Review",
+                    style: TextStyle(
+                        color: Color(0xFFE7E7FF),
+                        fontSize: 24,
+                        fontFamily: "Caprasimo")),
+                elevation: 0,
+                centerTitle: true,
+                backgroundColor: const Color(0xFF322E86),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    context.read<ReviewBloc>().add(NavigateToContracts(
+                        context: context, destination: const ClientDashboard()));
+                  },
+                ),
+              ),
+              body: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
                     children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(
-                                "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}")
-                            as ImageProvider,
-                        radius: 50,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${widget.freelancerFirstName} ${widget.freelancerLastName}",
-                              style: const TextStyle(
-                                fontFamily: "Inter Bold",
-                                fontSize: 22,
-                              ),
-                            ),
-                            Text(
-                              widget.profession,
-                              style: const TextStyle(
-                                fontSize: 17,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        style: const TextStyle(
-                            fontSize: 18,
-                            color: Color(0XFF322E86),
-                            fontFamily: "Inter Bold"),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const TextSpan(text: "Project: "),
-                          TextSpan(
-                              text: widget.appointmentPurpose,
-                              style: const TextStyle(
-                                  fontFamily: "Inter Regular",
-                                  color: Colors.black))
-                        ]),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      const Text(
-                        "Rating:",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Color(0XFF322E86),
-                            fontFamily: "Inter Bold"),
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                    "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}")
+                                as ImageProvider,
+                            radius: 50,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${widget.freelancerFirstName} ${widget.freelancerLastName}",
+                                  style: const TextStyle(
+                                    fontFamily: "Inter Bold",
+                                    fontSize: 22,
+                                  ),
+                                ),
+                                Text(
+                                  widget.profession,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: reviewTitleColour,
+                                fontFamily: "Inter Bold"),
+                            children: [
+                              const TextSpan(text: "Project: "),
+                              TextSpan(
+                                  text: widget.appointmentPurpose,
+                                  style: TextStyle(
+                                      fontFamily: "Inter Regular",
+                                      color: reviewValueColour))
+                            ]),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       Row(
-                        children: List.generate(5, (index) {
-                          return IconButton(
-                            icon: Icon(
-                              Icons.star,
-                              color: index < _selectedRating
-                                  ? Colors.amber
-                                  : Colors.grey,
-                              size: 35,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedRating = index + 1; // Update rating
-                              });
-                            },
-                          );
-                        }),
+                        children: [
+                          Text(
+                            "Rating:",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: reviewTitleColour,
+                                fontFamily: "Inter Bold"),
+                          ),
+                          Row(
+                            children: List.generate(5, (index) {
+                              return IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: index < _selectedRating
+                                      ? Colors.amber
+                                      : Colors.grey,
+                                  size: 35,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedRating = index + 1; // Update rating
+                                  });
+                                },
+                              );
+                            }),
+                          ),
+                        ],
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        maxLines: 7,
+                        controller: _reviewController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '*required';
+                          }
+    
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          hintText: "Share your thoughts.....",
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      CommonButton(
+                          buttonText: "Send",
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              final state = context.read<ReviewBloc>().state;
+                              if (state is ClientFetched) {
+                                context.read<ReviewBloc>().add(SaveReview(
+                                    context: context,
+                                    review: _reviewController.text.trim(),
+                                    rating: _selectedRating,
+                                    reviewDate: DateTime.now(),
+                                    client: state.client,
+                                    freelancer: widget.freelancer,
+                                    appointment: widget.appointment));
+                              }
+                            }
+                          })
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    maxLines: 7,
-                    controller: _reviewController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '*required';
-                      }
-
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      hintText: "Share your thoughts.....",
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  CommonButton(
-                      buttonText: "Send",
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          final state = context.read<ReviewBloc>().state;
-                          if (state is ClientFetched) {
-                            context.read<ReviewBloc>().add(SaveReview(
-                                context: context,
-                                review: _reviewController.text.trim(),
-                                rating: _selectedRating,
-                                reviewDate: DateTime.now(),
-                                client: state.client,
-                                freelancer: widget.freelancer,
-                                appointment: widget.appointment));
-                          }
-                        }
-                      })
-                ],
-              ),
-            ),
-          ));
-    });
+                ),
+              ));
+        });
+      },
+    );
   }
 }

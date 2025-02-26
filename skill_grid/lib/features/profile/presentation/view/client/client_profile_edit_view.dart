@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
+import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/profile/presentation/view/client/client_profile_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/edit_profile/client_edit_profile_bloc.dart';
@@ -95,193 +96,204 @@ class _ClientProfileEditViewState extends State<ClientProfileEditView> {
       'Butwal'
     ].map((city) => DropdownMenuItem(value: city, child: Text(city))).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit Profile",
-            style: TextStyle(
-                color: Color(0xFFE7E7FF),
-                fontSize: 24,
-                fontFamily: "Caprasimo")),
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: const Color(0xFF322E86),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            context.read<ClientEditProfileBloc>().add(NavigateToClientProfile(
-                context: context, destination: const ClientProfileView()));
-          },
-        ),
-      ),
-      body: BlocBuilder<ClientEditProfileBloc, ClientEditProfileState>(
-          builder: (context, state) {
-        if (state is ClientEditProfileLoaded) {
-          final client = state.clientEntity;
-          fnameController.text = client.firstName;
-          lnameController.text = client.lastName;
-          mobNumberController.text = client.mobileNo;
-          emailController.text = client.email;
-          selectedCity = client.city;
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, themeState) {
+        Color cityDropDownTitleColour = themeState.isDarkMode
+            ? const Color(0xFFE7E7FF)
+            : const Color(0xFF322E86);
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("Edit Profile",
+                style: TextStyle(
+                    color: Color(0xFFE7E7FF),
+                    fontSize: 24,
+                    fontFamily: "Caprasimo")),
+            elevation: 0,
+            centerTitle: true,
+            backgroundColor: const Color(0xFF322E86),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                context.read<ClientEditProfileBloc>().add(
+                    NavigateToClientProfile(
+                        context: context,
+                        destination: const ClientProfileView()));
+              },
+            ),
+          ),
+          body: BlocBuilder<ClientEditProfileBloc, ClientEditProfileState>(
+              builder: (context, state) {
+            if (state is ClientEditProfileLoaded) {
+              final client = state.clientEntity;
+              fnameController.text = client.firstName;
+              lnameController.text = client.lastName;
+              mobNumberController.text = client.mobileNo;
+              emailController.text = client.email;
+              selectedCity = client.city;
 
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30),
-              child: SafeArea(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                              backgroundColor: const Color(0xFF544FBD),
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (context) => Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        checkCameraPermission();
-                                        _browseImage(
-                                            ImageSource.camera, client);
-                                        Navigator.pop(context);
-                                      },
-                                      icon: const Icon(Icons.camera,
-                                          color: Colors.white),
-                                      label: const Text('Camera'),
-                                    ),
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        checkCameraPermission();
-                                        _browseImage(
-                                            ImageSource.gallery, client);
-                                        Navigator.pop(context);
-                                      },
-                                      icon: const Icon(Icons.image,
-                                          color: Colors.white),
-                                      label: const Text('Gallery'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          child: CircleAvatar(
-                            radius: 55,
-                            backgroundImage: _img != null
-                                ? FileImage(_img!)
-                                : client.profilePicture != null
-                                    ? NetworkImage(client.profilePicture!
-                                        .replaceFirst('localhost', '10.0.2.2'))
-                                    : const AssetImage(
-                                            "assets/images/default_profile_img.png")
-                                        as ImageProvider,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 45.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CommonTextfield(
-                                  textFieldTitle: "First name",
-                                  controller: fnameController),
-                              CommonTextfield(
-                                  textFieldTitle: "Last name",
-                                  controller: lnameController),
-                              CommonTextfield(
-                                  textFieldTitle: "Mobile number",
-                                  controller: mobNumberController),
-                              const SizedBox(height: 10),
-                              Container(
-                                padding: const EdgeInsets.only(left: 12),
-                                child: const Text("City",
-                                    style: TextStyle(
-                                        color: Color(0xFF322E86),
-                                        fontSize: 15)),
-                              ),
-                              const SizedBox(height: 7),
-                              CommonDropdown(
-                               width: 325,
-                               items: cityList,
-                               value: selectedCity,
-                               onChanged: (value) {
-                                 if (value != null) {
-                                   selectedCity = value;
-                                 }
-                               },
-                             ),
-                              const SizedBox(height: 7),
-                              CommonTextfield(
-                                  textFieldTitle: "Email address",
-                                  controller: emailController),
-                              CommonTextfield(
-                                  textFieldTitle: "Password",
-                                  controller: passwordController,
-                                  obscureText: true),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              final clientBloc =
-                                  context.read<ClientEditProfileBloc>();
-
-                              // First, check if the profile picture needs updating
-                              if (_img != null) {
-                                clientBloc.add(UpdateProfilePicture(
-                                  file: _img!,
-                                  clientId: client.clientId!,
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: SafeArea(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  backgroundColor: const Color(0xFF544FBD),
                                   context: context,
-                                ));
-                              }
+                                  isScrollControlled: true,
+                                  builder: (context) => Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        ElevatedButton.icon(
+                                          onPressed: () {
+                                            checkCameraPermission();
+                                            _browseImage(
+                                                ImageSource.camera, client);
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(Icons.camera,
+                                              color: Colors.white),
+                                          label: const Text('Camera'),
+                                        ),
+                                        ElevatedButton.icon(
+                                          onPressed: () {
+                                            checkCameraPermission();
+                                            _browseImage(
+                                                ImageSource.gallery, client);
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(Icons.image,
+                                              color: Colors.white),
+                                          label: const Text('Gallery'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                radius: 55,
+                                backgroundImage: _img != null
+                                    ? FileImage(_img!)
+                                    : client.profilePicture != null
+                                        ? NetworkImage(client.profilePicture!
+                                            .replaceFirst(
+                                                'localhost', '10.0.2.2'))
+                                        : const AssetImage(
+                                                "assets/images/default_profile_img.png")
+                                            as ImageProvider,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 45.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CommonTextfield(
+                                      textFieldTitle: "First name",
+                                      controller: fnameController),
+                                  CommonTextfield(
+                                      textFieldTitle: "Last name",
+                                      controller: lnameController),
+                                  CommonTextfield(
+                                      textFieldTitle: "Mobile number",
+                                      controller: mobNumberController),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 12),
+                                    child: Text("City",
+                                        style: TextStyle(
+                                            color: cityDropDownTitleColour,
+                                            fontSize: 15)),
+                                  ),
+                                  const SizedBox(height: 7),
+                                  CommonDropdown(
+                                    width: 325,
+                                    items: cityList,
+                                    value: selectedCity,
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        selectedCity = value;
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(height: 7),
+                                  CommonTextfield(
+                                      textFieldTitle: "Email address",
+                                      controller: emailController),
+                                  CommonTextfield(
+                                      textFieldTitle: "Password",
+                                      controller: passwordController,
+                                      obscureText: true),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  final clientBloc =
+                                      context.read<ClientEditProfileBloc>();
 
-                              // Dispatch UpdateClient event for bio updates
-                              clientBloc.add(UpdateClient(
-                                clientId: client.clientId!,
-                                firstName: fnameController.text.isNotEmpty
-                                    ? fnameController.text
-                                    : null,
-                                lastName: lnameController.text.isNotEmpty
-                                    ? lnameController.text
-                                    : null,
-                                mobileNo: mobNumberController.text.isNotEmpty
-                                    ? mobNumberController.text
-                                    : null,
-                                city: selectedCity,
-                                email: emailController.text.isNotEmpty
-                                    ? emailController.text
-                                    : null,
-                                password: passwordController.text.isNotEmpty
-                                    ? passwordController.text
-                                    : null,
-                                context: context,
-                              ));
-                            }
-                          },
-                          child: const Text("Save"),
+                                  // First, check if the profile picture needs updating
+                                  if (_img != null) {
+                                    clientBloc.add(UpdateProfilePicture(
+                                      file: _img!,
+                                      clientId: client.clientId!,
+                                      context: context,
+                                    ));
+                                  }
+
+                                  // Dispatch UpdateClient event for bio updates
+                                  clientBloc.add(UpdateClient(
+                                    clientId: client.clientId!,
+                                    firstName: fnameController.text.isNotEmpty
+                                        ? fnameController.text
+                                        : null,
+                                    lastName: lnameController.text.isNotEmpty
+                                        ? lnameController.text
+                                        : null,
+                                    mobileNo:
+                                        mobNumberController.text.isNotEmpty
+                                            ? mobNumberController.text
+                                            : null,
+                                    city: selectedCity,
+                                    email: emailController.text.isNotEmpty
+                                        ? emailController.text
+                                        : null,
+                                    password: passwordController.text.isNotEmpty
+                                        ? passwordController.text
+                                        : null,
+                                    context: context,
+                                  ));
+                                }
+                              },
+                              child: const Text("Save"),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      }),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
+        );
+      },
     );
   }
 }

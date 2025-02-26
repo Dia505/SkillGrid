@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
+import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
 import 'package:skill_grid/features/appointment/data/data_source/local_data_source/appointment_local_data_source.dart';
 import 'package:skill_grid/features/appointment/data/data_source/remote_data_source/appointment_remote_data_source.dart';
@@ -106,6 +107,7 @@ Future<void> initDependencies() async {
   await _initApiService();
   await _initSharedPreferences();
   await _initTokenHelper();
+  await _initThemeBloc();
 
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
@@ -156,6 +158,10 @@ _initTokenHelper() {
       () => TokenHelper(tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 }
 
+_initThemeBloc() {
+  getIt.registerLazySingleton<ThemeBloc>(() => ThemeBloc());
+}
+
 //Client dependencies
 _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<ClientLocalDataSource>(
@@ -184,14 +190,14 @@ _initClientRegistrationDependencies() async {
       tokenHelper: getIt<TokenHelper>()));
 
   getIt.registerLazySingleton<SendOtpUseCase>(() => SendOtpUseCase(
-    clientRepository: getIt<ClientRemoteRepository>(),
-  ));
+        clientRepository: getIt<ClientRemoteRepository>(),
+      ));
   getIt.registerLazySingleton<VerifyOtpUseCase>(() => VerifyOtpUseCase(
-    clientRepository: getIt<ClientRemoteRepository>(),
-  ));
+        clientRepository: getIt<ClientRemoteRepository>(),
+      ));
   getIt.registerLazySingleton<ResetPasswordUseCase>(() => ResetPasswordUseCase(
-    clientRepository: getIt<ClientRemoteRepository>(),
-  ));
+        clientRepository: getIt<ClientRemoteRepository>(),
+      ));
 
   getIt.registerFactory<ClientBloc>(() => ClientBloc(
       registerClientUseCase: getIt<RegisterClientUseCase>(),
@@ -279,7 +285,8 @@ _initClientHomeScreenDependencies() async {
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
       tokenHelper: getIt<TokenHelper>(),
       searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
-      getAppointmentByClientIdUseCase: getIt<GetAppointmentByClientIdUseCase>()));
+      getAppointmentByClientIdUseCase:
+          getIt<GetAppointmentByClientIdUseCase>()));
 }
 
 //Edit client profile dependencies
@@ -380,9 +387,10 @@ _initReviewDependencies() async {
       reviewRepository: getIt<ReviewRemoteRepository>(),
       tokenSharedPrefs: getIt<TokenSharedPrefs>(),
       tokenHelper: getIt<TokenHelper>()));
-  getIt.registerLazySingleton<GetReviewByAppointmentIdUseCase>(() => GetReviewByAppointmentIdUseCase(
-      reviewRepository: getIt<ReviewRemoteRepository>(),
-      tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+  getIt.registerLazySingleton<GetReviewByAppointmentIdUseCase>(() =>
+      GetReviewByAppointmentIdUseCase(
+          reviewRepository: getIt<ReviewRemoteRepository>(),
+          tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 
   getIt.registerFactory<ReviewBloc>(() => ReviewBloc(
       saveReviewUseCase: getIt<SaveReviewUseCase>(),
@@ -591,28 +599,26 @@ _initEditDeleteContractDependencies() async {
       updatePaymentUseCase: getIt<UpdatePaymentUseCase>(),
       deletePaymentByAppointmentIdUseCase:
           getIt<DeletePaymentByAppointmentIdUseCase>(),
-      getReviewByAppointmentIdUseCase: getIt<GetReviewByAppointmentIdUseCase>()));
+      getReviewByAppointmentIdUseCase:
+          getIt<GetReviewByAppointmentIdUseCase>()));
 }
 
 //Reset password dependencies
 _initResetPasswordDependencies() async {
-  getIt.registerFactory<ResetPasswordBloc>(() => ResetPasswordBloc(
-    resetPasswordUseCase: getIt<ResetPasswordUseCase>()
-  ));
+  getIt.registerFactory<ResetPasswordBloc>(() =>
+      ResetPasswordBloc(resetPasswordUseCase: getIt<ResetPasswordUseCase>()));
 }
 
 //Verify otp dependencies
 _initVerifyOtpDependencies() async {
   getIt.registerFactory<VerifyOtpBloc>(() => VerifyOtpBloc(
-    verifyOtpUseCase: getIt<VerifyOtpUseCase>(),
-    resetPasswordBloc: getIt<ResetPasswordBloc>()
-  ));
+      verifyOtpUseCase: getIt<VerifyOtpUseCase>(),
+      resetPasswordBloc: getIt<ResetPasswordBloc>()));
 }
 
 //Send otp dependencies
 _initSendOtpDependencies() async {
   getIt.registerFactory<SendOtpBloc>(() => SendOtpBloc(
-    sendOtpUseCase: getIt<SendOtpUseCase>(), 
-    verifyOtpBloc: getIt<VerifyOtpBloc>()
-  ));
+      sendOtpUseCase: getIt<SendOtpUseCase>(),
+      verifyOtpBloc: getIt<VerifyOtpBloc>()));
 }
