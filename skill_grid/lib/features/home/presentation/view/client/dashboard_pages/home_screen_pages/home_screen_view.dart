@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/home_ongoing_collab_card.dart';
 import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
-import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
+import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/dashboard_sidebar.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';

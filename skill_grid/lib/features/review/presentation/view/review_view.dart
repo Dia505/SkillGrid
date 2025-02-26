@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_button.dart';
-import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
+import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
 import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';

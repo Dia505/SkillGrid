@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
+import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 
 class FreelancerProfileServiceContainer extends StatefulWidget {
   final String title;

@@ -6,7 +6,7 @@ import 'package:skill_grid/core/common/freelancer_profile_education_container.da
 import 'package:skill_grid/core/common/freelancer_profile_employment_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_review_container.dart';
 import 'package:skill_grid/core/common/freelancer_profile_service_container.dart';
-import 'package:skill_grid/core/theme/theme_state_management/theme_bloc.dart';
+import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/features/appointment/presentation/view/send_offer_view.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/profile/freelancer/freelancer_profile_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

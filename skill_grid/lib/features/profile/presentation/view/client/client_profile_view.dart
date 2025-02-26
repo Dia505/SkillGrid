@@ -69,9 +69,8 @@ class _ClientProfileViewState extends State<ClientProfileView> {
                         onPressed: () {
                           context.read<ClientProfileBloc>().add(
                                 NavigateToEditClientProfile(
-                                  context: context,
-                                  destination: const ClientProfileEditView()
-                                ),
+                                    context: context,
+                                    destination: const ClientProfileEditView()),
                               );
                         },
                         child: const Text("Edit profile"),
