@@ -141,8 +141,6 @@ class AppointmentRemoteDataSource implements IAppointmentDataSource {
             appointmentEntity.freelancerService.freelancerServiceId,
         "client_id": appointmentEntity.client.clientId
       };
-      String url = ApiEndpoints.saveAppointment;
-      print("Data to be sent::: $url");
       Response response = await _dio.post(ApiEndpoints.saveAppointment,
           data: data,
           options: Options(

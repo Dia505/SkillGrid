@@ -19,7 +19,7 @@ class PaymentLocalDataSource implements IPaymentDataSource {
   }
 
   @override
-  Future<void> savePayment(PaymentEntity paymentEntity) {
+  Future<void> savePayment(PaymentEntity paymentEntity, String? token) {
     // TODO: implement savePayment
     throw UnimplementedError();
   }

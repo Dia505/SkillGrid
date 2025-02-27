@@ -8,7 +8,6 @@ import 'package:skill_grid/features/appointment/domain/entity/appointment_entity
 import 'package:skill_grid/features/appointment/domain/use_case/save_appointment_use_case.dart';
 import 'package:skill_grid/features/appointment/presentation/view_model/billing_and_payment/billing_and_payment_bloc.dart';
 import 'package:skill_grid/features/auth/domain/entity/freelancer_entity.dart';
-import 'package:skill_grid/features/billing_address/domain/entity/billing_address_entity.dart';
 import 'package:skill_grid/features/billing_address/domain/use_case/save_billing_address_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/save_payment_use_case.dart';
 
@@ -351,36 +350,19 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                 ),
                 BlocListener<BillingAndPaymentBloc, BillingAndPaymentState>(
                   listener: (context, state) {
-                    AppointmentEntity? savedAppointment;
-                    BillingAddressEntity? savedBillingAddress;
+                    final paymentParams = SavePaymentParams(
+                      amount: 0,
+                      paymentMethod: selectedPayment!,
+                      paymentStatus: false,
+                      appointment: state.appointment!,
+                      billingAddress: state.billingAddress!,
+                    );
 
-                    if (state is AppointmentSavedState) {
-                      savedAppointment = state.appointment;
-                      print("Saved appointment: $savedAppointment");
-                    }
-
-                    if (state is BillingAddressSavedState) {
-                      savedBillingAddress = state.billingAddress;
-                      print("Saved billing address: $savedBillingAddress");
-                    }
-
-                    // Now trigger SavePayment after appointment is saved
-                    if (savedAppointment != null &&
-                        savedBillingAddress != null) {
-                      final paymentParams = SavePaymentParams(
-                        amount: 0,
-                        paymentMethod: selectedPayment!,
-                        paymentStatus: false,
-                        appointment: savedAppointment,
-                        billingAddress: savedBillingAddress,
-                      );
-
-                      // Trigger the SavePayment event after both appointment and billing address are saved
-                      context.read<BillingAndPaymentBloc>().add(SavePayment(
-                            paymentParams: paymentParams,
-                            context: context,
-                          ));
-                    }
+                    // Trigger the SavePayment event after both appointment and billing address are saved
+                    context.read<BillingAndPaymentBloc>().add(SavePayment(
+                          paymentParams: paymentParams,
+                          context: context,
+                        ));
                   },
                   child: CommonButton(
                     buttonText: "Send offer",

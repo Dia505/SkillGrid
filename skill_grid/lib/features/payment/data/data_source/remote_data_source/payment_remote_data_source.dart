@@ -43,18 +43,47 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
   }
 
   @override
-  Future<void> savePayment(PaymentEntity paymentEntity) async {
+  Future<void> savePayment(PaymentEntity paymentEntity, String? token) async {
     try {
-      Response response = await _dio.post(
-        ApiEndpoints.savePayment,
-        data: {
-          "amount": paymentEntity.amount,
-          "payment_method": paymentEntity.paymentMethod,
-          "payment_status": paymentEntity.paymentStatus,
-          "appointment_id": paymentEntity.appointment.appointmentId,
-          "billing_address_id": paymentEntity.billingAddress.billingAddressId
-        },
-      );
+      // print('VAL::: DATASOURCE $paymentEntity');
+      // print("VAL::: DATASOURCE VARIABLES");
+      // print(
+      //     "VAL::: DATASOURCE ${paymentEntity.amount}, ${paymentEntity.amount.runtimeType}");
+      // print(
+      //     "VAL::: DATASOURCE ${paymentEntity.paymentStatus}, ${paymentEntity.paymentStatus.runtimeType}");
+      // print(
+      //     "VAL::: DATASOURCE ${paymentEntity.paymentMethod}, ${paymentEntity.paymentMethod.runtimeType}");
+      // print(
+      //     "VAL::: DATASOURCE ${paymentEntity.appointment.appointmentId}, ${paymentEntity.appointment.appointmentId.runtimeType}");
+      // print(
+      //     "VAL::: DATASOURCE ${paymentEntity.billingAddress.billingAddressId}, ${paymentEntity.billingAddress.billingAddressId.runtimeType}");
+      var data = {
+        "amount": paymentEntity.amount,
+        "payment_method": paymentEntity.paymentMethod,
+        "payment_status": paymentEntity.paymentStatus,
+        "appointment_id": paymentEntity.appointment.appointmentId,
+        "billing_address_id": paymentEntity.billingAddress.billingAddressId
+      };
+      // Response response = await _dio.post(
+      //   ApiEndpoints.savePayment,
+      //   data: {
+      //     "amount": paymentEntity.amount,
+      //     "payment_method": paymentEntity.paymentMethod,
+      //     "payment_status": paymentEntity.paymentStatus,
+      //     "appointment_id": paymentEntity.appointment.appointmentId,
+      //     "billing_address_id": paymentEntity.billingAddress.billingAddressId
+      //   },
+      // );
+      Response response = await _dio.post(ApiEndpoints.savePayment,
+          data: data,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ));
+      print('VAL::: DATASOURCE RESPONSE: $response');
+      print('VAL::: DATASOURCE Response Status: ${response.statusCode}');
+      print('VAL::: DATASOURCE Response Data: ${response.data}');
       if (response.statusCode == 201) {
         return;
       } else {

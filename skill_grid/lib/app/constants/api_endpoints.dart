@@ -4,13 +4,14 @@ class ApiEndpoints {
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
 
+  //192.168.18.11
   //10.0.2.2
-  static const String baseUrl = "http://192.168.18.11:3000/api/";
+  static const String baseUrl = "http://10.0.2.2:3000/api/";
 
   //Client routes
   static const String registerClient = "client";
   static const String findClientById = "client";
-  static const String imageUrl = "http://192.168.18.11:3000/client_images/";
+  static const String imageUrl = "http://10.0.2.2:3000/client_images/";
   static const String updateClientProfilePicture = "client";
   static const String updateClient = "client";
   static const String deleteClient = "client";

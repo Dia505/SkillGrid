@@ -164,17 +164,14 @@ _initTokenHelper() {
 
 _initLightSensor() {
   getIt.registerLazySingleton<LightSensorRepository>(
-    () => LightSensorRepositoryImpl()
-  );
+      () => LightSensorRepositoryImpl());
   getIt.registerLazySingleton<GetThemeModeBySensorUseCase>(
-    () => GetThemeModeBySensorUseCase(getIt<LightSensorRepository>())
-  );
+      () => GetThemeModeBySensorUseCase(getIt<LightSensorRepository>()));
 }
 
 _initThemeBloc() {
   getIt.registerLazySingleton<ThemeBloc>(
-    () => ThemeBloc(getIt<GetThemeModeBySensorUseCase>())
-  );
+      () => ThemeBloc(getIt<GetThemeModeBySensorUseCase>()));
 }
 
 //Client dependencies
@@ -550,8 +547,9 @@ _initPaymentDependencies() async {
       PaymentRemoteRepository(
           paymentRemoteDataSource: getIt<PaymentRemoteDataSource>()));
 
-  getIt.registerLazySingleton<SavePaymentUseCase>(() =>
-      SavePaymentUseCase(paymentRepository: getIt<PaymentRemoteRepository>()));
+  getIt.registerLazySingleton<SavePaymentUseCase>(() => SavePaymentUseCase(
+      paymentRepository: getIt<PaymentRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>()));
   getIt.registerLazySingleton<GetPaymentByAppointmentIdUseCase>(() =>
       GetPaymentByAppointmentIdUseCase(
           paymentRepository: getIt<PaymentRemoteRepository>(),

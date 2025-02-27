@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/app/use_case/use_case.dart';
 import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
@@ -30,15 +31,25 @@ class SavePaymentParams {
 
 class SavePaymentUseCase implements UsecaseWithParams<void, SavePaymentParams> {
   final IPaymentRepository paymentRepository;
-  SavePaymentUseCase({required this.paymentRepository});
+  final TokenSharedPrefs tokenSharedPrefs;
+  SavePaymentUseCase({required this.paymentRepository, required this.tokenSharedPrefs});
 
   @override
   Future<Either<Failure, void>> call(SavePaymentParams params) async {
-    return await paymentRepository.savePayment(PaymentEntity(
+    final token = await tokenSharedPrefs.getToken();
+
+    return token.fold((l) {
+      return Left(l);
+    }, (r) async {
+
+        final paymentResut = paymentRepository.savePayment(PaymentEntity(
         amount: params.amount,
         paymentMethod: params.paymentMethod,
         paymentStatus: params.paymentStatus,
         appointment: params.appointment,
-        billingAddress: params.billingAddress));
-  }
+        billingAddress: params.billingAddress), r);
+
+        return paymentResut;
+      
+  });}
 }
