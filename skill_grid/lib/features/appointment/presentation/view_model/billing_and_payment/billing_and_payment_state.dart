@@ -1,41 +1,57 @@
 part of 'billing_and_payment_bloc.dart';
 
 class BillingAndPaymentState extends Equatable {
-  const BillingAndPaymentState();
-  
+  final AppointmentEntity? appointment;
+  final BillingAddressEntity? billingAddress;
+  final bool isLoading;
+  final String? errorMessage;
+
+  const BillingAndPaymentState({
+    this.appointment,
+    this.billingAddress,
+    this.isLoading = false,
+    this.errorMessage,
+  });
+
+  BillingAndPaymentState copyWith({
+    AppointmentEntity? appointment,
+    BillingAddressEntity? billingAddress,
+    bool? isLoading,
+    String? errorMessage,
+  }) {
+    return BillingAndPaymentState(
+      appointment: appointment ?? this.appointment,
+      billingAddress: billingAddress ?? this.billingAddress,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props =>
+      [appointment, billingAddress, isLoading, errorMessage];
 }
 
-class BillingAndPaymentInitial extends BillingAndPaymentState {}
+// Initial State
+class BillingAndPaymentInitial extends BillingAndPaymentState {
+  const BillingAndPaymentInitial() : super(isLoading: false);
+}
 
-class BillingAndPaymentLoading extends BillingAndPaymentState {}
+// Loading State
+class BillingAndPaymentLoading extends BillingAndPaymentState {
+  const BillingAndPaymentLoading() : super(isLoading: true);
+}
 
-class BillingAndPaymentSuccess extends BillingAndPaymentState {}
+// Success State (Retains appointment & billing address)
+class BillingAndPaymentSuccess extends BillingAndPaymentState {
+  const BillingAndPaymentSuccess({
+    super.appointment,
+    super.billingAddress,
+  });
+}
 
+// Error State
 class BillingAndPaymentError extends BillingAndPaymentState {
-  final String message;
-  const BillingAndPaymentError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  const BillingAndPaymentError(String message)
+      : super(errorMessage: message, isLoading: false);
 }
-
-class AppointmentSavedState extends BillingAndPaymentState {
-  final AppointmentEntity appointment;
-  const AppointmentSavedState({required this.appointment});
-
-  @override
-  List<Object?> get props => [appointment];
-}
-
-class BillingAddressSavedState extends BillingAndPaymentState {
-  final BillingAddressEntity billingAddress;
-  const BillingAddressSavedState({required this.billingAddress});
-
-  @override
-  List<Object?> get props => [billingAddress];
-}
-
-
-

@@ -32,72 +32,89 @@ class BillingAndPaymentBloc
         _saveBillingAddressUseCase = saveBillingAddressUseCase,
         _getAppointmentByIdUseCase = getAppointmentByIdUseCase,
         _getBillingAddressByIdUseCase = getBillingAddressByIdUseCase,
-        super(BillingAndPaymentInitial()) {
-    on<SaveAppointment>((event, emit) async {
-      emit(BillingAndPaymentLoading());
+        super(const BillingAndPaymentInitial()) {
+    on<SaveAppointment>(_onSaveAppointment);
+    on<SaveBillingAddress>(_onSaveBillingAddress);
+    on<SavePayment>(_onSavePayment);
+  }
 
-      final appointmentResult =
-          await _saveAppointmentUseCase(event.appointmentParams);
+  Future<void> _onSaveAppointment(
+      SaveAppointment event, Emitter<BillingAndPaymentState> emit) async {
+    emit(state.copyWith(isLoading: true));
 
-      if (appointmentResult.isRight()) {
-        final appointmentId = appointmentResult.getOrElse(() => "").toString();
+    final appointmentResult =
+        await _saveAppointmentUseCase(event.appointmentParams);
 
-        // Fetch the full AppointmentEntity using the appointment ID
-        final appointmentEntityResult = await _getAppointmentByIdUseCase(
-          GetAppointmentByIdParams(appointmentId: appointmentId),
-        );
+    if (appointmentResult.isLeft()) {
+      emit(state.copyWith(
+          isLoading: false, errorMessage: "Failed to save appointment"));
+      return;
+    }
 
-        appointmentEntityResult.fold(
-          (failure) {
-            emit(BillingAndPaymentError(failure.message));
-          },
-          (appointmentEntity) {
-            emit(AppointmentSavedState(appointment: appointmentEntity));
-          },
-        );
-      } else {
-        emit(const BillingAndPaymentError("Failed to save appointment"));
-      }
-    });
+    final appointmentId = appointmentResult.getOrElse(() => "").toString();
+    final appointmentEntityResult = await _getAppointmentByIdUseCase(
+      GetAppointmentByIdParams(appointmentId: appointmentId),
+    );
 
-    on<SaveBillingAddress>((event, emit) async {
-      emit(BillingAndPaymentLoading());
-      final billingAddressResult =
-          await _saveBillingAddressUseCase(event.billingAddressParams);
+    appointmentEntityResult.fold(
+      (failure) {
+        emit(state.copyWith(isLoading: false, errorMessage: failure.message));
+      },
+      (appointmentEntity) {
+        emit(state.copyWith(
+          isLoading: false,
+          appointment: appointmentEntity,
+          errorMessage: null, // Clear previous errors
+        ));
+      },
+    );
+  }
 
-      if (billingAddressResult.isRight()) {
-        final billingAddressId =
-            billingAddressResult.getOrElse(() => "").toString();
+  Future<void> _onSaveBillingAddress(
+      SaveBillingAddress event, Emitter<BillingAndPaymentState> emit) async {
+    emit(state.copyWith(isLoading: true));
 
-        final billingAddressEntityResult = await _getBillingAddressByIdUseCase(
-          GetBillingAddressByIdParams(billingAddressId: billingAddressId),
-        );
+    final billingAddressResult =
+        await _saveBillingAddressUseCase(event.billingAddressParams);
 
-        billingAddressEntityResult.fold(
-          (failure) {
-            emit(BillingAndPaymentError(failure.message));
-          },
-          (billingAddressEntity) {
-            emit(
-                BillingAddressSavedState(billingAddress: billingAddressEntity));
-          },
-        );
-      } else {
-        emit(const BillingAndPaymentError("Failed to save billing address"));
-      }
-    });
+    if (billingAddressResult.isLeft()) {
+      emit(state.copyWith(
+          isLoading: false, errorMessage: "Failed to save billing address"));
+      return;
+    }
 
-    on<SavePayment>((event, emit) async {
-      emit(BillingAndPaymentLoading());
-      final paymentResult = await _savePaymentUseCase(event.paymentParams);
+    final billingAddressId =
+        billingAddressResult.getOrElse(() => "").toString();
+    final billingAddressEntityResult = await _getBillingAddressByIdUseCase(
+      GetBillingAddressByIdParams(billingAddressId: billingAddressId),
+    );
 
-      if (paymentResult.isRight()) {
-        emit(BillingAndPaymentSuccess());
-        showSnackBar(
-            context: event.context, message: "Payment set successfully!");
-      } else {
-        emit(const BillingAndPaymentError("Failed to save payment"));
-      }
-    });
+    billingAddressEntityResult.fold(
+      (failure) {
+        emit(state.copyWith(isLoading: false, errorMessage: failure.message));
+      },
+      (billingAddressEntity) {
+        emit(state.copyWith(
+          isLoading: false,
+          billingAddress: billingAddressEntity,
+          errorMessage: null, // Clear previous errors
+        ));
+      },
+    );
+  }
+
+  Future<void> _onSavePayment(
+      SavePayment event, Emitter<BillingAndPaymentState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    final paymentResult = await _savePaymentUseCase(event.paymentParams);
+    if (paymentResult.isLeft()) {
+      emit(state.copyWith(
+          isLoading: false, errorMessage: "Failed to save payment"));
+      return;
+    }
+
+    emit(state.copyWith(isLoading: false, errorMessage: null));
+
+    showSnackBar(context: event.context, message: "Payment set successfully!");
   }
 }

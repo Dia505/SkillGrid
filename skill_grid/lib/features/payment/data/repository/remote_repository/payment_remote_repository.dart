@@ -23,9 +23,9 @@ class PaymentRemoteRepository implements IPaymentRepository {
   }
 
   @override
-  Future<Either<Failure, void>> savePayment(PaymentEntity paymentEntity) async {
+  Future<Either<Failure, void>> savePayment(PaymentEntity paymentEntity, String? token) async {
     try {
-      _paymentRemoteDataSource.savePayment(paymentEntity);
+      _paymentRemoteDataSource.savePayment(paymentEntity, token);
       return const Right(null);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
