@@ -4,8 +4,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/delete_client_use_case.dart';
 
-import '../mock_token_shared_prefs.dart';
-import 'mock_client_repository.dart';
+import '../mock_token_shared_prefs.mock.dart';
+import 'mock_client_repository.mock.dart';
 
 void main() {
   late DeleteClientUseCase useCase;

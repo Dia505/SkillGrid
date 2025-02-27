@@ -86,6 +86,29 @@ class FreelancerApiModel extends Equatable {
     );
   }
 
+  static FreelancerApiModel fromEntity(FreelancerEntity entity) {
+    return FreelancerApiModel(
+      freelancerId: entity.freelancerId,
+      firstName: entity.firstName,
+      lastName: entity.lastName,
+      dateOfBirth: entity.dateOfBirth,
+      mobileNo: entity.mobileNo,
+      address: entity.address,
+      city: entity.city,
+      email: entity.email,
+      password: entity.password,
+      jobCategory: entity.jobCategory,
+      profession: entity.profession,
+      skills: entity.skills,
+      yearsOfExperience: entity.yearsOfExperience,
+      bio: entity.bio,
+      available: entity.available,
+      profilePicture: entity.profilePicture,
+      backgroundPicture: entity.backgroundPicture,
+      role: entity.role,
+    );
+  }
+
   // Convert from FreelancerApiModel to Entity
   FreelancerEntity toEntity() {
     return FreelancerEntity(

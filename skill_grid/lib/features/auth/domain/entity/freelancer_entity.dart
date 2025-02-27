@@ -40,6 +40,26 @@ class FreelancerEntity extends Equatable {
       this.backgroundPicture,
       this.role = "freelancer"});
 
+  FreelancerEntity.empty()
+    : freelancerId = "_empty.freelancerId",
+      firstName = "_empty.firstName",
+      lastName = "_empty.lastName",
+      dateOfBirth = DateTime(1970),
+      mobileNo = "_empty.mobileNo",
+      address = "_empty.address",
+      city = "_empty.city",
+      email = "_empty.email",
+      password = "_empty.password",
+      jobCategory = "_empty.jobCategory",
+      profession = "_empty.profession",
+      skills = "_empty.skills",
+      yearsOfExperience = 0,
+      bio = "_empty.bio",
+      available = true,
+      profilePicture = "_empty.profilePicture",
+      backgroundPicture = "_empty.backgroundPicture",
+      role = "_empty.role";
+
   @override
   List<Object?> get props => [
         freelancerId,

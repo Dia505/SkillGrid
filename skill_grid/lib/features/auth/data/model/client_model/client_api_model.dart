@@ -21,6 +21,8 @@ class ClientApiModel extends Equatable {
   @JsonKey(name: "profile_picture")
   final String? profilePicture;
   final String role;
+  final String? otp;
+  final DateTime? otpExpiresAt;
 
   const ClientApiModel(
       {this.clientId,
@@ -31,7 +33,9 @@ class ClientApiModel extends Equatable {
       required this.email,
       required this.password,
       String? profilePicture,
-      this.role = "client"})
+      this.role = "client",
+      this.otp,
+      this.otpExpiresAt})
       : profilePicture =
             profilePicture ?? "assets/images/default_profile_img.png";
 
@@ -50,10 +54,13 @@ class ClientApiModel extends Equatable {
         email: entity.email,
         password: entity.password,
         profilePicture: entity.profilePicture,
-        role: entity.role);
+        role: entity.role,
+        otp: entity.otp,
+        otpExpiresAt: entity.otpExpiresAt);
   }
 
-  static ClientEntity toEntity(FindClientByIdDto findClientByIdDto) {
+  static ClientEntity findClientByIdDtoToEntity(
+      FindClientByIdDto findClientByIdDto) {
     return ClientEntity(
         clientId: findClientByIdDto.clientId,
         firstName: findClientByIdDto.firstName,
@@ -89,6 +96,21 @@ class ClientApiModel extends Equatable {
     );
   }
 
+  ClientEntity toEntity() {
+    return ClientEntity(
+        clientId: clientId,
+        firstName: firstName,
+        lastName: lastName,
+        mobileNo: mobileNo,
+        city: city,
+        email: email,
+        password: password,
+        profilePicture: profilePicture,
+        role: role,
+        otp: otp,
+        otpExpiresAt: otpExpiresAt);
+  }
+
   @override
   List<Object?> get props => [
         clientId,
@@ -99,6 +121,8 @@ class ClientApiModel extends Equatable {
         email,
         password,
         profilePicture,
-        role
+        role,
+        otp,
+        otpExpiresAt
       ];
 }

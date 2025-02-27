@@ -77,7 +77,8 @@ class ClientRemoteDataSource implements IClientDataSource {
         FindClientByIdDto findClientByIdDto =
             FindClientByIdDto.fromJson(response.data);
 
-        ClientEntity clientEntity = ClientApiModel.toEntity(findClientByIdDto);
+        ClientEntity clientEntity =
+            ClientApiModel.findClientByIdDtoToEntity(findClientByIdDto);
 
         return clientEntity;
       } else {
@@ -193,7 +194,6 @@ class ClientRemoteDataSource implements IClientDataSource {
             ));
 
         if (response.statusCode == 200) {
-          print("Client updated successfully.");
         } else {
           throw Exception(response.statusMessage);
         }
@@ -202,6 +202,88 @@ class ClientRemoteDataSource implements IClientDataSource {
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<void> sendOtp(String email) async {
+    try {
+      Response response = await _dio.post(
+        ApiEndpoints.sendOtp,
+        data: {
+          "email": email,
+        },
+      );
+
+      if (response.statusCode == 201) {
+        return;
+      } else {
+        throw Exception(
+            'Failed to send OTP: ${response.statusMessage ?? 'Unknown error'}');
+      }
+    } on DioException catch (e) {
+      String errorMessage = '';
+      if (e.response != null) {
+        errorMessage =
+            e.response?.data?.toString() ?? 'Unknown error from the server';
+      } else {
+        errorMessage = e.message ?? 'Unknown error';
+      }
+      throw Exception('Dio error: $errorMessage');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future<void> verifyOtp(String email, String otp) async {
+    try {
+      Response response = await _dio.post(
+        ApiEndpoints.verifyOtp,
+        data: {"email": email, "otp": otp},
+      );
+
+      if (response.statusCode == 201) {
+        return;
+      } else {
+        throw Exception(
+            'Failed to verify OTP: ${response.statusMessage ?? 'Unknown error'}');
+      }
+    } on DioException catch (e) {
+      String errorMessage = '';
+      if (e.response != null) {
+        errorMessage =
+            e.response?.data?.toString() ?? 'Unknown error from the server';
+      } else {
+        errorMessage = e.message ?? 'Unknown error';
+      }
+      throw Exception('Dio error: $errorMessage');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future<void> resetPassword(
+      String email, String otp, String newPassword) async {
+    try {
+      Response response = await _dio.put(
+        ApiEndpoints.resetPassword,
+        data: {"email": email, "otp": otp, "newPassword": newPassword},
+      );
+
+      if (response.statusCode == 200) {
+        print('Password reset successful');
+      } else {
+        throw Exception('Failed to reset password: ${response.statusMessage}');
+      }
+    } on DioException catch (e) {
+      String errorMessage = e.response != null
+          ? e.response?.data?.toString() ?? 'Unknown error from the server'
+          : e.message ?? 'Unknown error';
+      throw Exception('Dio error: $errorMessage');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
     }
   }
 }

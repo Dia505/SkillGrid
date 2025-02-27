@@ -45,3 +45,13 @@ class ClientHomeSearchError extends ClientHomeState {
   List<Object?> get props => [message];
 }
 
+class HomeContractsLoadingState extends ClientHomeState {}
+
+class HomeContractsLoadedState extends ClientHomeState {
+  final List<AppointmentEntity> appointments;
+
+  const HomeContractsLoadedState(this.appointments);
+
+  @override
+  List<Object?> get props => [appointments];
+}

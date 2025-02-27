@@ -5,9 +5,9 @@ import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/get_client_by_id_use_case.dart';
 
-import '../mock_token_helper.dart';
-import '../mock_token_shared_prefs.dart';
-import 'mock_client_repository.dart';
+import '../mock_token_helper.mock.dart';
+import '../mock_token_shared_prefs.mock.dart';
+import 'mock_client_repository.mock.dart';
 
 void main() {
   late MockClientRepository repository;

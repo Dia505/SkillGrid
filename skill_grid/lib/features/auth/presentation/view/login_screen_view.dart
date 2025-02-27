@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_logo.dart';
 import 'package:skill_grid/core/common/common_textfield.dart';
-import 'package:skill_grid/features/auth/presentation/view/join_client_freelancer_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/client_registration_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/forgot_password_screens/send_otp_view.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 
 class LoginScreenView extends StatefulWidget {
@@ -119,25 +120,41 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                             ],
                           ),
                           const SizedBox(width: 50),
-                          const Text('Forgot Password?',
-                              style: TextStyle(
-                                  color: Color(0xFF322E86), fontSize: 15)),
+                          InkWell(
+                            onTap: () {
+                                context.read<LoginBloc>().add(
+                                    NavigateToSendOtpScreen(
+                                        context: context,
+                                        destination:
+                                            SendOtpView()));
+                              },
+                            child: const Text('Forgot Password?',
+                                style: TextStyle(
+                                    color: Color(0xFF322E86), fontSize: 15)),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 40),
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0),
-                        child: CommonButton(
-                          buttonText: "Log In",
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<LoginBloc>().add(LoginUserEvent(
-                                  context: context,
-                                  email: _emailController.text,
-                                  password: _passwordController.text));
-                            }
-                          },
-                        ),
+                        child: BlocBuilder<LoginBloc, LoginState>(
+                            builder: (context, state) {
+                          return state.isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : CommonButton(
+                                  buttonText: "Log In",
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context.read<LoginBloc>().add(
+                                          LoginUserEvent(
+                                              context: context,
+                                              email: _emailController.text,
+                                              password:
+                                                  _passwordController.text));
+                                    }
+                                  },
+                                );
+                        }),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -155,11 +172,10 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                             InkWell(
                               onTap: () {
                                 context.read<LoginBloc>().add(
-                                      NavigateJoinAsClientFreelancerEvent(
-                                        context: context, 
-                                        destination: const JoinClientFreelancerView()
-                                      )
-                                    );
+                                    NavigateToRegistrationEvent(
+                                        context: context,
+                                        destination:
+                                            const ClientRegistrationView()));
                               },
                               child: const Text("Sign Up",
                                   style: TextStyle(

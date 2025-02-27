@@ -8,11 +8,11 @@ sealed class LoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class NavigateJoinAsClientFreelancerEvent extends LoginEvent {
+class NavigateToRegistrationEvent extends LoginEvent {
   final BuildContext context;
   final Widget destination;
 
-  const NavigateJoinAsClientFreelancerEvent({
+  const NavigateToRegistrationEvent({
     required this.context,
     required this.destination,
   });
@@ -21,12 +21,10 @@ class NavigateJoinAsClientFreelancerEvent extends LoginEvent {
 class NavigateHomeScreenEvent extends LoginEvent {
   final BuildContext context;
   final Widget destination;
-  final String role;
 
   const NavigateHomeScreenEvent({
     required this.context,
-    required this.destination,
-    required this.role,
+    required this.destination
   });
 }
 
@@ -39,5 +37,15 @@ class LoginUserEvent extends LoginEvent {
     required this.context,
     required this.email,
     required this.password,
+  });
+}
+
+class NavigateToSendOtpScreen extends LoginEvent {
+  final BuildContext context;
+  final Widget destination;
+
+  const NavigateToSendOtpScreen({
+    required this.context,
+    required this.destination,
   });
 }
