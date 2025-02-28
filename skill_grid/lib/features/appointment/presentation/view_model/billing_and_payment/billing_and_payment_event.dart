@@ -31,3 +31,10 @@ class SaveBillingAddress extends BillingAndPaymentEvent {
   const SaveBillingAddress(
       {required this.billingAddressParams, required this.context});
 }
+
+class NavigateToContracts extends BillingAndPaymentEvent {
+  final BuildContext context;
+  final Widget destination;
+
+  const NavigateToContracts({required this.context, required this.destination});
+}

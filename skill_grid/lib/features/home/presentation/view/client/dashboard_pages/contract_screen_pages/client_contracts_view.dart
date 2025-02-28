@@ -29,7 +29,6 @@ class _ClientContractsViewState extends State<ClientContractsView> {
         if (state is ContractsLoadedState) {
           final appointments = state.appointments;
           final payments = state.payments;
-
           List filteredAppointments;
           if (_filter == 'Ongoing') {
             filteredAppointments = appointments
@@ -37,19 +36,28 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                     appointment.projectEndDate != null &&
                     appointment.projectEndDate!.isAfter(DateTime.now()))
                 .toList();
+            print("Filtered Appointments:: $filteredAppointments");
           } else if (_filter == 'Complete') {
             filteredAppointments = appointments
                 .where((appointment) =>
                     appointment.projectEndDate != null &&
                     appointment.projectEndDate!.isBefore(DateTime.now()))
                 .toList();
+            print("Filtered Appointments:: $filteredAppointments");
           } else if (_filter == 'Requested Offers') {
             filteredAppointments = appointments
-                .where((appointment) => appointment.status == false)
+                .where((appointment) =>
+                    appointment.status == false &&
+                    payments.any((payment) =>
+                        payment.appointment.appointmentId ==
+                            appointment.appointmentId &&
+                        payment.paymentStatus == false))
                 .toList();
+            print("Filtered Appointments:: $filteredAppointments");
           } else {
             // "All" filter: show all contracts
             filteredAppointments = appointments;
+            print("Filtered Appointments:: $filteredAppointments");
           }
 
           return Scaffold(
@@ -97,7 +105,12 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                                 (index) {
                                   final appointment =
                                       filteredAppointments[index];
-                                  final payment = payments[index];
+                                  final payment = payments.firstWhere(
+                                    (p) =>
+                                        p.appointment.appointmentId ==
+                                        appointment.appointmentId,
+                                    // Handle missing payments if necessary
+                                  );
                                   final formattedProjectEndDate =
                                       DateFormat("dd-MM-yyyy")
                                           .format(appointment.projectEndDate!);
