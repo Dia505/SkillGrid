@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/appointment_freelancer_card.dart';
 import 'package:skill_grid/core/common/common_button.dart';
 import 'package:skill_grid/core/common/common_dropdown.dart';
+import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/save_appointment_use_case.dart';
@@ -366,64 +367,84 @@ class _BillingAndPaymentViewState extends State<BillingAndPaymentView> {
                         ],
                       ),
                     ),
-                    BlocListener<BillingAndPaymentBloc, BillingAndPaymentState>(
-                      listener: (context, state) {
-                        final paymentParams = SavePaymentParams(
-                          amount: 0,
-                          paymentMethod: selectedPayment!,
-                          paymentStatus: false,
-                          appointment: state.appointment!,
-                          billingAddress: state.billingAddress!,
-                        );
+                    Column(
+                      children: [
+                        CommonButton(
+                          buttonText: "Save appointment details",
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              final appointmentParams = SaveAppointmentParams(
+                                appointmentPurpose:
+                                    widget.appointment.appointmentPurpose,
+                                appointmentDate:
+                                    widget.appointment.appointmentDate,
+                                projectDuration:
+                                    widget.appointment.projectDuration,
+                                appointmentTime:
+                                    widget.appointment.appointmentTime,
+                                status: false,
+                                freelancerService:
+                                    widget.appointment.freelancerService,
+                                client: widget.appointment.client,
+                              );
 
-                        // Trigger the SavePayment event after both appointment and billing address are saved
-                        context.read<BillingAndPaymentBloc>().add(SavePayment(
-                              paymentParams: paymentParams,
-                              context: context,
-                            ));
-                      },
-                      child: CommonButton(
-                        buttonText: "Send offer",
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            final appointmentParams = SaveAppointmentParams(
-                              appointmentPurpose:
-                                  widget.appointment.appointmentPurpose,
-                              appointmentDate:
-                                  widget.appointment.appointmentDate,
-                              projectDuration:
-                                  widget.appointment.projectDuration,
-                              appointmentTime:
-                                  widget.appointment.appointmentTime,
-                              status: false,
-                              freelancerService:
-                                  widget.appointment.freelancerService,
-                              client: widget.appointment.client,
+                              final billingAddressParams =
+                                  SaveBillingAddressParams(
+                                address: _billingAddressController.text.trim(),
+                                city: selectedCity!,
+                              );
+
+                              // Trigger SaveAppointment and SaveBillingAddress events simultaneously
+                              context
+                                  .read<BillingAndPaymentBloc>()
+                                  .add(SaveAppointment(
+                                    appointmentParams: appointmentParams,
+                                    context: context,
+                                  ));
+
+                              context
+                                  .read<BillingAndPaymentBloc>()
+                                  .add(SaveBillingAddress(
+                                    billingAddressParams: billingAddressParams,
+                                    context: context,
+                                  ));
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        CommonButton(
+                          buttonText: "Send offer",
+                          onPressed: () {
+                            final state =
+                                context.read<BillingAndPaymentBloc>().state;
+
+                            if (state.appointment == null ||
+                                state.billingAddress == null) {
+                              showSnackBar(
+                                  context: context,
+                                  message: "Missing required details!");
+                              return;
+                            }
+
+                            final paymentParams = SavePaymentParams(
+                              amount: 0,
+                              paymentMethod: selectedPayment!,
+                              paymentStatus: false,
+                              appointment: state.appointment!,
+                              billingAddress: state.billingAddress!,
                             );
 
-                            final billingAddressParams =
-                                SaveBillingAddressParams(
-                              address: _billingAddressController.text.trim(),
-                              city: selectedCity!,
-                            );
-
-                            // Trigger SaveAppointment and SaveBillingAddress events simultaneously
                             context
                                 .read<BillingAndPaymentBloc>()
-                                .add(SaveAppointment(
-                                  appointmentParams: appointmentParams,
+                                .add(SavePayment(
+                                  paymentParams: paymentParams,
                                   context: context,
                                 ));
-
-                            context
-                                .read<BillingAndPaymentBloc>()
-                                .add(SaveBillingAddress(
-                                  billingAddressParams: billingAddressParams,
-                                  context: context,
-                                ));
-                          }
-                        },
-                      ),
+                          },
+                        )
+                      ],
                     )
                   ],
                 ),

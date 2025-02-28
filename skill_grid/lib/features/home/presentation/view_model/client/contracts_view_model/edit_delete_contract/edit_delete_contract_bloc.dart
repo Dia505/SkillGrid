@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/common/snack_bar/snack_bar.dart';
 import 'package:skill_grid/features/appointment/domain/use_case/update_appointment_use_case.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
+import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/payment/domain/use_case/delete_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/payment/domain/use_case/update_payment_use_case.dart';
@@ -80,8 +80,7 @@ class EditDeleteContractBloc
           emit(EditDeleteContractSuccess());
 
           add(NavigateToContracts(
-              context: event.context,
-              destination: const ClientContractsView()));
+              context: event.context, destination: const ClientDashboard()));
 
           showSnackBar(
               context: event.context,
@@ -108,8 +107,7 @@ class EditDeleteContractBloc
           emit(EditDeleteContractSuccess());
 
           add(NavigateToContracts(
-              context: event.context,
-              destination: const ClientContractsView()));
+              context: event.context, destination: const ClientDashboard()));
 
           showSnackBar(
               context: event.context,
@@ -138,8 +136,7 @@ class EditDeleteContractBloc
           emit(EditDeleteContractSuccess());
 
           add(NavigateToContracts(
-              context: event.context,
-              destination: const ClientContractsView()));
+              context: event.context, destination: const ClientDashboard()));
 
           showSnackBar(
             context: event.context,
