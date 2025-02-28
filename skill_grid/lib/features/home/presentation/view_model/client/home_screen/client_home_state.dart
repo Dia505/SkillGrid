@@ -27,24 +27,6 @@ class ClientHomeError extends ClientHomeState {
   List<Object?> get props => [message];
 }
 
-class ClientHomeSearchLoading extends ClientHomeState {}
-
-class ClientHomeSearchLoaded extends ClientHomeState {
-  final List<FreelancerEntity> freelancers;
-  const ClientHomeSearchLoaded(this.freelancers);
-
-  @override
-  List<Object?> get props => [freelancers];
-}
-
-class ClientHomeSearchError extends ClientHomeState {
-  final String message;
-  const ClientHomeSearchError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
 class HomeContractsLoadingState extends ClientHomeState {}
 
 class HomeContractsLoadedState extends ClientHomeState {

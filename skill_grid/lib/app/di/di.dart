@@ -296,7 +296,6 @@ _initClientHomeScreenDependencies() async {
   getIt.registerFactory<ClientHomeBloc>(() => ClientHomeBloc(
       getClientByIdUseCase: getIt<GetClientByIdUseCase>(),
       tokenHelper: getIt<TokenHelper>(),
-      searchFreelancersUseCase: getIt<SearchFreelancersUseCase>(),
       getAppointmentByClientIdUseCase:
           getIt<GetAppointmentByClientIdUseCase>()));
 }
