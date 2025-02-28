@@ -21,20 +21,13 @@ class FreelancerProfileView extends StatefulWidget {
 
 class _FreelancerProfileViewState extends State<FreelancerProfileView> {
   bool _isExpanded = false;
-  int _currentPage = 0;
-  late final PageController _servicePageController;
 
-  @override
-  void dispose() {
-    _servicePageController
-        .dispose(); // Dispose controller to prevent memory leaks
-    super.dispose();
-  }
+  final PageController _servicePageController = PageController();
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _servicePageController = PageController();
 
     // Ensure the controller is only used when the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {

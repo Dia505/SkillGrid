@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomeOngoingCollabCard extends StatelessWidget {
   final String freelancerProfileImgPath;
   final String projectName;
-  final String deadlineDuration;
-  final int completePercent;
-  final String freelancerName;
+  final String projectEndDate;
+  final String appointmentDate;
+  final String? appointmentTime;
+  final int projectDurationValue;
+  final String projectDurationUnit;
+  final String freelancerFirstName;
+  final String freelancerLastName;
   final String? rating;
   // final VoidCallback onPressed;
 
@@ -13,15 +18,43 @@ class HomeOngoingCollabCard extends StatelessWidget {
     super.key,
     required this.freelancerProfileImgPath,
     required this.projectName,
-    required this.deadlineDuration,
-    required this.completePercent,
-    required this.freelancerName,
+    required this.projectEndDate,
+    required this.appointmentDate,
+    this.appointmentTime,
+    required this.projectDurationUnit,
+    required this.projectDurationValue,
+    required this.freelancerFirstName,
+    required this.freelancerLastName,
     this.rating,
     // required this.onPressed,
   });
 
+  double calculateCompletionPercent() {
+    DateTime startDate = DateFormat('dd-MM-yyyy').parse(appointmentDate);
+    DateTime endDate = DateFormat('dd-MM-yyyy').parse(projectEndDate);
+
+    int totalDays = endDate.difference(startDate).inDays;
+
+    int elapsedDays = DateTime.now().difference(startDate).inDays;
+
+    double percent = (elapsedDays / totalDays) * 100;
+
+    return percent.clamp(0, 100);
+  }
+
+  int calculateRemainingDays() {
+    DateTime startDate = DateFormat('dd-MM-yyyy').parse(appointmentDate);
+    DateTime endDate = DateFormat('dd-MM-yyyy').parse(projectEndDate);
+
+    int totalDays = endDate.difference(startDate).inDays;
+    return totalDays;
+  }
+
   @override
   Widget build(BuildContext context) {
+    double completePercent = calculateCompletionPercent();
+    int remainingDays = calculateRemainingDays();
+
     return SizedBox(
       width: 350,
       height: 120,
@@ -49,7 +82,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
                         color: Colors.black),
                   ),
                   Text(
-                    "$deadlineDuration to complete",
+                    "$remainingDays to complete",
                     style: const TextStyle(color: Colors.black),
                   ),
                   Row(
@@ -76,7 +109,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        freelancerName,
+                        "$freelancerFirstName $freelancerLastName",
                         style: const TextStyle(color: Colors.black),
                       ),
                       const SizedBox(width: 10),
