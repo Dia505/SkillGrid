@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/home_ongoing_collab_card.dart';
 import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
 import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
+import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/dashboard_sidebar.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
 
@@ -20,6 +20,8 @@ class HomeScreenView extends StatefulWidget {
 class _HomeScreenViewState extends State<HomeScreenView> {
   final _searchController = TextEditingController();
   ClientEntity? _client;
+  List<AppointmentEntity>? _contracts;
+
   final List<Map<String, dynamic>> serviceCategory = [
     {'icon': Icons.computer, 'label': 'Technology'},
     {'icon': Icons.design_services_outlined, 'label': 'Design'},
@@ -229,27 +231,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                       width: 50,
                                       height: 48,
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          final searchQuery =
-                                              _searchController.text.trim();
-                                          if (searchQuery.isNotEmpty) {
-                                            // Dispatch the event to search freelancers
-                                            context.read<ClientHomeBloc>().add(
-                                                SearchFreelancers(
-                                                    searchQuery, context));
-
-                                            // Navigate to the SearchScreenView after search
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) =>
-                                                    SearchScreenView(
-                                                        searchQuery:
-                                                            searchQuery),
-                                              ),
-                                            );
-                                          }
-                                        },
+                                        onPressed: () {},
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 const Color(0XFF7C76E4),
@@ -279,29 +261,51 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     fontSize: 22, fontFamily: "Inter Light"),
                               ),
                               const SizedBox(height: 10),
-                              BlocBuilder<ClientHomeBloc, ClientHomeState>(
-                                builder: (context, state) {
-                                  if (state is HomeContractsLoadingState) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (state
-                                      is HomeContractsLoadedState) {
-                                    final contracts = state.appointments;
-                                    print('CONTRACTS:: $contracts');
-                                    if (contracts.isEmpty) {
+                              BlocListener<ClientHomeBloc, ClientHomeState>(
+                                listener: (context, state) {
+                                  if (state is HomeContractsLoadedState) {
+                                    print(
+                                        "Loaded Contracts: ${state.appointments}");
+                                    setState(() {
+                                      _contracts = state.appointments;
+                                    });
+                                  }
+                                },
+                                child: BlocBuilder<ClientHomeBloc,
+                                    ClientHomeState>(
+                                  builder: (context, state) {
+                                    print("Contracts::: $_contracts");
+                                    print("Contracts state::: $state");
+
+                                    if (_contracts == null) {
                                       return const Center(
-                                          child: Text('No ongoing contracts.'));
+                                          child: CircularProgressIndicator());
+                                    } else if (_contracts!.isEmpty) {
+                                      return Center(
+                                          child: Column(children: [
+                                        Image.asset(
+                                          "assets/images/client_dashboard_no_collaborations.png",
+                                          height: 240,
+                                        ),
+                                        const SizedBox(
+                                          width: 270,
+                                          child: Text(
+                                            "You haven't started any collaborations yet. Start working with top freelancers and bring your ideas to life!",
+                                            style: TextStyle(
+                                                fontFamily: "Inter Medium"),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        )
+                                      ]));
                                     }
+
                                     return ListView.builder(
-                                      itemCount: contracts.length,
+                                      itemCount: _contracts?.length ?? 0,
                                       itemBuilder: (context, index) {
-                                        final contract = contracts[index];
-                                        final formattedProjectEndDate =
-                                            DateFormat("dd-MM-yyyy").format(
-                                                contract.projectEndDate!);
-                                        final formattedAppointmentDate =
-                                            DateFormat("dd-MM-yyyy").format(
-                                                contract.appointmentDate);
+                                        final contract = _contracts?[index];
+                                        if (contract == null) {
+                                          return const SizedBox.shrink();
+                                        }
                                         return Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: HomeOngoingCollabCard(
@@ -320,9 +324,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                             projectName:
                                                 contract.appointmentPurpose,
                                             appointmentDate:
-                                                formattedAppointmentDate,
+                                                DateFormat("dd-MM-yyyy").format(
+                                                    contract.appointmentDate),
                                             projectEndDate:
-                                                formattedProjectEndDate,
+                                                DateFormat("dd-MM-yyyy").format(
+                                                    contract.projectEndDate!),
                                             appointmentTime:
                                                 contract.appointmentTime,
                                             projectDurationUnit:
@@ -333,11 +339,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                         );
                                       },
                                     );
-                                  } else if (state is ClientHomeError) {
-                                    return Center(child: Text(state.message));
-                                  }
-                                  return const SizedBox.shrink();
-                                },
+                                  },
+                                ),
                               ),
                               const SizedBox(height: 12),
                               const Divider(
