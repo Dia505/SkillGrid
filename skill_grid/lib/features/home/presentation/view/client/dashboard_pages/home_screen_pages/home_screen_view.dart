@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/home_ongoing_collab_card.dart';
 import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
 import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
+import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/home_screen_pages/dashboard_sidebar.dart';
 import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/search_screen_pages/search_screen_view.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
@@ -17,7 +19,7 @@ class HomeScreenView extends StatefulWidget {
 
 class _HomeScreenViewState extends State<HomeScreenView> {
   final _searchController = TextEditingController();
-
+  ClientEntity? _client;
   final List<Map<String, dynamic>> serviceCategory = [
     {'icon': Icons.computer, 'label': 'Technology'},
     {'icon': Icons.design_services_outlined, 'label': 'Design'},
@@ -122,26 +124,36 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    BlocBuilder<ClientHomeBloc,
+                                    BlocListener<ClientHomeBloc,
                                         ClientHomeState>(
-                                      builder: (context, state) {
+                                      listener: (context, state) {
                                         if (state is ClientHomeLoaded) {
-                                          final client = state.clientEntity;
-                                          return Text(
-                                            "Hello ${client.firstName}👋",
-                                            style: const TextStyle(
-                                                color: Color(0xFFCCCAFF),
-                                                fontSize: 17),
-                                          );
-                                        } else {
-                                          return const Text(
-                                            "Hello user👋",
-                                            style: TextStyle(
-                                                color: Color(0xFFCCCAFF),
-                                                fontSize: 17),
-                                          );
+                                          setState(() {
+                                            _client = state
+                                                .clientEntity; // Save client when loaded
+                                          });
                                         }
                                       },
+                                      child: BlocBuilder<ClientHomeBloc,
+                                          ClientHomeState>(
+                                        builder: (context, state) {
+                                          if (_client != null) {
+                                            return Text(
+                                              "Hello ${_client?.firstName}👋",
+                                              style: const TextStyle(
+                                                  color: Color(0xFFCCCAFF),
+                                                  fontSize: 17),
+                                            );
+                                          } else {
+                                            return const Text(
+                                              "Hello user👋",
+                                              style: TextStyle(
+                                                  color: Color(0xFFCCCAFF),
+                                                  fontSize: 17),
+                                            );
+                                          }
+                                        },
+                                      ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
@@ -152,21 +164,26 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                       child: BlocBuilder<ClientHomeBloc,
                                           ClientHomeState>(
                                         builder: (context, state) {
-                                          if (state is ClientHomeLoaded) {
-                                            final client = state.clientEntity;
+                                          final client =
+                                              _client; // Local variable ensures null-safety
+
+                                          if (client != null) {
                                             String imageUrl =
                                                 client.profilePicture ?? '';
+
                                             return CircleAvatar(
-                                                radius: 30,
-                                                backgroundImage: client
-                                                            .profilePicture !=
-                                                        null
-                                                    ? NetworkImage(
-                                                        imageUrl.replaceFirst(
-                                                            'localhost',
-                                                            '10.0.2.2'))
-                                                    : const AssetImage(
-                                                        "assets/images/default_profile_img.png"));
+                                              radius: 30,
+                                              backgroundImage: client
+                                                          .profilePicture !=
+                                                      null
+                                                  ? NetworkImage(
+                                                      imageUrl.replaceFirst(
+                                                          'localhost',
+                                                          '10.0.2.2'))
+                                                  : const AssetImage(
+                                                          "assets/images/default_profile_img.png")
+                                                      as ImageProvider,
+                                            );
                                           } else {
                                             return const CircleAvatar(
                                               radius: 30,
@@ -262,24 +279,65 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     fontSize: 22, fontFamily: "Inter Light"),
                               ),
                               const SizedBox(height: 10),
-                              const HomeOngoingCollabCard(
-                                freelancerProfileImgPath:
-                                    "assets/images/istockphoto-1354842602-612x612.jpg",
-                                freelancerName: "Anjali Karki",
-                                projectName: "Bank Management System",
-                                deadlineDuration: "5 days",
-                                completePercent: 65,
-                                rating: "⭐⭐⭐⭐⭐",
-                              ),
-                              const SizedBox(height: 10),
-                              const HomeOngoingCollabCard(
-                                freelancerProfileImgPath:
-                                    "assets/images/indian_girl_stock_img.jpg",
-                                freelancerName: "Rita Singh",
-                                projectName: "Bank advertisement videography",
-                                deadlineDuration: "2 hours",
-                                completePercent: 85,
-                                rating: "⭐⭐⭐⭐⭐",
+                              BlocBuilder<ClientHomeBloc, ClientHomeState>(
+                                builder: (context, state) {
+                                  if (state is HomeContractsLoadingState) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (state
+                                      is HomeContractsLoadedState) {
+                                    final contracts = state.appointments;
+                                    print('CONTRACTS:: $contracts');
+                                    if (contracts.isEmpty) {
+                                      return const Center(
+                                          child: Text('No ongoing contracts.'));
+                                    }
+                                    return ListView.builder(
+                                      itemCount: contracts.length,
+                                      itemBuilder: (context, index) {
+                                        final contract = contracts[index];
+                                        final formattedProjectEndDate =
+                                            DateFormat("dd-MM-yyyy").format(
+                                                contract.projectEndDate!);
+                                        final formattedAppointmentDate =
+                                            DateFormat("dd-MM-yyyy").format(
+                                                contract.appointmentDate);
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: HomeOngoingCollabCard(
+                                            freelancerProfileImgPath: contract
+                                                .freelancerService
+                                                .freelancer
+                                                .profilePicture!,
+                                            freelancerFirstName: contract
+                                                .freelancerService
+                                                .freelancer
+                                                .firstName,
+                                            freelancerLastName: contract
+                                                .freelancerService
+                                                .freelancer
+                                                .lastName,
+                                            projectName:
+                                                contract.appointmentPurpose,
+                                            appointmentDate:
+                                                formattedAppointmentDate,
+                                            projectEndDate:
+                                                formattedProjectEndDate,
+                                            appointmentTime:
+                                                contract.appointmentTime,
+                                            projectDurationUnit:
+                                                contract.projectDuration.unit,
+                                            projectDurationValue:
+                                                contract.projectDuration.value,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else if (state is ClientHomeError) {
+                                    return Center(child: Text(state.message));
+                                  }
+                                  return const SizedBox.shrink();
+                                },
                               ),
                               const SizedBox(height: 12),
                               const Divider(

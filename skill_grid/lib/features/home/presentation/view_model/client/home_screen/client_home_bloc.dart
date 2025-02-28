@@ -16,6 +16,7 @@ part 'client_home_event.dart';
 part 'client_home_state.dart';
 
 class ClientHomeBloc extends Bloc<ClientHomeEvent, ClientHomeState> {
+  bool homeLoaded = false;
   final GetClientByIdUseCase _getClientByIdUseCase;
   final TokenHelper _tokenHelper;
   final SearchFreelancersUseCase _searchFreelancersUseCase;
@@ -34,6 +35,28 @@ class ClientHomeBloc extends Bloc<ClientHomeEvent, ClientHomeState> {
     on<SearchFreelancers>(_onSearchFreelancers);
 
     on<NavigateToSearchScreenEvent>(_onNavigateToSearchScreen);
+
+    on<FetchClientContracts>((event, emit) async {
+      try {
+        // Fetch the contracts for the client using the provided client ID
+        final contractsResult = await _getAppointmentByClientIdUseCase(
+            GetAppointmentByClientIdParams(clientId: event.clientId));
+
+        contractsResult.fold(
+          (failure) {
+            // If there's a failure, emit error state
+            emit(ClientHomeError(failure.message));
+          },
+          (contracts) {
+            // If contracts are fetched successfully, emit the loaded state
+            emit(HomeContractsLoadedState(contracts));
+          },
+        );
+      } catch (e) {
+        // Handle any other errors and emit error state
+        emit(ClientHomeError("Error occurred while fetching contracts: $e"));
+      }
+    });
   }
 
   Future<void> loadClient() async {
@@ -52,16 +75,18 @@ class ClientHomeBloc extends Bloc<ClientHomeEvent, ClientHomeState> {
       result.fold(
         (failure) {
           emit(ClientHomeError(failure.message));
-          print("Error in cubit: ${failure.message}");
         },
         (clientEntity) {
           emit(ClientHomeLoaded(clientEntity));
-          print("Client loaded: ${clientEntity.toString()}");
+          homeLoaded = true;
+          if (state is! HomeContractsLoadedState) {
+            add(FetchClientContracts(clientId: userId));
+            emit(ClientHomeLoaded(clientEntity));
+          }
         },
       );
     } catch (e) {
       emit(ClientHomeError("Error occurred: $e"));
-      print("Exception occurred: $e");
     }
   }
 
@@ -91,38 +116,5 @@ class ClientHomeBloc extends Bloc<ClientHomeEvent, ClientHomeState> {
             child: event.destination), // Pass the bloc to the new screen
       ),
     );
-  }
-
-  Future<void> loadClientContracts() async {
-    emit(HomeContractsLoadingState());
-
-    try {
-      final userId = await _tokenHelper.getUserIdFromToken();
-      if (userId == null) {
-        emit(const ClientHomeError("Client id not found"));
-        return;
-      }
-
-      final appointmentResult = await _getAppointmentByClientIdUseCase(
-        GetAppointmentByClientIdParams(clientId: userId),
-      );
-
-      final appointments = appointmentResult.fold(
-        (failure) {
-          emit(ClientHomeError(failure.message));
-          return <AppointmentEntity>[];
-        },
-        (appointments) => appointments,
-      );
-
-      if (appointments.isEmpty) {
-        emit(const ClientHomeError("No appointments found"));
-        return;
-      }
-
-      emit(HomeContractsLoadedState(appointments));
-    } catch (e) {
-      emit(ClientHomeError("Error occurred: $e"));
-    }
   }
 }

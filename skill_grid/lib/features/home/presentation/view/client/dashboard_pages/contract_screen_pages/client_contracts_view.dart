@@ -25,7 +25,6 @@ class _ClientContractsViewState extends State<ClientContractsView> {
   Widget build(BuildContext context) {
     return BlocBuilder<ContractsBloc, ContractsState>(
       builder: (context, state) {
-        print("State: $state");
         if (state is ContractsLoadedState) {
           final appointments = state.appointments;
           final payments = state.payments;
@@ -34,7 +33,8 @@ class _ClientContractsViewState extends State<ClientContractsView> {
             filteredAppointments = appointments
                 .where((appointment) =>
                     appointment.projectEndDate != null &&
-                    appointment.projectEndDate!.isAfter(DateTime.now()))
+                    appointment.projectEndDate!.isAfter(DateTime.now()) &&
+                    appointment.status == true)
                 .toList();
             print("Filtered Appointments:: $filteredAppointments");
           } else if (_filter == 'Complete') {

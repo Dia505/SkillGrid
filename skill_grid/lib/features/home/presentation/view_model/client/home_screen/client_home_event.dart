@@ -1,6 +1,6 @@
 part of 'client_home_bloc.dart';
 
-@immutable 
+@immutable
 sealed class ClientHomeEvent extends Equatable {
   const ClientHomeEvent();
 
@@ -22,4 +22,13 @@ class NavigateToSearchScreenEvent extends ClientHomeEvent {
     required this.context,
     required this.destination,
   });
+}
+
+class FetchClientContracts extends ClientHomeEvent {
+  final String clientId;
+
+  const FetchClientContracts({required this.clientId});
+
+  @override
+  List<Object> get props => [clientId];
 }
