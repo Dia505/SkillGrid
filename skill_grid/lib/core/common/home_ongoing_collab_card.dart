@@ -57,7 +57,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
 
     return SizedBox(
       width: 350,
-      height: 120,
+      height: 150,
       child: Card(
         elevation: 3,
         color: Colors.white,
@@ -68,18 +68,25 @@ class HomeOngoingCollabCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage(freelancerProfileImgPath),
+                backgroundImage: freelancerProfileImgPath.isNotEmpty
+                    ? NetworkImage(
+                        "http://10.0.2.2:3000/freelancer_images/$freelancerProfileImgPath") // Adjust base URL
+                    : const AssetImage("assets/images/default_profile_img.png")
+                        as ImageProvider,
                 radius: 30,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    projectName,
-                    style: const TextStyle(
-                        fontFamily: "Inter Medium",
-                        fontSize: 16,
-                        color: Colors.black),
+                  SizedBox(
+                    width: 250,
+                    child: Text(
+                      projectName,
+                      style: const TextStyle(
+                          fontFamily: "Inter Medium",
+                          fontSize: 16,
+                          color: Colors.black),
+                    ),
                   ),
                   Text(
                     "$remainingDays to complete",

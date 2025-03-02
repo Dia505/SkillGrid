@@ -260,12 +260,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                 style: TextStyle(
                                     fontSize: 22, fontFamily: "Inter Light"),
                               ),
-                              const SizedBox(height: 10),
                               BlocListener<ClientHomeBloc, ClientHomeState>(
                                 listener: (context, state) {
                                   if (state is HomeContractsLoadedState) {
-                                    print(
-                                        "Loaded Contracts: ${state.appointments}");
                                     setState(() {
                                       _contracts = state.appointments;
                                     });
@@ -274,41 +271,44 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                 child: BlocBuilder<ClientHomeBloc,
                                     ClientHomeState>(
                                   builder: (context, state) {
-                                    print("Contracts::: $_contracts");
-                                    print("Contracts state::: $state");
-
                                     if (_contracts == null) {
                                       return const Center(
                                           child: CircularProgressIndicator());
                                     } else if (_contracts!.isEmpty) {
-                                      return Center(
-                                          child: Column(children: [
-                                        Image.asset(
-                                          "assets/images/client_dashboard_no_collaborations.png",
-                                          height: 240,
-                                        ),
-                                        const SizedBox(
-                                          width: 270,
-                                          child: Text(
-                                            "You haven't started any collaborations yet. Start working with top freelancers and bring your ideas to life!",
-                                            style: TextStyle(
-                                                fontFamily: "Inter Medium"),
-                                            textAlign: TextAlign.center,
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 30, right: 27),
+                                        child: Center(
+                                            child: Column(children: [
+                                          Image.asset(
+                                            "assets/images/client_dashboard_no_collaborations.png",
+                                            height: 240,
                                           ),
-                                        )
-                                      ]));
+                                          const SizedBox(
+                                            width: 270,
+                                            child: Text(
+                                              "You haven't started any collaborations yet. Start working with top freelancers and bring your ideas to life!",
+                                              style: TextStyle(
+                                                  fontFamily: "Inter Medium"),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          )
+                                        ])),
+                                      );
                                     }
 
-                                    return ListView.builder(
-                                      itemCount: _contracts?.length ?? 0,
-                                      itemBuilder: (context, index) {
-                                        final contract = _contracts?[index];
-                                        if (contract == null) {
-                                          return const SizedBox.shrink();
-                                        }
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: HomeOngoingCollabCard(
+                                    return Container(
+                                      height: 200,
+                                      padding: const EdgeInsets.only(right: 20),
+                                      child: ListView.builder(
+                                        itemCount: _contracts?.length ?? 0,
+                                        itemBuilder: (context, index) {
+                                          final contract = _contracts?[index];
+                                          if (contract == null) {
+                                            return const SizedBox.shrink();
+                                          }
+                                          final collabCard =
+                                              HomeOngoingCollabCard(
                                             freelancerProfileImgPath: contract
                                                 .freelancerService
                                                 .freelancer
@@ -335,9 +335,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                                 contract.projectDuration.unit,
                                             projectDurationValue:
                                                 contract.projectDuration.value,
-                                          ),
-                                        );
-                                      },
+                                          );
+                                          if (collabCard
+                                                  .calculateCompletionPercent() <
+                                              100) {
+                                            return collabCard;
+                                          } else {
+                                            return const SizedBox
+                                                .shrink(); // Hide completed projects
+                                          }
+                                        },
+                                      ),
                                     );
                                   },
                                 ),

@@ -1,9 +1,11 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
+import 'package:skill_grid/core/network/network_info.dart';
 import 'package:skill_grid/core/theme/theme_sensor/data/repository/light_sensor_repository_impl.dart';
 import 'package:skill_grid/core/theme/theme_sensor/domain/repository/light_sensor_repository.dart';
 import 'package:skill_grid/core/theme/theme_sensor/domain/use_case/get_theme_mode_by_sensor_use_case.dart';
@@ -112,6 +114,8 @@ Future<void> initDependencies() async {
   await _initTokenHelper();
   await _initThemeBloc();
   await _initLightSensor();
+  await _initConnectivity();
+  await _initNetworkInfo();
 
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
@@ -174,6 +178,15 @@ _initThemeBloc() {
       () => ThemeBloc(getIt<GetThemeModeBySensorUseCase>()));
 }
 
+_initConnectivity() {
+  getIt.registerLazySingleton<Connectivity>(() => Connectivity());
+}
+
+_initNetworkInfo() {
+  getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(getIt<Connectivity>()));
+}
+
+
 //Client dependencies
 _initClientRegistrationDependencies() async {
   getIt.registerLazySingleton<ClientLocalDataSource>(
@@ -197,9 +210,11 @@ _initClientRegistrationDependencies() async {
       ));
 
   getIt.registerLazySingleton<GetClientByIdUseCase>(() => GetClientByIdUseCase(
-      clientRepository: getIt<ClientRemoteRepository>(),
+      clientRemoteRepository: getIt<ClientRemoteRepository>(),
+      clientLocalRepoitory: getIt<ClientLocalRepository>(),
       tokenSharedPrefs: getIt<TokenSharedPrefs>(),
-      tokenHelper: getIt<TokenHelper>()));
+      tokenHelper: getIt<TokenHelper>(),
+      networkInfo: getIt<NetworkInfo>()));
 
   getIt.registerLazySingleton<SendOtpUseCase>(() => SendOtpUseCase(
         clientRepository: getIt<ClientRemoteRepository>(),
@@ -494,9 +509,11 @@ _initAppointmentDependencies() {
           tokenSharedPrefs: getIt<TokenSharedPrefs>()));
   getIt.registerLazySingleton<GetAppointmentByClientIdUseCase>(() =>
       GetAppointmentByClientIdUseCase(
-          appointmentRepository: getIt<AppointmentRemoteRepository>(),
+          remoteAppointmentRepository: getIt<AppointmentRemoteRepository>(),
+          localAppointmentRepository: getIt<AppointmentLocalRepository>(),
           tokenSharedPrefs: getIt<TokenSharedPrefs>(),
-          tokenHelper: getIt<TokenHelper>()));
+          tokenHelper: getIt<TokenHelper>(),
+          networkInfo: getIt<NetworkInfo>()));
   getIt.registerLazySingleton<UpdateAppointmentUseCase>(() =>
       UpdateAppointmentUseCase(
           appointmentRepository: getIt<AppointmentRemoteRepository>(),
