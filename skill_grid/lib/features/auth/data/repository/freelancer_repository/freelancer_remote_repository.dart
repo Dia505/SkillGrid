@@ -23,13 +23,11 @@ class FreelancerRemoteRepository implements IFreelancerRepository {
 
   @override
   Future<Either<Failure, void>> deleteFreelancer(String freelancerId) {
-    // TODO: implement deleteFreelancer
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, List<FreelancerEntity>>> getAllFreelancer() {
-    // TODO: implement getAllFreelancer
     throw UnimplementedError();
   }
 
@@ -60,7 +58,6 @@ class FreelancerRemoteRepository implements IFreelancerRepository {
 
   @override
   Future<Either<Failure, void>> updateFreelancer(FreelancerEntity freelancerEntity) {
-    // TODO: implement updateFreelancer
     throw UnimplementedError();
   }
   

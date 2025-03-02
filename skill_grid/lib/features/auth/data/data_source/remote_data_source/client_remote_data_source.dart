@@ -273,7 +273,6 @@ class ClientRemoteDataSource implements IClientDataSource {
       );
 
       if (response.statusCode == 200) {
-        print('Password reset successful');
       } else {
         throw Exception('Failed to reset password: ${response.statusMessage}');
       }

@@ -160,7 +160,6 @@ class PaymentRemoteDataSource implements IPaymentDataSource {
           ));
 
       if (response.statusCode == 200) {
-        print("Payment and Appointment successfully deleted");
       } else {
         throw Exception("Failed to delete: ${response.statusMessage}");
       }

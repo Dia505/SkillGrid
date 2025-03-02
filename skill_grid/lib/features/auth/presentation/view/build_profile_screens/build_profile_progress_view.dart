@@ -50,7 +50,6 @@ class _BuildProfileProgressViewState extends State<BuildProfileProgressView> wit
     // Validate only the current step's form if it exists
     if (_formKeys[_currentStep].currentState != null &&
         !_formKeys[_currentStep].currentState!.validate()) {
-      print("Form on step $_currentStep is not valid");
       return; // <-- Change 2: Prevent moving to the next step if the form is invalid
     }
 

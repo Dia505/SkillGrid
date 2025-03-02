@@ -80,19 +80,16 @@ class ClientLocalRepository implements IClientRepository {
   
   @override
   Future<Either<Failure, void>> resetPassword(String email, String otp, String newPassword) {
-    // TODO: implement resetPassword
     throw UnimplementedError();
   }
   
   @override
   Future<Either<Failure, void>> sendOtp(String email) {
-    // TODO: implement sendOtp
     throw UnimplementedError();
   }
   
   @override
   Future<Either<Failure, void>> verifyOtp(String email, String otp) {
-    // TODO: implement verifyOtp
     throw UnimplementedError();
   }
 }

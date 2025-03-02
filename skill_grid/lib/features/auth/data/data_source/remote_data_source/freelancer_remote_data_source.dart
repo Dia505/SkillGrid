@@ -30,8 +30,6 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
       Response response =
           await _dio.post(ApiEndpoints.registerFreelancer, data: data);
 
-      print("Response: $response");
-
       if (response.statusCode == 201) {
         return;
       } else {
@@ -46,20 +44,17 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
 
   @override
   Future<void> deleteFreelancer(String freelancerId) {
-    // TODO: implement deleteFreelancer
     throw UnimplementedError();
   }
 
   @override
   Future<List<FreelancerEntity>> getAllFreelancers() {
-    // TODO: implement getAllFreelancers
     throw UnimplementedError();
   }
 
   @override
   Future<FreelancerEntity> getFreelancerById(
       String freelancerId, String? token) async {
-    print("Calling getFreelancerById with ID: $freelancerId");
     try {
       final String url = "${ApiEndpoints.findFreelancerById}/$freelancerId";
 
@@ -108,7 +103,6 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
 
   @override
   Future<void> updateFreelancer(FreelancerEntity freelancerEntity) {
-    // TODO: implement updateFreelancer
     throw UnimplementedError();
   }
 

@@ -37,7 +37,6 @@ class ClientLoginUseCase implements UsecaseWithParams<String, ClientLoginParams>
           (token) {
             tokenSharedPrefs.saveToken(token);
             tokenSharedPrefs.getToken().then((value) {
-              print(value);
             });
             return Right(token);
           }

@@ -21,8 +21,6 @@ class SplashScreenCubit extends Cubit<void> {
         
         result.fold(
           (failure) {
-            // Handle failure if needed (e.g., log error, show toast)
-            print(failure.message);
             _navigateToOnboardingScreen(context);
           },
           (token) {
