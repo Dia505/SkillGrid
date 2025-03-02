@@ -26,25 +26,21 @@ class PaymentLocalRepository implements IPaymentRepository {
   @override
   Future<Either<Failure, void>> savePayment(
       PaymentEntity paymentEntity, String? token) {
-    // TODO: implement savePayment
     throw UnimplementedError();
   }
   
   @override
   Future<Either<Failure, void>> updatePayment(String paymentId, PaymentEntity updatedPayemnt, String? token) {
-    // TODO: implement updatePayment
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, PaymentEntity>> getPaymentById(String paymentId, String? token) {
-    // TODO: implement getPaymentById
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, void>> deletePaymentByAppointmentId(String appointmentId, String? token) {
-    // TODO: implement deletePaymentByAppointmentId
     throw UnimplementedError();
   }
 }

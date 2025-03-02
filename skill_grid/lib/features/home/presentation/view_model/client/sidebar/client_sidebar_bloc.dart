@@ -65,7 +65,6 @@ class ClientSidebarBloc extends Bloc<ClientSidebarEvent, ClientSidebarState> {
         result.fold(
           (failure) {
             emit(ClientSidebarError("Failed to log out: ${failure.message}"));
-            print("Logout failed: ${failure.message}");
           },
           (_) {
             emit(LoggedOut());
@@ -111,8 +110,7 @@ class ClientSidebarBloc extends Bloc<ClientSidebarEvent, ClientSidebarState> {
       );
     } catch (e) {
       emit(ClientSidebarError(
-          "Error occurred: $e")); // Emit error if an exception occurs
-      print("Exception occurred: $e");
+          "Error occurred: $e")); 
     }
   }
 }

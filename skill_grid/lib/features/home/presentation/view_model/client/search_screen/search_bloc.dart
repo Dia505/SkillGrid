@@ -120,7 +120,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           );
         }));
 
-        print("Rating map: $avgRatingMap");
         emit(SearchLoaded(
             freelancers, portfolioMap, avgHourlyRateMap, avgRatingMap));
       },

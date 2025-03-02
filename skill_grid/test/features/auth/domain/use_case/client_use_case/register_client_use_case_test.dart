@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/register_client_use_case.dart';
+
 import 'mock_client_repository.mock.dart';
 
 void main() {
@@ -18,13 +19,12 @@ void main() {
   const params = CreateClientParams.empty();
 
   test("Should call [ClientRepository.registerClient]", () async {
-    when(() => repository.registerClient(any())).thenAnswer(
-      (_) async => Right(null)
-    );
+    when(() => repository.registerClient(any()))
+        .thenAnswer((_) async => const Right(null));
 
     final result = await useCase(params);
 
-    expect(result, Right(null));
+    expect(result, const Right(null));
 
     verify(() => repository.registerClient(any())).called(1);
 

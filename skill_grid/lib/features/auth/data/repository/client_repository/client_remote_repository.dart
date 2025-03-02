@@ -28,7 +28,7 @@ class ClientRemoteRepository implements IClientRepository {
   Future<Either<Failure, void>> deleteClient(String clientId, String? token) async {
     try {
       _clientRemoteDataSource.deleteClient(clientId, token);
-      return Right(null);
+      return const Right(null);
     }
     catch(e) {
       return Left(ApiFailure(message: e.toString()));

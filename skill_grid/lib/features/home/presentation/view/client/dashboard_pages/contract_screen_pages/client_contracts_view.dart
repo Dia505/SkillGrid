@@ -36,14 +36,12 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                     appointment.projectEndDate!.isAfter(DateTime.now()) &&
                     appointment.status == true)
                 .toList();
-            print("Filtered Appointments:: $filteredAppointments");
           } else if (_filter == 'Complete') {
             filteredAppointments = appointments
                 .where((appointment) =>
                     appointment.projectEndDate != null &&
                     appointment.projectEndDate!.isBefore(DateTime.now()))
                 .toList();
-            print("Filtered Appointments:: $filteredAppointments");
           } else if (_filter == 'Requested Offers') {
             filteredAppointments = appointments
                 .where((appointment) =>
@@ -53,11 +51,8 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                             appointment.appointmentId &&
                         payment.paymentStatus == false))
                 .toList();
-            print("Filtered Appointments:: $filteredAppointments");
           } else {
-            // "All" filter: show all contracts
             filteredAppointments = appointments;
-            print("Filtered Appointments:: $filteredAppointments");
           }
 
           return Scaffold(

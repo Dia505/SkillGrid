@@ -75,7 +75,6 @@ class ClientEditProfileBloc
       );
     } catch (e) {
       emit(ClientEditProfileError("Error occurred: $e"));
-      print("Exception occurred: $e");
     }
   }
 
