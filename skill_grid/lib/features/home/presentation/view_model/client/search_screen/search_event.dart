@@ -30,3 +30,5 @@ class NavigateToFreelancerProfile extends SearchEvent {
   @override
   List<Object> get props => [freelancerId];
 }
+
+class ClearSearch extends SearchEvent {} 

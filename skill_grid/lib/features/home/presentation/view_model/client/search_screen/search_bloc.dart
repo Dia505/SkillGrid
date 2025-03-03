@@ -42,6 +42,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     on<FilterByCriteria>(_onFilterByCriteria);
 
+    on<ClearSearch>((event, emit) {
+      emit(SearchInitial());
+    });
+
     on<NavigateToFreelancerProfile>((event, emit) {
       Navigator.push(
         event.context,

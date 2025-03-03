@@ -6,6 +6,10 @@ import 'package:skill_grid/app/shared_prefs/token_shared_prefs.dart';
 import 'package:skill_grid/core/network/api_service.dart';
 import 'package:skill_grid/core/network/hive_service.dart';
 import 'package:skill_grid/core/network/network_info.dart';
+import 'package:skill_grid/core/shake_sensor/data/repository/shake_sensor_repository_impl.dart';
+import 'package:skill_grid/core/shake_sensor/domain/repository/shake_sensor_repository.dart';
+import 'package:skill_grid/core/shake_sensor/domain/use_case/shake_sensor_use_case.dart';
+import 'package:skill_grid/core/shake_sensor/presentation/shake_sensor_bloc.dart';
 import 'package:skill_grid/core/theme/theme_sensor/data/repository/light_sensor_repository_impl.dart';
 import 'package:skill_grid/core/theme/theme_sensor/domain/repository/light_sensor_repository.dart';
 import 'package:skill_grid/core/theme/theme_sensor/domain/use_case/get_theme_mode_by_sensor_use_case.dart';
@@ -116,6 +120,7 @@ Future<void> initDependencies() async {
   await _initLightSensor();
   await _initConnectivity();
   await _initNetworkInfo();
+  await _initShakeSensor();
 
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
@@ -178,14 +183,23 @@ _initThemeBloc() {
       () => ThemeBloc(getIt<GetThemeModeBySensorUseCase>()));
 }
 
+_initShakeSensor() {
+  getIt.registerLazySingleton<ShakeSensorRepository>(
+      () => ShakeSensorRepositoryImpl());
+  getIt.registerLazySingleton<ShakeSensorUseCase>(
+      () => ShakeSensorUseCase(getIt<ShakeSensorRepository>()));
+  getIt.registerLazySingleton<ShakeSensorBloc>(
+      () => ShakeSensorBloc(getIt<ShakeSensorUseCase>()));
+}
+
 _initConnectivity() {
   getIt.registerLazySingleton<Connectivity>(() => Connectivity());
 }
 
 _initNetworkInfo() {
-  getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(getIt<Connectivity>()));
+  getIt.registerLazySingleton<NetworkInfo>(
+      () => NetworkInfoImpl(getIt<Connectivity>()));
 }
-
 
 //Client dependencies
 _initClientRegistrationDependencies() async {
