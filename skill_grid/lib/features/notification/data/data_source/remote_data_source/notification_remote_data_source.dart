@@ -46,12 +46,8 @@ class NotificationRemoteDataSource implements INotificationDataSource {
       final String url =
           "${ApiEndpoints.markNotificationAsRead}/$notificationId/read";
 
-      // Send the update request directly to mark the notification as read
-      Map<String, dynamic> updateData = {'read': true};
-
       var response = await dio.put(
         url,
-        data: updateData,
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',

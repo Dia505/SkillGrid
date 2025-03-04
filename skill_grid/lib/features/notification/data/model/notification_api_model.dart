@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:skill_grid/features/appointment/data/model/appointment_api_model.dart';
 import 'package:skill_grid/features/auth/data/model/client_model/client_api_model.dart';
 import 'package:skill_grid/features/auth/data/model/freelancer_model/freelancer_api_model.dart';
-import 'package:skill_grid/features/notification/data/dto/get_notification_by_id_dto.dart';
 import 'package:skill_grid/features/notification/data/dto/get_notifications_by_client_id_dto.dart';
 import 'package:skill_grid/features/notification/domain/entity/notification_entity.dart';
 
@@ -18,23 +17,38 @@ class NotificationApiModel extends Equatable {
   final DateTime notificationDate;
   final bool read;
   @JsonKey(name: "freelancer_id")
-  final FreelancerApiModel freelancer;
+  final FreelancerApiModel? freelancer;
   @JsonKey(name: "client_id")
-  final ClientApiModel client;
+  final ClientApiModel? client;
   @JsonKey(name: "appointment_id")
-  final AppointmentApiModel appointment;
+  final AppointmentApiModel? appointment;
 
   const NotificationApiModel(
       {this.notificationId,
       required this.message,
       required this.notificationDate,
       required this.read,
-      required this.freelancer,
-      required this.client,
-      required this.appointment});
+      this.freelancer,
+      this.client,
+      this.appointment});
 
-  factory NotificationApiModel.fromJson(Map<String, dynamic> json) =>
-      _$NotificationApiModelFromJson(json);
+  factory NotificationApiModel.fromJson(Map<String, dynamic> json) {
+    try {
+      return NotificationApiModel(
+          notificationId: json["_id"],
+          message: json["message"],
+          read: json["read"],
+          notificationDate: DateTime.parse(json["notification_date"]),
+          freelancer: null,
+          client: ClientApiModel.fromJson(
+              json["client_id"] as Map<String, dynamic>),
+          appointment: AppointmentApiModel.fromJson(
+              json["appointment_id"] as Map<String, dynamic>));
+    } catch (e) {
+      throw const FormatException(
+          "Invalid JSON format for NotificationApiModel");
+    }
+  }
 
   Map<String, dynamic> toJson() => _$NotificationApiModelToJson(this);
 
@@ -44,9 +58,11 @@ class NotificationApiModel extends Equatable {
         message: entity.message,
         notificationDate: entity.notificationDate,
         read: entity.read,
-        freelancer: FreelancerApiModel.fromEntity(entity.freelancer),
-        client: ClientApiModel.fromEntity(entity.client),
-        appointment: AppointmentApiModel.fromEntity(entity.appointment));
+        freelancer: entity.freelancer != null
+            ? FreelancerApiModel.fromEntity(entity.freelancer!)
+            : null,
+        client: ClientApiModel.fromEntity(entity.client!),
+        appointment: AppointmentApiModel.fromEntity(entity.appointment!));
   }
 
   NotificationEntity toEntity() {
@@ -55,9 +71,9 @@ class NotificationApiModel extends Equatable {
         message: message,
         notificationDate: notificationDate,
         read: read,
-        freelancer: freelancer.toEntity(),
-        client: client.toEntity(),
-        appointment: appointment.toEntity());
+        freelancer: freelancer?.toEntity(),
+        client: client?.toEntity(),
+        appointment: appointment?.toEntity());
   }
 
   static List<NotificationEntity> toEntityList(
@@ -74,17 +90,6 @@ class NotificationApiModel extends Equatable {
         freelancer: notificationsClientDto.freelancer,
         client: notificationsClientDto.client,
         appointment: notificationsClientDto.appointment);
-  }
-
-  static NotificationEntity getNotificationByIdDtoToEntity(
-      GetNotificationByIdDto notificationDto) {
-    return NotificationEntity(
-        message: notificationDto.message,
-        notificationDate: notificationDto.notificationDate,
-        read: notificationDto.read,
-        freelancer: notificationDto.freelancer.toEntity(),
-        client: notificationDto.client.toEntity(),
-        appointment: notificationDto.appointment.toEntity());
   }
 
   NotificationApiModel copyWith({bool? read}) {

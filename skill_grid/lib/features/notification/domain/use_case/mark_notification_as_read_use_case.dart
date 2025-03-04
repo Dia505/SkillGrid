@@ -7,13 +7,12 @@ import 'package:skill_grid/features/notification/domain/repository/notification_
 
 class MarkNotificationAsReadParams extends Equatable {
   final String notificationId;
-  final bool read;
 
   const MarkNotificationAsReadParams(
-      {required this.notificationId, required this.read});
+      {required this.notificationId});
 
   @override
-  List<Object?> get props => [notificationId, read];
+  List<Object?> get props => [notificationId];
 }
 
 class MarkNotificationAsReadUseCase

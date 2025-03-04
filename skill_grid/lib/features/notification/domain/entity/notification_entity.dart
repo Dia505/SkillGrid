@@ -8,18 +8,18 @@ class NotificationEntity extends Equatable {
   final String message;
   final DateTime notificationDate;
   final bool read;
-  final FreelancerEntity freelancer;
-  final ClientEntity client;
-  final AppointmentEntity appointment;
+  final FreelancerEntity? freelancer;
+  final ClientEntity? client;
+  final AppointmentEntity? appointment;
 
   const NotificationEntity({
     this.notificationId,
     required this.message,
     required this.notificationDate,
     required this.read,
-    required this.freelancer,
-    required this.client,
-    required this.appointment
+    this.freelancer,
+    this.client,
+    this.appointment
   });
 
   @override

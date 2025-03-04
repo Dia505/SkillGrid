@@ -71,6 +71,5 @@ class ApiEndpoints {
 
   //Notification routes
   static const String getNotificationsByClientId = "notification/client";
-  static const String getNotificationById = "notification";
   static const String markNotificationAsRead = "notification";
 }

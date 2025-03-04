@@ -52,8 +52,13 @@ class NotificationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
+                    backgroundImage: freelancerProfileImgPath.isNotEmpty
+                        ? NetworkImage(
+                            "http://10.0.2.2:3000/freelancer_images/$freelancerProfileImgPath") 
+                        : const AssetImage(
+                                "assets/images/default_profile_img.png")
+                            as ImageProvider,
                     radius: 30,
-                    backgroundImage: AssetImage(freelancerProfileImgPath),
                   ),
                   const SizedBox(width: 10),
                   Expanded(

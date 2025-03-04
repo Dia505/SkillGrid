@@ -6,11 +6,13 @@ import 'package:skill_grid/features/notification/domain/repository/notification_
 
 class NotificationRemoteRepository implements INotificationRepository {
   final NotificationRemoteDataSource _notificationRemoteDataSource;
-  NotificationRemoteRepository({required NotificationRemoteDataSource notificationRemoteDataSource})
-    : _notificationRemoteDataSource = notificationRemoteDataSource;
+  NotificationRemoteRepository(
+      {required NotificationRemoteDataSource notificationRemoteDataSource})
+      : _notificationRemoteDataSource = notificationRemoteDataSource;
 
   @override
-  Future<Either<Failure, List<NotificationEntity>>> getNotificationsByClientId(String clientId, String? token) async {
+  Future<Either<Failure, List<NotificationEntity>>> getNotificationsByClientId(
+      String clientId, String? token) async {
     try {
       final notificationList = await _notificationRemoteDataSource
           .getNotificationsByClientId(clientId, token);
@@ -25,12 +27,14 @@ class NotificationRemoteRepository implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, void>> markNotificationAsRead(String notificationId, String? token) async {
+  Future<Either<Failure, void>> markNotificationAsRead(
+      String notificationId, String? token) async {
     try {
       await _notificationRemoteDataSource.markNotificationAsRead(
           notificationId, token);
       return const Right(null);
     } catch (e) {
+      print("Error in repository: $e");
       return Left(ApiFailure(message: e.toString()));
     }
   }
