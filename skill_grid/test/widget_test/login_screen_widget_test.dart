@@ -6,14 +6,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:skill_grid/core/theme/theme_sensor/domain/use_case/get_theme_mode_by_sensor_use_case.dart';
 import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/features/auth/domain/use_case/client_use_case/client_login_use_case.dart';
-import 'package:skill_grid/features/auth/domain/use_case/client_use_case/register_client_use_case.dart';
-import 'package:skill_grid/features/auth/presentation/view/client_registration_view.dart';
+import 'package:skill_grid/features/auth/presentation/view/login_screen_view.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
-import 'package:skill_grid/features/auth/presentation/view_model/sign_up/client/client_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
-
-// Mock classes
-class MockRegisterClientUseCase extends Mock implements RegisterClientUseCase {}
 
 class MockClientLoginUseCase extends Mock implements ClientLoginUseCase {}
 
@@ -23,21 +18,15 @@ class MockGetThemeModeBySensorUseCase extends Mock
     implements GetThemeModeBySensorUseCase {}
 
 void main() {
-  late MockRegisterClientUseCase mockRegisterClientUseCase;
   late MockClientLoginUseCase mockClientLoginUseCase;
   late MockClientDashboardCubit mockClientDashboardCubit;
   late MockGetThemeModeBySensorUseCase mockGetThemeModeBySensorUseCase;
 
   setUp(() {
-    // Initialize mocks
-    mockRegisterClientUseCase = MockRegisterClientUseCase();
     mockClientLoginUseCase = MockClientLoginUseCase();
     mockClientDashboardCubit = MockClientDashboardCubit();
     mockGetThemeModeBySensorUseCase = MockGetThemeModeBySensorUseCase();
 
-    // Register mock dependencies in GetIt
-    GetIt.instance.registerSingleton<MockRegisterClientUseCase>(
-        mockRegisterClientUseCase);
     GetIt.instance
         .registerSingleton<MockClientLoginUseCase>(mockClientLoginUseCase);
     GetIt.instance
@@ -46,12 +35,6 @@ void main() {
       LoginBloc(
         clientLoginUseCase: mockClientLoginUseCase,
         clientDashboardCubit: mockClientDashboardCubit,
-      ),
-    );
-    GetIt.instance.registerSingleton<ClientBloc>(
-      ClientBloc(
-        loginBloc: GetIt.instance<LoginBloc>(),
-        registerClientUseCase: mockRegisterClientUseCase,
       ),
     );
     GetIt.instance.registerSingleton<ThemeBloc>(
@@ -64,7 +47,7 @@ void main() {
     GetIt.instance.reset();
   });
 
-  testWidgets("Should have title 'Sign up'", (WidgetTester tester) async {
+  testWidgets("Should have title 'Welcome Back!'", (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -73,18 +56,18 @@ void main() {
               BlocProvider<ThemeBloc>(
                 create: (context) => GetIt.instance<ThemeBloc>(),
               ),
-              BlocProvider<ClientBloc>(
-                create: (context) => GetIt.instance<ClientBloc>(),
+              BlocProvider<LoginBloc>(
+                create: (context) => GetIt.instance<LoginBloc>(),
               ),
             ],
-            child: const ClientRegistrationView(),
+            child: const LoginScreenView(),
           ),
         ),
       ),
     );
 
     // Your test assertions go here
-    Finder title = find.text("Sign Up");
+    Finder title = find.text("Welcome Back!");
     expect(title, findsOneWidget);
   });
 
@@ -97,29 +80,20 @@ void main() {
               BlocProvider<ThemeBloc>(
                 create: (context) => GetIt.instance<ThemeBloc>(),
               ),
-              BlocProvider<ClientBloc>(
-                create: (context) => GetIt.instance<ClientBloc>(),
+              BlocProvider<LoginBloc>(
+                create: (context) => GetIt.instance<LoginBloc>(),
               ),
             ],
-            child: const ClientRegistrationView(),
+            child: const LoginScreenView(),
           ),
         ),
       ),
     );
 
-    await tester.enterText(find.byType(TextField).at(0), 'Test');
+    await tester.enterText(find.byType(TextField).at(0), 'testuser@gmail.com');
     expect(find.byType(TextField).at(0), findsOneWidget);
 
-    await tester.enterText(find.byType(TextField).at(1), 'User');
+    await tester.enterText(find.byType(TextField).at(1), 'Testuser@123');
     expect(find.byType(TextField).at(1), findsOneWidget);
-
-    await tester.enterText(find.byType(TextField).at(2), '9818445783');
-    expect(find.byType(TextField).at(2), findsOneWidget);
-
-    await tester.enterText(find.byType(TextField).at(3), 'testuser@gmail.com');
-    expect(find.byType(TextField).at(3), findsOneWidget);
-
-    await tester.enterText(find.byType(TextField).at(4), 'Testuser@123');
-    expect(find.byType(TextField).at(4), findsOneWidget);
   });
 }

@@ -49,7 +49,6 @@ import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/get_freelancer_by_id_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/register_freelancer_use_case.dart';
 import 'package:skill_grid/features/auth/domain/use_case/freelancer_use_case/search_freelancers_use_case.dart';
-import 'package:skill_grid/features/auth/presentation/view_model/join_as_client_freelancer/join_as_client_freelancer_cubit.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/reset_password/reset_password_bloc.dart';
 import 'package:skill_grid/features/auth/presentation/view_model/send_otp/send_otp_bloc.dart';
@@ -130,7 +129,6 @@ Future<void> initDependencies() async {
   await _initClientRegistrationDependencies();
   await _initFreelancerRegistrationDependencies();
   await _initLoginDependencies();
-  await _initJoinAsClientFreelancerDependencies();
   await _initSplashScreenDependencies();
   await _initOnboardScreenDependencies();
   await _initClientDashboardDependencies();
@@ -298,15 +296,6 @@ _initLoginDependencies() async {
   getIt.registerFactory<LoginBloc>(() => LoginBloc(
       clientLoginUseCase: getIt<ClientLoginUseCase>(),
       clientDashboardCubit: getIt<ClientDashboardCubit>()));
-}
-
-//Join as client/freelancer dependencies
-_initJoinAsClientFreelancerDependencies() async {
-  getIt.registerFactory<JoinAsClientFreelancerCubit>(() =>
-      JoinAsClientFreelancerCubit(
-          clientBloc: getIt<ClientBloc>(),
-          freelancerBloc: getIt<FreelancerBloc>(),
-          loginBloc: getIt<LoginBloc>()));
 }
 
 //Splash screen dependencies

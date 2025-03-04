@@ -76,38 +76,38 @@ class _ReviewViewState extends State<ReviewView> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                    "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}")
-                                as ImageProvider,
-                            radius: 50,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${widget.freelancerFirstName} ${widget.freelancerLastName}",
-                                  style: const TextStyle(
-                                    fontFamily: "Inter Bold",
-                                    fontSize: 22,
-                                  ),
-                                ),
-                                Text(
-                                  widget.profession,
-                                  style: const TextStyle(
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   children: [
+                      //     CircleAvatar(
+                      //       backgroundImage: NetworkImage(
+                      //               "http://10.0.2.2:3000/freelancer_images/${widget.freelancerProfileImgPath}")
+                      //           as ImageProvider,
+                      //       radius: 50,
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.only(left: 15),
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Text(
+                      //             "${widget.freelancerFirstName} ${widget.freelancerLastName}",
+                      //             style: const TextStyle(
+                      //               fontFamily: "Inter Bold",
+                      //               fontSize: 22,
+                      //             ),
+                      //           ),
+                      //           Text(
+                      //             widget.profession,
+                      //             style: const TextStyle(
+                      //               fontSize: 17,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       const SizedBox(
                         height: 30,
                       ),
