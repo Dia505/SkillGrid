@@ -46,8 +46,10 @@ class GetAppointmentByClientIdUseCase
           result.fold((failure) => null, (appointments) async {
             // appointments is a List<AppointmentEntity>
             for (var appointment in appointments) {
-              await localAppointmentRepository.saveAppointment(
+              var val= localAppointmentRepository.saveAppointment(
                   appointment, r); // Save each appointment to local Hive
+              print('LOCALL $val');
+              return val;
             }
           });
           return result;

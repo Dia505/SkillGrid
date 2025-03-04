@@ -68,4 +68,9 @@ class ApiEndpoints {
   static const String sendOtp = "reset/send-otp";
   static const String verifyOtp = "reset/verify-otp";
   static const String resetPassword = "reset/reset-password";
+
+  //Notification routes
+  static const String getNotificationsByClientId = "notification/client";
+  static const String getNotificationById = "notification";
+  static const String markNotificationAsRead = "notification";
 }

@@ -52,7 +52,7 @@ void main() {
     GetIt.instance.reset();
   });
 
-  testWidgets("Should have title 'Contracts'", (WidgetTester tester) async {
+  testWidgets("Should have title 'Review'", (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: MultiBlocProvider(
@@ -78,7 +78,7 @@ void main() {
     );
 
     // Find the title
-    Finder title = find.text('Contracts');
+    Finder title = find.text('Review');
     expect(title, findsOneWidget);
   });
 }
