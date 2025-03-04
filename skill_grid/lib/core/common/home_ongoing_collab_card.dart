@@ -89,7 +89,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "$remainingDays to complete",
+                    "$remainingDays days to complete",
                     style: const TextStyle(color: Colors.black),
                   ),
                   Row(
