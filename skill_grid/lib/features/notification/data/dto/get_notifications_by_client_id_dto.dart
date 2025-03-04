@@ -14,20 +14,20 @@ class GetNotificationsByClientIdDto {
   final DateTime notificationDate;
   final bool read;
   @JsonKey(name: "freelancer_id")
-  final FreelancerApiModel freelancer;
+  final FreelancerApiModel? freelancer;
   @JsonKey(name: "client_id")
-  final ClientApiModel client;
+  final ClientApiModel? client;
   @JsonKey(name: "appointment_id")
-  final AppointmentApiModel appointment;
+  final AppointmentApiModel? appointment;
 
   GetNotificationsByClientIdDto({
     this.notificationId,
     required this.message,
     required this.notificationDate,
     required this.read,
-    required this.freelancer,
-    required this.client,
-    required this.appointment
+    this.freelancer,
+    this.client,
+    this.appointment
   });
 
   factory GetNotificationsByClientIdDto.fromJson(Map<String, dynamic> json) =>

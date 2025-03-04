@@ -17,6 +17,9 @@ import 'package:skill_grid/features/home/presentation/view_model/client/contract
 import 'package:skill_grid/features/home/presentation/view_model/client/home_screen/client_home_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/search_screen/search_bloc.dart';
 import 'package:skill_grid/features/home/presentation/view_model/client/sidebar/client_sidebar_bloc.dart';
+import 'package:skill_grid/features/notification/domain/use_case/get_notifications_by_client_id_use_case.dart';
+import 'package:skill_grid/features/notification/domain/use_case/mark_notification_as_read_use_case.dart';
+import 'package:skill_grid/features/notification/presentation/view_model/notification_bloc.dart';
 import 'package:skill_grid/features/payment/domain/use_case/get_payment_by_appointment_id_use_case.dart';
 import 'package:skill_grid/features/portfolio/domain/use_case/get_portfolio_by_freelancer_service_id_use_case.dart';
 import 'package:skill_grid/features/profile/presentation/view_model/profile/client/client_profile_bloc.dart';
@@ -66,7 +69,14 @@ class ClientDashboardState extends Equatable {
               getPaymentByAppointmentIdUseCase:
                   getIt<GetPaymentByAppointmentIdUseCase>()),
           child: const ClientContractsView()),
-      const NotificationScreenView()
+      BlocProvider(
+          create: (context) => NotificationBloc(
+              getNotificationsByClientIdUseCase:
+                  getIt<GetNotificationsByClientIdUseCase>(),
+              tokenHelper: getIt<TokenHelper>(),
+              markNotificationAsReadUseCase:
+                  getIt<MarkNotificationAsReadUseCase>()),
+          child: const NotificationScreenView(),)
     ]);
   }
 
