@@ -65,16 +65,11 @@ void main() {
   });
 
   testWidgets("Should have title 'Sign up'", (WidgetTester tester) async {
-    // Set a custom screen size for testing
-    tester.view.physicalSize = const Size(1200, 800); // Larger screen
-    tester.view.devicePixelRatio = 1.0;
 
     await tester.pumpWidget(
       MaterialApp(
-        home: SizedBox(
-          width: 500, // Match the larger screen size
-          height: 300,
-          child: MultiBlocProvider(
+        home: Scaffold(
+          body: MultiBlocProvider(
             providers: [
               BlocProvider<ThemeBloc>(
                 create: (context) => GetIt.instance<ThemeBloc>(),
