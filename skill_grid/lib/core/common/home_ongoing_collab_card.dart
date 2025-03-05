@@ -11,8 +11,6 @@ class HomeOngoingCollabCard extends StatelessWidget {
   final String projectDurationUnit;
   final String freelancerFirstName;
   final String freelancerLastName;
-  final String? rating;
-  // final VoidCallback onPressed;
 
   const HomeOngoingCollabCard({
     super.key,
@@ -25,8 +23,6 @@ class HomeOngoingCollabCard extends StatelessWidget {
     required this.projectDurationValue,
     required this.freelancerFirstName,
     required this.freelancerLastName,
-    this.rating,
-    // required this.onPressed,
   });
 
   double calculateCompletionPercent() {
@@ -113,15 +109,9 @@ class HomeOngoingCollabCard extends StatelessWidget {
                       Text("$completePercent%"),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "$freelancerFirstName $freelancerLastName",
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(rating ?? " "),
-                    ],
+                  Text(
+                    "$freelancerFirstName $freelancerLastName",
+                    style: const TextStyle(color: Colors.black),
                   )
                 ],
               )

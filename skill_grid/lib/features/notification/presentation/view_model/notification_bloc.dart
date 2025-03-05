@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skill_grid/app/di/di.dart';
 import 'package:skill_grid/core/error/failure.dart';
 import 'package:skill_grid/core/utils/token_helper.dart';
-import 'package:skill_grid/features/home/presentation/view/client/dashboard_pages/contract_screen_pages/client_contracts_view.dart';
-import 'package:skill_grid/features/home/presentation/view_model/client/contracts_view_model/contracts/contracts_bloc.dart';
+import 'package:skill_grid/features/home/presentation/view/client/client_dashboard.dart';
+import 'package:skill_grid/features/home/presentation/view_model/client/dashboard/client_dashboard_cubit.dart';
 import 'package:skill_grid/features/notification/domain/entity/notification_entity.dart';
 import 'package:skill_grid/features/notification/domain/use_case/get_notifications_by_client_id_use_case.dart';
 import 'package:skill_grid/features/notification/domain/use_case/mark_notification_as_read_use_case.dart';
@@ -31,13 +31,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     on<MarkNotificationAsReadEvent>(_onMarkNotificationAsRead);
 
     on<NavigateToContracts>((event, emit) {
-      final contractsBloc = getIt<ContractsBloc>();
+      final clientDashboardCubit = getIt<ClientDashboardCubit>();
 
       Navigator.pushReplacement(
         event.context,
         MaterialPageRoute(
           builder: (context) => BlocProvider.value(
-              value: contractsBloc, child: event.destination),
+              value: clientDashboardCubit..setInitialIndex(2),
+              child: event.destination),
         ),
       );
     });
@@ -80,7 +81,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         emit(NotificationMarkedAsRead());
         add(NavigateToContracts(
           context: event.context,
-          destination: const ClientContractsView(),
+          destination: const ClientDashboard(),
         ));
       },
     );

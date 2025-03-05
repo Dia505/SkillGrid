@@ -110,7 +110,7 @@ class _SearchScreenViewState extends State<SearchScreenView> {
           ),
           BlocListener<ShakeSensorBloc, ShakeSensorState>(
             listener: (context, state) {
-              if(state is ShakeRefreshed) {
+              if (state is ShakeRefreshed) {
                 context.read<SearchBloc>().add(ClearSearch());
               }
             },
@@ -121,25 +121,21 @@ class _SearchScreenViewState extends State<SearchScreenView> {
                   if (state is SearchLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is SearchError) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25, vertical: 100),
-                      child: Center(
-                          child: Column(children: [
-                        Image.asset(
-                          "assets/images/no_result_found.png",
-                          width: 250,
-                          height: 250,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          "Looks like there are no results for that. Keep searching!",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ])),
-                    );
+                    return Center(
+                        child: Column(children: [
+                      Image.asset(
+                        "assets/images/no_result_found.png",
+                        width: 250,
+                        height: 250,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Looks like there are no results for that. Keep searching!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ]));
                   } else if (state is SearchLoaded) {
                     if (state.freelancers.isEmpty) {
                       return Center(

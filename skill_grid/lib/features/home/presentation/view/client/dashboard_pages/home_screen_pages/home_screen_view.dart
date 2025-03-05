@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skill_grid/core/common/home_ongoing_collab_card.dart';
-import 'package:skill_grid/core/common/home_recently_viewed_card.dart';
 import 'package:skill_grid/core/theme/theme_sensor/presentation/theme_bloc.dart';
 import 'package:skill_grid/features/appointment/domain/entity/appointment_entity.dart';
 import 'package:skill_grid/features/auth/domain/entity/client_entity.dart';
@@ -69,6 +68,27 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     {
       'service_img': "assets/images/video_edit_service.jpg",
       'label': 'Video Editing'
+    },
+  ];
+
+  final List<Map<String, dynamic>> appFeatures = [
+    {
+      'feature_img': "assets/images/home_screen_discover.jpg",
+      'label': 'Discover Top Talent',
+      'subtitle':
+          'Browse skilled professionals to find the perfect match for your project, anytime.'
+    },
+    {
+      'feature_img': "assets/images/home_screen_collaborate.jpg",
+      'label': 'Collaborate with Experts',
+      'subtitle':
+          'Connect with freelancers who bring your ideas to life with exceptional skills.'
+    },
+    {
+      'feature_img': "assets/images/home_screen_project_management.jpg",
+      'label': 'Effortless Project Management',
+      'subtitle':
+          'Effortlessly track your project from start to finish, ensuring smooth progress.'
     },
   ];
 
@@ -358,7 +378,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                 endIndent: 25, // Space after the line (right)
                               ),
                               const SizedBox(
-                                height: 15,
+                                height: 20,
                               ),
                               const Text(
                                 "Service Category",
@@ -403,48 +423,45 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                   }).toList(), // Converts the iterable to a list of widgets
                                 ),
                               ),
-                              const SizedBox(height: 20),
-                              const Text(
-                                "Top Rated Freelancers",
-                                style: TextStyle(
-                                    fontSize: 22, fontFamily: "Inter Light"),
-                              ),
-                              const SizedBox(height: 10),
-                              const SingleChildScrollView(
+                              const SizedBox(height: 30),
+                              SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: [
-                                    HomeRecentlyViewedCard(
-                                      portfolioImgPath:
-                                          "assets/images/gettyimages-480952865-612x612.jpg",
-                                      freelancerProfileImgPath:
-                                          "assets/images/istockphoto-1395071229-612x612.jpg",
-                                      freelancerName: "Krishna Basnet",
-                                      profession: "Photographer/Videographer",
-                                      rating: "⭐⭐⭐⭐",
-                                      hourlyRate: "1500",
-                                    ),
-                                    HomeRecentlyViewedCard(
-                                      portfolioImgPath:
-                                          "assets/images/Screenshot 2024-12-01 003357.png",
-                                      freelancerProfileImgPath:
-                                          "assets/images/gettyimages-484274251-612x612.jpg",
-                                      freelancerName: "Amaira Yadav",
-                                      profession: "Photographer",
-                                      rating: "⭐⭐⭐⭐⭐",
-                                      hourlyRate: "5000",
-                                    ),
-                                    HomeRecentlyViewedCard(
-                                      portfolioImgPath:
-                                          "assets/images/food-photographer-ideas.jpg",
-                                      freelancerProfileImgPath:
-                                          "assets/images/indian_girl_stock_img.jpg",
-                                      freelancerName: "Rita Singh",
-                                      profession: "Photographer",
-                                      rating: "⭐⭐⭐⭐⭐",
-                                      hourlyRate: "3000",
-                                    ),
-                                  ],
+                                  children: appFeatures.map((feature) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12),
+                                      child: Column(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.asset(
+                                              feature["feature_img"],
+                                              width: 200,
+                                              height: 150,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            feature["label"],
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontFamily: "Inter SemiBold"),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          SizedBox(
+                                            width: 200,
+                                            child: Text(
+                                              feature["subtitle"],
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                               const SizedBox(height: 20),
