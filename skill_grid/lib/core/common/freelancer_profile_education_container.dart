@@ -17,7 +17,7 @@ class FreelancerProfileEducationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 327,
-      height: 90,
+      height: 95,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
