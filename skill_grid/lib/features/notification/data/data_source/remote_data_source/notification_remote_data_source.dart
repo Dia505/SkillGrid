@@ -42,11 +42,10 @@ class NotificationRemoteDataSource implements INotificationDataSource {
   Future<void> markNotificationAsRead(
       String notificationId, String? token) async {
     try {
-      final dio = Dio();
       final String url =
           "${ApiEndpoints.markNotificationAsRead}/$notificationId/read";
 
-      var response = await dio.put(
+      var response = await _dio.put(
         url,
         options: Options(
           headers: {
@@ -56,7 +55,6 @@ class NotificationRemoteDataSource implements INotificationDataSource {
       );
 
       if (response.statusCode == 200) {
-        print("Notification marked as read successfully!");
       } else {
         throw Exception("Failed to mark notification as read");
       }

@@ -34,7 +34,6 @@ class NotificationRemoteRepository implements INotificationRepository {
           notificationId, token);
       return const Right(null);
     } catch (e) {
-      print("Error in repository: $e");
       return Left(ApiFailure(message: e.toString()));
     }
   }
