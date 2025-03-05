@@ -201,7 +201,6 @@ void main() {
     );
 
     // Find the review text field and "Send" button
-    final reviewTextField = find.byType(TextFormField);
     final sendButton = find.text('Send');
 
     // Tap the "Send" button without entering anything in the review field
