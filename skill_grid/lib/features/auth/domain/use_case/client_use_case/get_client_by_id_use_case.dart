@@ -34,7 +34,6 @@ class GetClientByIdUseCase
     }, (r) async {
       final role = await tokenHelper.getRoleFromToken();
       if (role == "client") {
-        final isConnected = await networkInfo.isConnected;
         if (await networkInfo.isConnected) {
           // Online: Fetch from API and cache locally
           final result =

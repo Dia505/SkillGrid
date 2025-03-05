@@ -25,7 +25,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
     required this.freelancerLastName,
   });
 
-  double calculateCompletionPercent() {
+  int calculateCompletionPercent() {
     DateTime startDate = DateFormat('dd-MM-yyyy').parse(appointmentDate);
     DateTime endDate = DateFormat('dd-MM-yyyy').parse(projectEndDate);
 
@@ -35,7 +35,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
 
     double percent = (elapsedDays / totalDays) * 100;
 
-    return percent.clamp(0, 100);
+    return percent.clamp(0, 100).round();
   }
 
   int calculateRemainingDays() {
@@ -48,7 +48,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double completePercent = calculateCompletionPercent();
+    int completePercent = calculateCompletionPercent();
     int remainingDays = calculateRemainingDays();
 
     return SizedBox(
@@ -96,8 +96,7 @@ class HomeOngoingCollabCard extends StatelessWidget {
                           width: 200,
                           height: 6,
                           child: LinearProgressIndicator(
-                            value: completePercent /
-                                100, // 85% progress (ranges from 0.0 to 1.0)
+                            value: completePercent / 100,
                             backgroundColor: const Color(
                                 0xFFC5BDBD), // Color of the unfilled part
                             valueColor: const AlwaysStoppedAnimation<Color>(

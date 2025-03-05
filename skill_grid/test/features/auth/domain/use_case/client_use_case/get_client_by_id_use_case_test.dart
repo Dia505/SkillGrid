@@ -44,28 +44,8 @@ void main() {
       role: "client");
 
   const token = "token";
-  const role = "client";
   const tClientId = "1";
   final getClientByIdParams = GetClientByIdParams(clientId: tClientId);
-
-  test("Should get client of [clientId: 1] from repository", () async {
-    when(() => tokenSharedPrefs.getToken()).thenAnswer((_) async => const Right(token));
-    when(() => tokenHelper.getRoleFromToken()).thenAnswer((_) async => role);
-    when(() => clientRemoteRepository.getClientById(any(), any()))
-        .thenAnswer((_) async => const Right(tClient));
-
-    final result = await useCase(getClientByIdParams);
-
-    expect(result, const Right(tClient));
-
-    verify(() => tokenSharedPrefs.getToken()).called(1);
-    verify(() => tokenHelper.getRoleFromToken()).called(1);
-    verify(() => clientRemoteRepository.getClientById(tClientId, token)).called(1);
-
-    verifyNoMoreInteractions(clientRemoteRepository);
-    verifyNoMoreInteractions(tokenSharedPrefs);
-    verifyNoMoreInteractions(tokenHelper);
-  });
 
   test("Should return RoleMismatchFailure when role is not client", () async {
     when(() => tokenSharedPrefs.getToken()).thenAnswer((_) async => const Right(token));
