@@ -668,8 +668,7 @@ _initNotificationDependencies() async {
 
   getIt.registerLazySingleton<NotificationRemoteRepository>(() =>
       NotificationRemoteRepository(
-          notificationRemoteDataSource:
-              getIt<NotificationRemoteDataSource>()));
+          notificationRemoteDataSource: getIt<NotificationRemoteDataSource>()));
 
   getIt.registerLazySingleton<GetNotificationsByClientIdUseCase>(() =>
       GetNotificationsByClientIdUseCase(
@@ -682,8 +681,8 @@ _initNotificationDependencies() async {
           tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 
   getIt.registerFactory<NotificationBloc>(() => NotificationBloc(
-    getNotificationsByClientIdUseCase: getIt<GetNotificationsByClientIdUseCase>(), 
-    tokenHelper: getIt<TokenHelper>(),
-    markNotificationAsReadUseCase: getIt<MarkNotificationAsReadUseCase>()
-  ));
+      getNotificationsByClientIdUseCase:
+          getIt<GetNotificationsByClientIdUseCase>(),
+      tokenHelper: getIt<TokenHelper>(),
+      markNotificationAsReadUseCase: getIt<MarkNotificationAsReadUseCase>()));
 }
