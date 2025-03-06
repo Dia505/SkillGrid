@@ -173,10 +173,9 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                                                   )));
                                         },
                                         child: CommonContractCard(
-                                          freelancerProfileImgPath: appointment
-                                              .freelancerService
-                                              .freelancer
-                                              .profilePicture!,
+                                          freelancerProfileImgPath:
+                                              appointment.freelancerService
+                                                  .freelancer.profilePicture!,
                                           freelancerFirstName: appointment
                                               .freelancerService
                                               .freelancer
@@ -194,14 +193,16 @@ class _ClientContractsViewState extends State<ClientContractsView> {
                                           projectEndDate:
                                               formattedProjectEndDate,
                                           amount: payment.amount,
-                                          paymentMethod: payment.paymentMethod,
-                                          paymentStatus: payment.paymentStatus,
+                                          paymentMethod:
+                                              payment.paymentMethod,
+                                          paymentStatus:
+                                              payment.paymentStatus,
                                           appointmentDate:
                                               formattedAppointmentDate,
-                                          projectDurationUnit:
-                                              appointment.projectDuration.unit,
-                                          projectDurationValue:
-                                              appointment.projectDuration.value,
+                                          projectDurationUnit: appointment
+                                              .projectDuration.unit,
+                                          projectDurationValue: appointment
+                                              .projectDuration.value,
                                         ),
                                       ),
                                       const SizedBox(height: 10),

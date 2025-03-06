@@ -1,16 +1,26 @@
-# skill_grid
+# SkillGrid
 
-A new Flutter project.
+Empowering businesses and clients to connect with top freelancers effortlessly.
 
-## Getting Started
+## Overview
 
-This project is a starting point for a Flutter application.
+SkillGrid is a freelance booking platform that allows businesses and individuals to hire skilled professionals across various industries. Whether you need a designer, developer, writer, or consultant, SkillGrid provides a seamless experience for discovering, booking, and managing collaborations.
 
-A few resources to get you started if this is your first Flutter project:
+The platform is built to be fast, secure, and user-friendly, ensuring smooth interactions between clients and freelancers.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Key Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Effortless Booking – Clients can browse, compare, and book freelancers instantly.
+Smart Search & Filters – Find the perfect freelancer with category-based filtering.
+Customizable Contracts – Define project terms, deadlines, and deliverables.
+Project Tracking – Stay updated on project progress with real-time updates.
+Contract Management – Easily create, review, and manage contracts within the app.
+Feedback & Ratings – Provide reviews and rate freelancers based on their work.
+
+#### Technology Stack
+
+Frontend: Flutter (Dart)
+Backend: Node.js, Express.js
+Database: MongoDB
+
+
