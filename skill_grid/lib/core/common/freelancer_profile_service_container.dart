@@ -72,55 +72,55 @@ class _FreelancerProfileServiceContainerState
         Color serviceTitleUnderlineColour = themeState.isDarkMode
             ? const Color(0xFFE7E7FF)
             : const Color(0XFF544FBD);
-      return Container(
-        margin: const EdgeInsets.only(right: 20),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0XFF707070)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Service Title and Rate
-            Text(
-              "${widget.title} - Rs. ${widget.rate}/hr",
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: serviceTitleColour,
-                  fontFamily: "Inter Bold",
-                  decoration: TextDecoration.underline,
-                  decorationColor: serviceTitleUnderlineColour),
-            ),
-            const SizedBox(height: 15),
-            // Continuous scrolling images
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: widget.images.length * 100, // Infinite loop simulation
-                itemBuilder: (context, index) {
-                  final imageIndex = index % widget.images.length;
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Image.network(
-                      widget.images[imageIndex]
-                          .replaceFirst('localhost', '10.0.2.2'),
-                      fit: BoxFit.contain,
-                    ),
-                  );
-                },
+        return Container(
+          margin: const EdgeInsets.only(right: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0XFF707070)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Service Title and Rate
+              Text(
+                "${widget.title} - Rs. ${widget.rate}/hr",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: serviceTitleColour,
+                    fontFamily: "Inter Bold",
+                    decoration: TextDecoration.underline,
+                    decorationColor: serviceTitleUnderlineColour),
               ),
-            ),
-          ],
-        ),
-      );},
+              const SizedBox(height: 15),
+              // Continuous scrolling images
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.images.length * 100, // Infinite loop simulation
+                  itemBuilder: (context, index) {
+                    final imageIndex = index % widget.images.length;
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Image.network(
+                        widget.images[imageIndex]
+                            .replaceFirst('localhost', '10.0.2.2'),
+                        fit: BoxFit.contain,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );},
     );
   }
 }

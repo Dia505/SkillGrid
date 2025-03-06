@@ -58,8 +58,8 @@ class _ClientProfileViewState extends State<ClientProfileView> {
                       CircleAvatar(
                         radius: 55,
                         backgroundImage: imageUrl.isNotEmpty
-                            ? NetworkImage(
-                                imageUrl.replaceFirst('localhost', '10.0.2.2'))
+                            ? NetworkImage(imageUrl.replaceFirst(
+                                'localhost', '10.0.2.2'))
                             : const AssetImage(
                                     "assets/images/default_profile_img.png")
                                 as ImageProvider,

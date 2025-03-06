@@ -88,27 +88,27 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
         Color detailTitleColour = themeState.isDarkMode
             ? const Color(0xFFE7E7FF)
             : const Color(0XFF322E86);
-        Color detailValueColour = themeState.isDarkMode
-            ? Colors.white
-            : Colors.black;
+        Color detailValueColour =
+            themeState.isDarkMode ? Colors.white : Colors.black;
         Color updateButtonColour = themeState.isDarkMode
             ? const Color(0xFFE7E7FF)
             : const Color(0xFF544FBD);
-            
+
         return BlocBuilder<EditDeleteContractBloc, EditDeleteContractState>(
             builder: (context, event) {
           return Scaffold(
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
                 child: SafeArea(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       InkWell(
                           onTap: () {
-                            BlocProvider.of<EditDeleteContractBloc>(context).add(
-                                NavigateToContracts(
+                            BlocProvider.of<EditDeleteContractBloc>(context)
+                                .add(NavigateToContracts(
                                     context: context,
                                     destination: const ClientDashboard()));
                           },
@@ -195,7 +195,7 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                       text: widget.projectEndDate,
                                       style: TextStyle(
                                           fontFamily: "Inter Regular",
-                                          color:detailValueColour))
+                                          color: detailValueColour))
                                 ]),
                           ),
                           const SizedBox(
@@ -211,8 +211,9 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                   child: LinearProgressIndicator(
                                     value: completePercent / 100,
                                     backgroundColor: const Color(0xFFC5BDBD),
-                                    valueColor: const AlwaysStoppedAnimation<Color>(
-                                        Color(0xFF236FD2)),
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                            Color(0xFF236FD2)),
                                   ),
                                 ),
                               ),
@@ -318,7 +319,7 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                                           widget.appointmentId,
                                                       context: context),
                                                 );
-    
+
                                             Navigator.of(context).pop();
                                           },
                                         ),
@@ -352,7 +353,8 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                     children: [
                                       Text(
                                         "Review sent",
-                                        style: TextStyle(color: Color(0XFF322E86)),
+                                        style:
+                                            TextStyle(color: Color(0XFF322E86)),
                                       ),
                                       Icon(
                                         Icons.check_rounded,
@@ -369,15 +371,15 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                       backgroundColor: updateButtonColour,
                                     ),
                                     onPressed: () {
-                                      BlocProvider.of<
-                                              EditDeleteContractBloc>(context)
+                                      BlocProvider.of<EditDeleteContractBloc>(
+                                              context)
                                           .add(NavigateToReview(
                                               context: context,
                                               destination: ReviewView(
                                                   freelancerProfileImgPath: widget
                                                       .freelancerProfileImgPath,
-                                                  freelancerFirstName:
-                                                      widget.freelancerFirstName,
+                                                  freelancerFirstName: widget
+                                                      .freelancerFirstName,
                                                   freelancerLastName:
                                                       widget.freelancerLastName,
                                                   profession: widget.profession,
@@ -438,7 +440,7 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                   if (value == null || value.isEmpty) {
                                     return '*required';
                                   }
-    
+
                                   return null;
                                 },
                                 decoration: const InputDecoration(
@@ -581,17 +583,18 @@ class _EditDeleteContractViewState extends State<EditDeleteContractView> {
                                       widget.appointmentPurpose;
                               bool isPaymentMethodChanged =
                                   selectedPayment != widget.paymentMethod;
-    
+
                               if (isAppointmentPurposeChanged) {
                                 context.read<EditDeleteContractBloc>().add(
                                       UpdateAppointment(
                                           appointmentId: widget.appointmentId,
                                           appointmentPurpose:
-                                              _appointmentPurposeController.text,
+                                              _appointmentPurposeController
+                                                  .text,
                                           context: context),
                                     );
                               }
-    
+
                               if (isPaymentMethodChanged) {
                                 context.read<EditDeleteContractBloc>().add(
                                       UpdatePayment(

@@ -66,12 +66,14 @@ class _ReviewViewState extends State<ReviewView> {
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () {
                     context.read<ReviewBloc>().add(NavigateToContracts(
-                        context: context, destination: const ClientDashboard()));
+                        context: context,
+                        destination: const ClientDashboard()));
                   },
                 ),
               ),
               body: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -150,7 +152,8 @@ class _ReviewViewState extends State<ReviewView> {
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _selectedRating = index + 1; // Update rating
+                                    _selectedRating =
+                                        index + 1; // Update rating
                                   });
                                 },
                               );
@@ -168,13 +171,13 @@ class _ReviewViewState extends State<ReviewView> {
                           if (value == null || value.isEmpty) {
                             return '*required';
                           }
-    
+
                           return null;
                         },
                         decoration: const InputDecoration(
                           hintText: "Share your thoughts.....",
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
                         ),
                       ),
                       const SizedBox(
